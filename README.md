@@ -36,6 +36,8 @@
 - UX,UI Modules ( Xamarin )
 
 # Modules
+
+## Server
 ## Requirements:
 - TCP/IP Protocols
 - Send and Receive Data Container 
@@ -48,5 +50,15 @@
 - UI/UX
 - Specific Signals for Classify Request From Users
 - Real Date/Time
+
+## Client
+## Requirements
+- TCP/IP Protocols
+- Able to Change Data or Information
+- Send and Receive Data Container 
+- Login modules (Specific ID Login )
+- UI/UX
+- Specific Signals for Classify Request From Users
+
 
 
