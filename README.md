@@ -11,6 +11,7 @@
 - Full system level test log
 - And of course, implementing and demonstrating your system to your peers
 
+# Minimum Requirements
 - At least 2 Application
 - At least five (5) for Client Application Functionality
 - At least five (5) for Server Application Functionality
