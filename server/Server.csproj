@@ -46,14 +46,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Form1.cs">
+    <Compile Include="Server_Menu_Form.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Server_Menu_Form.Designer.cs">
+      <DependentUpon>Server_Menu_Form.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Login_Server_Form.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Login_Server_Form.Designer.cs">
+      <DependentUpon>Login_Server_Form.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Login_Server_Form.resx">
+      <DependentUpon>Login_Server_Form.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -62,6 +71,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -75,6 +85,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\gabriel-dalton-b7aqNnYRntY-unsplash %281%29.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\user-interface.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\2203549_admin_avatar_human_login_user_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\115724_key_lock_password_locked_secure_icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
