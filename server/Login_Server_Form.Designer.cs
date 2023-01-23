@@ -204,6 +204,7 @@
             this.Sign_Up_btn.TabIndex = 16;
             this.Sign_Up_btn.Text = "Sign Up";
             this.Sign_Up_btn.UseVisualStyleBackColor = false;
+            this.Sign_Up_btn.Click += new System.EventHandler(this.Sign_Up_btn_Click);
             // 
             // Login_Btn
             // 
@@ -216,6 +217,7 @@
             this.Login_Btn.TabIndex = 17;
             this.Login_Btn.Text = "Login";
             this.Login_Btn.UseVisualStyleBackColor = false;
+            this.Login_Btn.Click += new System.EventHandler(this.Login_Btn_Click);
             // 
             // incorrect_message_username
             // 

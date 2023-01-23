@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static server.ExcelApiTest;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace server
 {
@@ -60,6 +62,33 @@ namespace server
                 else if (Password_txtbox.Text.Length == 0) { Password_txtbox.ForeColor = Color.Gray; Password_txtbox.Text = "Password"; }
             }
             catch { }
+        }
+
+        private void Login_Btn_Click(object sender, EventArgs e)
+        {
+            try 
+            {
+                string username = Username_txtbox.Text;
+                string password = Password_txtbox.Text;
+
+                ExcelApiTest.Function_Excel_Login(username, password);
+
+            } catch
+            {
+
+            }
+        }
+
+        private void Sign_Up_btn_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Server_SignUp.Sign_Up();
+            }
+            catch
+            {
+
+            }
         }
     }
 }
