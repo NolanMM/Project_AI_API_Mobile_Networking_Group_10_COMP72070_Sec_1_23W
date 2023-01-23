@@ -20,7 +20,7 @@ namespace server
             WorkBook wb = WorkBook.Load("sample.xlsx");
             WorkSheet ws = wb.GetWorkSheet("Sheet1");
 
-            string raw_material = username + password;
+            string raw_material = username;
             string UserID = Encryption_.ComputeSha256Hash(raw_material);
 
             string key = "Empty";
@@ -89,7 +89,7 @@ namespace server
                 // Generate Unique hashing code for each Username+Password Combination and Make it the unique UserID
                 // And take 16 char in the hashing code for the encyption key for the data of user - final string
 
-                string raw_material = username + password;
+                string raw_material = username;
                 string UserID = Encryption_.ComputeSha256Hash(raw_material);
 
                 // Take 16 chars from userID for the key for AES the data
