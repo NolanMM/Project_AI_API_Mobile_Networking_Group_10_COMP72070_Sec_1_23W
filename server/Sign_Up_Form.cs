@@ -8,20 +8,28 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static server.ExcelApiTest;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace server
 {
-    public partial class Login_Server_Form : Form
+    public partial class Sign_Up_Form : Form
     {
-        public Login_Server_Form()
+        public Sign_Up_Form()
         {
             InitializeComponent();
         }
 
+        private void Sign_Up_btn_Click(object sender, EventArgs e)
+        {
+            string usernname = Username_txtbox.Text;
+            string password = Password_txtbox.Text;
+            string email = Email_txtbox.Text;
+            Server_SignUp.Sign_Up(usernname,password,email);
+        }
+
         private void Username_txtbox_TextChanged(object sender, EventArgs e)
         {
-            try {
+            try
+            {
 
                 Username_txtbox.ForeColor = Color.White;
 
@@ -32,8 +40,19 @@ namespace server
 
         private void Password_txtbox_TextChanged(object sender, EventArgs e)
         {
-            try {
+            try
+            {
+                Password_txtbox.PasswordChar = '*';
                 Password_txtbox.ForeColor = Color.White;
+            }
+            catch { }
+        }
+
+        private void Email_txtbox_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                Email_txtbox.ForeColor = Color.White;
             }
             catch { }
         }
@@ -59,39 +78,22 @@ namespace server
                 {
                     Password_txtbox.Clear();
                 }
-                else if (Password_txtbox.Text.Length == 0) { Password_txtbox.ForeColor = Color.Gray; Password_txtbox.Text = "Password"; }
+                else if (Password_txtbox.Text.Length == 0) { Password_txtbox.ForeColor = Color.Gray; Password_txtbox.PasswordChar = '\0'; ; Password_txtbox.Text = "Password"; }
             }
             catch { }
         }
 
-        private void Login_Btn_Click(object sender, EventArgs e)
-        {
-            try 
-            {
-                string username = Username_txtbox.Text;
-                string password = Password_txtbox.Text;
-
-                ExcelApiTest.Function_Excel_Login(username, password);
-
-            } catch
-            {
-
-            }
-        }
-
-        private void Sign_Up_btn_Click(object sender, EventArgs e)
+        private void Email_txtbox_MouseEnter(object sender, EventArgs e)
         {
             try
             {
-                //Server_SignUp.Sign_Up();
-                Sign_Up_Form temp = new Sign_Up_Form();
-                this.Hide();
-                temp.ShowDialog();
+                if (Email_txtbox.Text == "Email")
+                {
+                    Email_txtbox.Clear();
+                }
+                else if (Email_txtbox.Text.Length == 0) { Email_txtbox.ForeColor = Color.Gray; Email_txtbox.Text = "Email"; }
             }
-            catch
-            {
-
-            }
+            catch { }
         }
     }
 }

@@ -78,40 +78,71 @@ namespace server
         }
         public static class Server_SignUp
         {
-            public static void Sign_Up()
+            public static void Sign_Up(string username,string password,string email)
             {
                 // Generate Sample data by Hard Code
 
-                string username = "minhlenguyen02";
-                string password = "Connhenbeo1";
-                string email = "minhlenguyen02@gmail.com";
+                //string username = "minhlenguyen02";
+                //string password = "Connhenbeo1";
+                //string email = "minhlenguyen02@gmail.com";
 
                 // Generate Unique hashing code for each Username+Password Combination and Make it the unique UserID
                 // And take 16 char in the hashing code for the encyption key for the data of user - final string
+                bool Flag = Check_If_Duplicate_Username(username);
+                if (Flag != true)
+                {
+                    string raw_material = username;
+                    string UserID = Encryption_.ComputeSha256Hash(raw_material);
 
-                string raw_material = username;
-                string UserID = Encryption_.ComputeSha256Hash(raw_material);
+                    // Take 16 chars from userID for the key for AES the data
+                    string public_key = UserID.Substring(0, 8);
+                    string secret_key = UserID.Substring(8, 8);
 
-                // Take 16 chars from userID for the key for AES the data
-                string public_key = UserID.Substring(0, 8);
-                string secret_key = UserID.Substring(8, 8);
+                    // Combine all the data together
+                    string final_string = username + "-" + password + "-" + email;
 
-                // Combine all the data together
-                string final_string = username + "-" + password + "-" + email;
+                    // Encypted the final_string (User data) by the key
+                    string write_to_file_encypted_data = Encryption_.Encrypt(final_string, public_key, secret_key);
 
-                // Encypted the final_string (User data) by the key
-                string write_to_file_encypted_data = Encryption_.Encrypt(final_string, public_key, secret_key);
+                    // Combine the encypted data with the key and store it into the file first for test
+                    //string store_data = UserID + "-" + write_to_file_encypted_data;
+                    ExcelApiTest.Write_To_Excel(UserID, write_to_file_encypted_data);
 
-                // Combine the encypted data with the key and store it into the file first for test
-                //string store_data = UserID + "-" + write_to_file_encypted_data;
-                ExcelApiTest.Write_To_Excel(UserID, write_to_file_encypted_data);
+                    //System.IO.File.AppendAllText(@"./Test.txt", store_data + "\n");
 
-                //System.IO.File.AppendAllText(@"./Test.txt", store_data + "\n");
-
-                MessageBox.Show("Sign Up Successful", "Warning");
+                    MessageBox.Show("Sign Up Successful", "Warning");
+                }
+                else { MessageBox.Show("Duplicate Username", "Warning"); }
 
             }
 
+        }
+        public static bool Check_If_Duplicate_Username(string username)
+        {
+            WorkBook wb = WorkBook.Load("sample.xlsx");
+            WorkSheet ws = wb.GetWorkSheet("Sheet1");
+
+            string raw_material = username;
+            string UserID = Encryption_.ComputeSha256Hash(raw_material);
+
+            bool key = false;
+            //Traverse all rows of Excel WorkSheet
+            for (int i = 0; i < ws.Rows.Count(); i++)
+            {
+                //Traverse all columns of specific Row
+                for (int j = 0; j < ws.Columns.Count(); j++)
+                {
+                    //Get the values of UserID if it match with hashing code from hashing
+                    string val = ws.Rows[i].Columns[0].Value.ToString();
+                    if (val == UserID)
+                    {
+                        // Assign the key
+                        key = true;
+                    }
+
+                }
+            }
+            return key;
         }
         public static void Write_To_Excel(string key, string encrypted_data)
         {

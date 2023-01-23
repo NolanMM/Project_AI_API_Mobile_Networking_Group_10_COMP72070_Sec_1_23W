@@ -1,6 +1,6 @@
 ﻿namespace server
 {
-    partial class Server_Menu_Form
+    partial class Forgot_Password
     {
         /// <summary>
         /// Required designer variable.
@@ -30,14 +30,14 @@
         {
             this.SuspendLayout();
             // 
-            // Server_Menu_Form
+            // Forgot_Password
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1011, 641);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Name = "Server_Menu_Form";
-            this.Text = "Form1";
+            this.Name = "Forgot_Password";
+            this.Text = "Forgot_Password";
             this.ResumeLayout(false);
 
         }
@@ -45,4 +45,3 @@
         #endregion
     }
 }
-

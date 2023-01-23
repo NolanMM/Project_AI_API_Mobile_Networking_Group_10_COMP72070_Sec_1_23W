@@ -73,6 +73,16 @@ namespace server.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap _134146_mail_email_icon {
+            get {
+                object obj = ResourceManager.GetObject("134146_mail_email_icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap _2203549_admin_avatar_human_login_user_icon {
             get {
                 object obj = ResourceManager.GetObject("2203549_admin_avatar_human_login_user_icon", resourceCulture);
