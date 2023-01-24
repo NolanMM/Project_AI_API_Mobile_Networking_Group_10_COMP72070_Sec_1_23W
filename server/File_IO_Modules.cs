@@ -144,6 +144,52 @@ namespace server
             }
             return key;
         }
+
+        public static string[] Take_Information_By_Username(string username)
+        {
+            WorkBook wb = WorkBook.Load("sample.xlsx");
+            WorkSheet ws = wb.GetWorkSheet("Sheet1");
+
+            string raw_material = username;
+            string UserID = Encryption_.ComputeSha256Hash(raw_material);
+            string key = "Empty";
+            string data_result = "Empty";
+            //Traverse all rows of Excel WorkSheet
+            for (int i = 0; i < ws.Rows.Count(); i++)
+            {
+                //Traverse all columns of specific Row
+                for (int j = 0; j < ws.Columns.Count(); j++)
+                {
+                    //Get the values of UserID if it match with hashing code from hashing
+                    string val = ws.Rows[i].Columns[0].Value.ToString();
+                    if (val == UserID)
+                    {   
+                        // Assign the key
+                        key = ws.Rows[i].Columns[0].Value.ToString();
+                        // Take the encypted data out
+                        data_result = ws.Rows[i].Columns[1].Value.ToString();
+                    }
+
+                }
+            }
+            if (key != "Empty" && data_result != "Empty")
+            {
+                // Take 16 chars for the key to decypted the data in the second column in the same row
+                string public_key = UserID.Substring(0, 8);
+                string secret_key = UserID.Substring(8, 8);
+                string decrypted_data = Encryption_.Decrypt(data_result, public_key, secret_key);
+
+                // string Items[0] = Username
+                // string Items[1] = Password;
+                // string Items[2] = Email;
+                string[] Items = decrypted_data.Split('-');
+                return Items;
+            }
+            else
+            {
+                return null;
+            }
+        }
         public static void Write_To_Excel(string key, string encrypted_data)
         {
             //Create a Workbook object
@@ -162,6 +208,92 @@ namespace server
             //worksheet.AllocatedRange.AutoFitColumns();
             //Save to an Excel file
             workbook.SaveToFile("sample.xlsx", XLs.ExcelVersion.Version2016);
+        }
+        public static bool Re_Write_Password_To_Excel_Specific_Location(string username, string newpassword)
+        {
+            // Find the Location of Item inside the file
+
+            int Row = 0;
+
+            WorkBook wb = WorkBook.Load("sample.xlsx");
+            WorkSheet ws = wb.GetWorkSheet("Sheet1");
+
+            string raw_material = username;
+            string UserID = Encryption_.ComputeSha256Hash(raw_material);
+
+            string key = "Empty";
+            string data_result = "Empty";
+            //Traverse all rows of Excel WorkSheet
+            for (int i = 0; i < ws.Rows.Count(); i++)
+            {
+                //Traverse all columns of specific Row
+                for (int j = 0; j < ws.Columns.Count(); j++)
+                {
+                    //Get the values of UserID if it match with hashing code from hashing
+                    string val = ws.Rows[i].Columns[0].Value.ToString();
+                    if (val == UserID)
+                    {
+                        // Assign the key
+                        key = val;
+                        data_result = ws.Rows[i].Columns[1].Value.ToString();
+                        // Store the row position
+                        Row = i;
+                    }
+
+                }
+            }
+
+            // Using string Split and Replace the old_password by new_password
+            if (key != "Empty" && data_result != "Empty")
+            {
+                // Take 16 chars for the key to decypted the data in the second column in the same row
+                string public_key = UserID.Substring(0, 8);
+                string secret_key = UserID.Substring(8, 8);
+                string decrypted_data = Encryption_.Decrypt(data_result, public_key, secret_key);
+
+                // string Items[0] = Username
+                // string Items[1] = Password;
+                // string Items[2] = Email;
+                string[] Items = decrypted_data.Split('-');
+
+                // Assign New Value of password
+                Items[1] = newpassword;
+
+                // Generate new hashing code by username for the key
+                // Encypted new data -> new encypted file
+
+
+                // Combine all the data together
+                string final_string = Items[0] + "-" + Items[1] + "-" + Items[2];
+
+                // Encypted the final_string (User data) by the key
+                string write_to_file_encypted_data = Encryption_.Encrypt(final_string, public_key, secret_key);
+
+                // Re write to the file to specific location just find
+                // Save to the File the new data
+
+                //Create a Workbook object
+                XLs.Workbook workbook = new XLs.Workbook();
+                workbook.LoadFromFile("sample.xlsx");
+                //Remove default worksheets
+                //workbook.Worksheets.Clear();
+                //Add a worksheet and name it
+                XLs.Worksheet worksheet = workbook.Worksheets[0];
+                //Write new data to specific cells
+                worksheet.Range[Row , 1].Value = key;
+                worksheet.Range[Row , 2].Value = write_to_file_encypted_data;
+
+                //Auto fit column width
+                //worksheet.AllocatedRange.AutoFitColumns();
+                //Save to an Excel file
+                workbook.SaveToFile("sample.xlsx", XLs.ExcelVersion.Version2016);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
         }
 
     }

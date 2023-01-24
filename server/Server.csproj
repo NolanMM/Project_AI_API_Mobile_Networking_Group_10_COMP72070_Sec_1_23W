@@ -98,6 +98,7 @@
     <Compile Include="Forgot_Password.Designer.cs">
       <DependentUpon>Forgot_Password.cs</DependentUpon>
     </Compile>
+    <Compile Include="OTP_Code.cs" />
     <Compile Include="Security_Modules.cs" />
     <Compile Include="Server_Menu_Form.cs">
       <SubType>Form</SubType>
