@@ -43,6 +43,7 @@
             this.Email_txtbox = new System.Windows.Forms.TextBox();
             this.Sign_Up_btn = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.Return_btn = new System.Windows.Forms.Button();
             this.panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             this.panel1.SuspendLayout();
@@ -199,8 +200,8 @@
             // 
             this.Sign_Up_btn.BackColor = System.Drawing.Color.Black;
             this.Sign_Up_btn.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Sign_Up_btn.ForeColor = System.Drawing.Color.Snow;
-            this.Sign_Up_btn.Location = new System.Drawing.Point(766, 527);
+            this.Sign_Up_btn.ForeColor = System.Drawing.Color.IndianRed;
+            this.Sign_Up_btn.Location = new System.Drawing.Point(855, 527);
             this.Sign_Up_btn.Name = "Sign_Up_btn";
             this.Sign_Up_btn.Size = new System.Drawing.Size(144, 45);
             this.Sign_Up_btn.TabIndex = 17;
@@ -218,12 +219,26 @@
             this.pictureBox1.TabIndex = 6;
             this.pictureBox1.TabStop = false;
             // 
+            // Return_btn
+            // 
+            this.Return_btn.BackColor = System.Drawing.Color.Black;
+            this.Return_btn.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Return_btn.ForeColor = System.Drawing.Color.Snow;
+            this.Return_btn.Location = new System.Drawing.Point(684, 527);
+            this.Return_btn.Name = "Return_btn";
+            this.Return_btn.Size = new System.Drawing.Size(144, 45);
+            this.Return_btn.TabIndex = 18;
+            this.Return_btn.Text = "Return";
+            this.Return_btn.UseVisualStyleBackColor = false;
+            this.Return_btn.Click += new System.EventHandler(this.Return_btn_Click);
+            // 
             // Sign_Up_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.ClientSize = new System.Drawing.Size(1011, 641);
+            this.Controls.Add(this.Return_btn);
             this.Controls.Add(this.Sign_Up_btn);
             this.Controls.Add(this.panel5);
             this.Controls.Add(this.panel3);
@@ -265,5 +280,6 @@
         private System.Windows.Forms.PictureBox pictureBox4;
         private System.Windows.Forms.TextBox Email_txtbox;
         public System.Windows.Forms.Button Sign_Up_btn;
+        public System.Windows.Forms.Button Return_btn;
     }
 }

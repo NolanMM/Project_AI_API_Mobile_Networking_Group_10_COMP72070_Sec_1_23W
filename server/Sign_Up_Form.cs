@@ -99,5 +99,12 @@ namespace server
             }
             catch { }
         }
+
+        private void Return_btn_Click(object sender, EventArgs e)
+        {
+            Login_Server_Form login_Server_Form = new Login_Server_Form();
+            this.Hide();
+            login_Server_Form.ShowDialog();
+        }
     }
 }

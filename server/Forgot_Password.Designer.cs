@@ -29,51 +29,42 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.Title = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
-            this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.Password_txtbox = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.Timer_Sent_Label = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.Sent_btn = new System.Windows.Forms.Label();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.Username_txtbox = new System.Windows.Forms.TextBox();
             this.panel7 = new System.Windows.Forms.Panel();
             this.panel8 = new System.Windows.Forms.Panel();
-            this.pictureBox5 = new System.Windows.Forms.PictureBox();
             this.Confirm_password_txtbox = new System.Windows.Forms.TextBox();
             this.panel9 = new System.Windows.Forms.Panel();
             this.panel10 = new System.Windows.Forms.Panel();
-            this.pictureBox6 = new System.Windows.Forms.PictureBox();
             this.OTP_Input_txtbox = new System.Windows.Forms.TextBox();
             this.Confirm_btn = new System.Windows.Forms.Button();
             this.incorrect_message_OTP = new System.Windows.Forms.Label();
             this.incorrect_message_username = new System.Windows.Forms.Label();
             this.Timer_Sent = new System.Windows.Forms.Timer(this.components);
             this.Wrong_Confirm_lable = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.pictureBox6 = new System.Windows.Forms.PictureBox();
+            this.pictureBox5 = new System.Windows.Forms.PictureBox();
+            this.pictureBox3 = new System.Windows.Forms.PictureBox();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.Return_btn = new System.Windows.Forms.Button();
             this.panel3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.panel7.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
             this.panel9.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.pictureBox1.Image = global::server.Properties.Resources.gabriel_dalton_b7aqNnYRntY_unsplash__1_;
-            this.pictureBox1.Location = new System.Drawing.Point(0, -143);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(650, 785);
-            this.pictureBox1.TabIndex = 7;
-            this.pictureBox1.TabStop = false;
             // 
             // Title
             // 
@@ -106,17 +97,6 @@
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(206, 1);
             this.panel4.TabIndex = 12;
-            // 
-            // pictureBox3
-            // 
-            this.pictureBox3.BackColor = System.Drawing.Color.Transparent;
-            this.pictureBox3.BackgroundImage = global::server.Properties.Resources._115724_key_lock_password_locked_secure_icon;
-            this.pictureBox3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBox3.Location = new System.Drawing.Point(15, 7);
-            this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(38, 38);
-            this.pictureBox3.TabIndex = 10;
-            this.pictureBox3.TabStop = false;
             // 
             // Password_txtbox
             // 
@@ -176,17 +156,6 @@
             this.Sent_btn.Text = "Sent";
             this.Sent_btn.Click += new System.EventHandler(this.Sent_btn_Click);
             // 
-            // pictureBox2
-            // 
-            this.pictureBox2.BackColor = System.Drawing.Color.Transparent;
-            this.pictureBox2.BackgroundImage = global::server.Properties.Resources._2203549_admin_avatar_human_login_user_icon;
-            this.pictureBox2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBox2.Location = new System.Drawing.Point(15, 7);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(38, 38);
-            this.pictureBox2.TabIndex = 10;
-            this.pictureBox2.TabStop = false;
-            // 
             // Username_txtbox
             // 
             this.Username_txtbox.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
@@ -216,17 +185,6 @@
             this.panel8.Name = "panel8";
             this.panel8.Size = new System.Drawing.Size(206, 1);
             this.panel8.TabIndex = 12;
-            // 
-            // pictureBox5
-            // 
-            this.pictureBox5.BackColor = System.Drawing.Color.Transparent;
-            this.pictureBox5.BackgroundImage = global::server.Properties.Resources._115724_key_lock_password_locked_secure_icon;
-            this.pictureBox5.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBox5.Location = new System.Drawing.Point(15, 7);
-            this.pictureBox5.Name = "pictureBox5";
-            this.pictureBox5.Size = new System.Drawing.Size(38, 38);
-            this.pictureBox5.TabIndex = 10;
-            this.pictureBox5.TabStop = false;
             // 
             // Confirm_password_txtbox
             // 
@@ -258,17 +216,6 @@
             this.panel10.Size = new System.Drawing.Size(206, 1);
             this.panel10.TabIndex = 12;
             // 
-            // pictureBox6
-            // 
-            this.pictureBox6.BackColor = System.Drawing.Color.Transparent;
-            this.pictureBox6.BackgroundImage = global::server.Properties.Resources._134146_mail_email_icon;
-            this.pictureBox6.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBox6.Location = new System.Drawing.Point(15, 7);
-            this.pictureBox6.Name = "pictureBox6";
-            this.pictureBox6.Size = new System.Drawing.Size(38, 38);
-            this.pictureBox6.TabIndex = 10;
-            this.pictureBox6.TabStop = false;
-            // 
             // OTP_Input_txtbox
             // 
             this.OTP_Input_txtbox.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
@@ -285,8 +232,8 @@
             // 
             this.Confirm_btn.BackColor = System.Drawing.Color.Black;
             this.Confirm_btn.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Confirm_btn.ForeColor = System.Drawing.Color.Snow;
-            this.Confirm_btn.Location = new System.Drawing.Point(767, 547);
+            this.Confirm_btn.ForeColor = System.Drawing.Color.IndianRed;
+            this.Confirm_btn.Location = new System.Drawing.Point(855, 527);
             this.Confirm_btn.Name = "Confirm_btn";
             this.Confirm_btn.Size = new System.Drawing.Size(144, 45);
             this.Confirm_btn.TabIndex = 21;
@@ -339,12 +286,80 @@
             this.Wrong_Confirm_lable.Text = "Incorrect Confirmation Password";
             this.Wrong_Confirm_lable.Visible = false;
             // 
+            // pictureBox6
+            // 
+            this.pictureBox6.BackColor = System.Drawing.Color.Transparent;
+            this.pictureBox6.BackgroundImage = global::server.Properties.Resources._134146_mail_email_icon;
+            this.pictureBox6.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox6.Location = new System.Drawing.Point(15, 7);
+            this.pictureBox6.Name = "pictureBox6";
+            this.pictureBox6.Size = new System.Drawing.Size(38, 38);
+            this.pictureBox6.TabIndex = 10;
+            this.pictureBox6.TabStop = false;
+            // 
+            // pictureBox5
+            // 
+            this.pictureBox5.BackColor = System.Drawing.Color.Transparent;
+            this.pictureBox5.BackgroundImage = global::server.Properties.Resources._115724_key_lock_password_locked_secure_icon;
+            this.pictureBox5.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox5.Location = new System.Drawing.Point(15, 7);
+            this.pictureBox5.Name = "pictureBox5";
+            this.pictureBox5.Size = new System.Drawing.Size(38, 38);
+            this.pictureBox5.TabIndex = 10;
+            this.pictureBox5.TabStop = false;
+            // 
+            // pictureBox3
+            // 
+            this.pictureBox3.BackColor = System.Drawing.Color.Transparent;
+            this.pictureBox3.BackgroundImage = global::server.Properties.Resources._115724_key_lock_password_locked_secure_icon;
+            this.pictureBox3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox3.Location = new System.Drawing.Point(15, 7);
+            this.pictureBox3.Name = "pictureBox3";
+            this.pictureBox3.Size = new System.Drawing.Size(38, 38);
+            this.pictureBox3.TabIndex = 10;
+            this.pictureBox3.TabStop = false;
+            // 
+            // pictureBox2
+            // 
+            this.pictureBox2.BackColor = System.Drawing.Color.Transparent;
+            this.pictureBox2.BackgroundImage = global::server.Properties.Resources._2203549_admin_avatar_human_login_user_icon;
+            this.pictureBox2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox2.Location = new System.Drawing.Point(15, 7);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(38, 38);
+            this.pictureBox2.TabIndex = 10;
+            this.pictureBox2.TabStop = false;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.pictureBox1.Image = global::server.Properties.Resources.gabriel_dalton_b7aqNnYRntY_unsplash__1_;
+            this.pictureBox1.Location = new System.Drawing.Point(0, -143);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(650, 785);
+            this.pictureBox1.TabIndex = 7;
+            this.pictureBox1.TabStop = false;
+            // 
+            // Return_btn
+            // 
+            this.Return_btn.BackColor = System.Drawing.Color.Black;
+            this.Return_btn.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Return_btn.ForeColor = System.Drawing.Color.Snow;
+            this.Return_btn.Location = new System.Drawing.Point(684, 527);
+            this.Return_btn.Name = "Return_btn";
+            this.Return_btn.Size = new System.Drawing.Size(144, 45);
+            this.Return_btn.TabIndex = 25;
+            this.Return_btn.Text = "Return";
+            this.Return_btn.UseVisualStyleBackColor = false;
+            this.Return_btn.Click += new System.EventHandler(this.Return_btn_Click);
+            // 
             // Forgot_Password
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.ClientSize = new System.Drawing.Size(1011, 641);
+            this.Controls.Add(this.Return_btn);
             this.Controls.Add(this.Wrong_Confirm_lable);
             this.Controls.Add(this.incorrect_message_username);
             this.Controls.Add(this.incorrect_message_OTP);
@@ -360,19 +375,19 @@
             this.Name = "Forgot_Password";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Forgot_Password";
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.panel7.ResumeLayout(false);
             this.panel7.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
             this.panel9.ResumeLayout(false);
             this.panel9.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -404,5 +419,6 @@
         private System.Windows.Forms.Timer Timer_Sent;
         private System.Windows.Forms.Label Timer_Sent_Label;
         public System.Windows.Forms.Label Wrong_Confirm_lable;
+        public System.Windows.Forms.Button Return_btn;
     }
 }
