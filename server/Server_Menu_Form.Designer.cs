@@ -40,10 +40,24 @@
             this.Current_Time_Label_Change = new System.Windows.Forms.Label();
             this.Current_Time_Label = new System.Windows.Forms.Label();
             this.UC_Control_Panel = new System.Windows.Forms.Panel();
+            this.Connection_ID_Online_Listview = new System.Windows.Forms.ListView();
+            this.UserID_Client = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.Status_Client = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.OFF_btn = new System.Windows.Forms.Button();
+            this.On_Btn = new System.Windows.Forms.Button();
+            this.ON_OFF_log_listview = new System.Windows.Forms.ListView();
+            this.UserID = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.Date = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.Status = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.Side_Panel.SuspendLayout();
             this.Logo_Panel.SuspendLayout();
             this.Tool_Bar_Panel.SuspendLayout();
+            this.UC_Control_Panel.SuspendLayout();
             this.SuspendLayout();
             // 
             // Side_Panel
@@ -188,16 +202,152 @@
             // 
             // UC_Control_Panel
             // 
+            this.UC_Control_Panel.Controls.Add(this.textBox1);
+            this.UC_Control_Panel.Controls.Add(this.label3);
+            this.UC_Control_Panel.Controls.Add(this.label2);
+            this.UC_Control_Panel.Controls.Add(this.label1);
+            this.UC_Control_Panel.Controls.Add(this.Connection_ID_Online_Listview);
+            this.UC_Control_Panel.Controls.Add(this.OFF_btn);
+            this.UC_Control_Panel.Controls.Add(this.On_Btn);
+            this.UC_Control_Panel.Controls.Add(this.ON_OFF_log_listview);
             this.UC_Control_Panel.Dock = System.Windows.Forms.DockStyle.Top;
             this.UC_Control_Panel.Location = new System.Drawing.Point(200, 83);
             this.UC_Control_Panel.Name = "UC_Control_Panel";
-            this.UC_Control_Panel.Size = new System.Drawing.Size(811, 558);
+            this.UC_Control_Panel.Size = new System.Drawing.Size(811, 555);
             this.UC_Control_Panel.TabIndex = 2;
+            // 
+            // Connection_ID_Online_Listview
+            // 
+            this.Connection_ID_Online_Listview.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.Connection_ID_Online_Listview.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.UserID_Client,
+            this.Status_Client});
+            this.Connection_ID_Online_Listview.GridLines = true;
+            this.Connection_ID_Online_Listview.HideSelection = false;
+            this.Connection_ID_Online_Listview.Location = new System.Drawing.Point(18, 72);
+            this.Connection_ID_Online_Listview.Name = "Connection_ID_Online_Listview";
+            this.Connection_ID_Online_Listview.Size = new System.Drawing.Size(324, 162);
+            this.Connection_ID_Online_Listview.TabIndex = 35;
+            this.Connection_ID_Online_Listview.UseCompatibleStateImageBehavior = false;
+            this.Connection_ID_Online_Listview.View = System.Windows.Forms.View.Details;
+            // 
+            // UserID_Client
+            // 
+            this.UserID_Client.Text = "Client ID";
+            this.UserID_Client.Width = 146;
+            // 
+            // Status_Client
+            // 
+            this.Status_Client.Text = "Client Status";
+            this.Status_Client.Width = 146;
+            // 
+            // OFF_btn
+            // 
+            this.OFF_btn.BackColor = System.Drawing.Color.Black;
+            this.OFF_btn.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.OFF_btn.ForeColor = System.Drawing.Color.IndianRed;
+            this.OFF_btn.Location = new System.Drawing.Point(393, 390);
+            this.OFF_btn.Name = "OFF_btn";
+            this.OFF_btn.Size = new System.Drawing.Size(144, 45);
+            this.OFF_btn.TabIndex = 34;
+            this.OFF_btn.Text = "OFF";
+            this.OFF_btn.UseVisualStyleBackColor = false;
+            this.OFF_btn.Click += new System.EventHandler(this.OFF_btn_Click);
+            // 
+            // On_Btn
+            // 
+            this.On_Btn.BackColor = System.Drawing.Color.Black;
+            this.On_Btn.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.On_Btn.ForeColor = System.Drawing.Color.Snow;
+            this.On_Btn.Location = new System.Drawing.Point(198, 390);
+            this.On_Btn.Name = "On_Btn";
+            this.On_Btn.Size = new System.Drawing.Size(144, 45);
+            this.On_Btn.TabIndex = 33;
+            this.On_Btn.Text = "ON";
+            this.On_Btn.UseVisualStyleBackColor = false;
+            // 
+            // ON_OFF_log_listview
+            // 
+            this.ON_OFF_log_listview.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.ON_OFF_log_listview.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.UserID,
+            this.Date,
+            this.Status});
+            this.ON_OFF_log_listview.ForeColor = System.Drawing.Color.SeaGreen;
+            this.ON_OFF_log_listview.GridLines = true;
+            this.ON_OFF_log_listview.HideSelection = false;
+            this.ON_OFF_log_listview.Location = new System.Drawing.Point(393, 72);
+            this.ON_OFF_log_listview.Name = "ON_OFF_log_listview";
+            this.ON_OFF_log_listview.Size = new System.Drawing.Size(382, 162);
+            this.ON_OFF_log_listview.TabIndex = 32;
+            this.ON_OFF_log_listview.UseCompatibleStateImageBehavior = false;
+            this.ON_OFF_log_listview.View = System.Windows.Forms.View.Details;
+            // 
+            // UserID
+            // 
+            this.UserID.Text = "Manager ID";
+            this.UserID.Width = 144;
+            // 
+            // Date
+            // 
+            this.Date.Text = "Date";
+            this.Date.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.Date.Width = 121;
+            // 
+            // Status
+            // 
+            this.Status.Text = "Status";
+            this.Status.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.Status.Width = 100;
             // 
             // timer1
             // 
             this.timer1.Enabled = true;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Cooper Black", 20.25F);
+            this.label1.ForeColor = System.Drawing.Color.White;
+            this.label1.Location = new System.Drawing.Point(48, 29);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(262, 31);
+            this.label1.TabIndex = 36;
+            this.label1.Text = "Connected Clients";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Cooper Black", 20.25F);
+            this.label2.ForeColor = System.Drawing.Color.White;
+            this.label2.Location = new System.Drawing.Point(462, 29);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(239, 31);
+            this.label2.TabIndex = 37;
+            this.label2.Text = "State Server Log";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Cooper Black", 20.25F);
+            this.label3.ForeColor = System.Drawing.Color.White;
+            this.label3.Location = new System.Drawing.Point(261, 282);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(220, 31);
+            this.label3.TabIndex = 38;
+            this.label3.Text = "Current Status";
+            // 
+            // textBox1
+            // 
+            this.textBox1.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.textBox1.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold);
+            this.textBox1.ForeColor = System.Drawing.Color.White;
+            this.textBox1.Location = new System.Drawing.Point(315, 329);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.ReadOnly = true;
+            this.textBox1.Size = new System.Drawing.Size(100, 39);
+            this.textBox1.TabIndex = 39;
             // 
             // Server_Menu_Form
             // 
@@ -217,6 +367,8 @@
             this.Logo_Panel.ResumeLayout(false);
             this.Tool_Bar_Panel.ResumeLayout(false);
             this.Tool_Bar_Panel.PerformLayout();
+            this.UC_Control_Panel.ResumeLayout(false);
+            this.UC_Control_Panel.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -235,6 +387,19 @@
         private System.Windows.Forms.Label Current_Time_Label;
         private System.Windows.Forms.Label Current_Time_Label_Change;
         private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.ListView ON_OFF_log_listview;
+        private System.Windows.Forms.ColumnHeader UserID;
+        private System.Windows.Forms.ColumnHeader Date;
+        private System.Windows.Forms.ColumnHeader Status;
+        public System.Windows.Forms.Button OFF_btn;
+        public System.Windows.Forms.Button On_Btn;
+        private System.Windows.Forms.ListView Connection_ID_Online_Listview;
+        private System.Windows.Forms.ColumnHeader UserID_Client;
+        private System.Windows.Forms.ColumnHeader Status_Client;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }
 

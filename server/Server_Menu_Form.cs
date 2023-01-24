@@ -46,8 +46,6 @@ namespace server
             movesidepanel_Show(Main_Control_Btn);
         }
 
-
-
         private void Event_Log_Btn_Click(object sender, EventArgs e)
         {
             movesidepanel_Show(Event_Log_Btn);
@@ -56,6 +54,11 @@ namespace server
         private void Register_New_Member_btn_Click(object sender, EventArgs e)
         {
             movesidepanel_Show(Register_New_Member_btn);
+        }
+
+        private void OFF_btn_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
