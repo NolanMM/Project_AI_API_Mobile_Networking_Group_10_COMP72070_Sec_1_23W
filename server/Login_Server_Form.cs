@@ -34,6 +34,7 @@ namespace server
         {
             try {
                 Password_txtbox.ForeColor = Color.White;
+                Password_txtbox.PasswordChar = '*';
             }
             catch { }
         }
@@ -73,6 +74,10 @@ namespace server
 
                 ExcelApiTest.Function_Excel_Login(username, password);
 
+                Server_Menu_Form server_Menu_Form = new Server_Menu_Form();
+                this.Hide();
+                server_Menu_Form.ShowDialog();
+
             } catch
             {
 
@@ -91,6 +96,21 @@ namespace server
             catch
             {
 
+            }
+        }
+
+
+        private void Forgot_Password_btn_MouseClick(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                // Open the forgot password form
+                Forgot_Password temp = new Forgot_Password();
+                this.Hide();
+                temp.ShowDialog();
+            }
+            catch
+            {
             }
         }
     }

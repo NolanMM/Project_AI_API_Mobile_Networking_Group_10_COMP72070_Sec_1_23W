@@ -184,6 +184,7 @@
             this.Forgot_Password_btn.Size = new System.Drawing.Size(99, 14);
             this.Forgot_Password_btn.TabIndex = 13;
             this.Forgot_Password_btn.Text = "Forgot Password";
+            this.Forgot_Password_btn.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Forgot_Password_btn_MouseClick);
             // 
             // panel6
             // 

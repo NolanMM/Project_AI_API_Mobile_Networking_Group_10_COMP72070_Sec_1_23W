@@ -36,7 +36,9 @@
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.Password_txtbox = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.Timer_Sent_Label = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.Sent_btn = new System.Windows.Forms.Label();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.Username_txtbox = new System.Windows.Forms.TextBox();
             this.panel7 = new System.Windows.Forms.Panel();
@@ -44,7 +46,6 @@
             this.pictureBox5 = new System.Windows.Forms.PictureBox();
             this.Confirm_password_txtbox = new System.Windows.Forms.TextBox();
             this.panel9 = new System.Windows.Forms.Panel();
-            this.Sent_btn = new System.Windows.Forms.Label();
             this.panel10 = new System.Windows.Forms.Panel();
             this.pictureBox6 = new System.Windows.Forms.PictureBox();
             this.OTP_Input_txtbox = new System.Windows.Forms.TextBox();
@@ -52,7 +53,6 @@
             this.incorrect_message_OTP = new System.Windows.Forms.Label();
             this.incorrect_message_username = new System.Windows.Forms.Label();
             this.Timer_Sent = new System.Windows.Forms.Timer(this.components);
-            this.Timer_Sent_Label = new System.Windows.Forms.Label();
             this.Wrong_Confirm_lable = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel3.SuspendLayout();
@@ -142,6 +142,19 @@
             this.panel1.Size = new System.Drawing.Size(315, 45);
             this.panel1.TabIndex = 16;
             // 
+            // Timer_Sent_Label
+            // 
+            this.Timer_Sent_Label.AutoSize = true;
+            this.Timer_Sent_Label.BackColor = System.Drawing.Color.Black;
+            this.Timer_Sent_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Timer_Sent_Label.ForeColor = System.Drawing.Color.IndianRed;
+            this.Timer_Sent_Label.Location = new System.Drawing.Point(250, 13);
+            this.Timer_Sent_Label.Name = "Timer_Sent_Label";
+            this.Timer_Sent_Label.Size = new System.Drawing.Size(27, 20);
+            this.Timer_Sent_Label.TabIndex = 24;
+            this.Timer_Sent_Label.Text = "00";
+            this.Timer_Sent_Label.Visible = false;
+            // 
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.White;
@@ -149,6 +162,19 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(206, 1);
             this.panel2.TabIndex = 12;
+            // 
+            // Sent_btn
+            // 
+            this.Sent_btn.AutoSize = true;
+            this.Sent_btn.BackColor = System.Drawing.Color.Black;
+            this.Sent_btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Sent_btn.ForeColor = System.Drawing.Color.IndianRed;
+            this.Sent_btn.Location = new System.Drawing.Point(240, 13);
+            this.Sent_btn.Name = "Sent_btn";
+            this.Sent_btn.Size = new System.Drawing.Size(37, 17);
+            this.Sent_btn.TabIndex = 13;
+            this.Sent_btn.Text = "Sent";
+            this.Sent_btn.Click += new System.EventHandler(this.Sent_btn_Click);
             // 
             // pictureBox2
             // 
@@ -223,20 +249,6 @@
             this.panel9.Name = "panel9";
             this.panel9.Size = new System.Drawing.Size(315, 45);
             this.panel9.TabIndex = 20;
-            // 
-            // Sent_btn
-            // 
-            this.Sent_btn.AutoSize = true;
-            this.Sent_btn.BackColor = System.Drawing.Color.Black;
-            this.Sent_btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Sent_btn.ForeColor = System.Drawing.Color.IndianRed;
-            this.Sent_btn.Location = new System.Drawing.Point(240, 13);
-            this.Sent_btn.Name = "Sent_btn";
-            this.Sent_btn.Size = new System.Drawing.Size(37, 17);
-            this.Sent_btn.TabIndex = 13;
-            this.Sent_btn.Text = "Sent";
-            this.Sent_btn.Visible = false;
-            this.Sent_btn.Click += new System.EventHandler(this.Sent_btn_Click);
             // 
             // panel10
             // 
@@ -314,19 +326,6 @@
             this.Timer_Sent.Interval = 1000;
             this.Timer_Sent.Tick += new System.EventHandler(this.Timer_Sent_Tick);
             // 
-            // Timer_Sent_Label
-            // 
-            this.Timer_Sent_Label.AutoSize = true;
-            this.Timer_Sent_Label.BackColor = System.Drawing.Color.Black;
-            this.Timer_Sent_Label.Font = new System.Drawing.Font("Microsoft Sans Serif", 12.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Timer_Sent_Label.ForeColor = System.Drawing.Color.IndianRed;
-            this.Timer_Sent_Label.Location = new System.Drawing.Point(250, 13);
-            this.Timer_Sent_Label.Name = "Timer_Sent_Label";
-            this.Timer_Sent_Label.Size = new System.Drawing.Size(27, 20);
-            this.Timer_Sent_Label.TabIndex = 24;
-            this.Timer_Sent_Label.Text = "00";
-            this.Timer_Sent_Label.Visible = false;
-            // 
             // Wrong_Confirm_lable
             // 
             this.Wrong_Confirm_lable.BackColor = System.Drawing.Color.Transparent;
@@ -359,6 +358,7 @@
             this.ForeColor = System.Drawing.SystemColors.ControlText;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "Forgot_Password";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Forgot_Password";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.panel3.ResumeLayout(false);
