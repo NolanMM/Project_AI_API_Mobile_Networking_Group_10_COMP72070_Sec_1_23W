@@ -4,16 +4,29 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using static server.ExcelApiTest;
 
 namespace server
 {
-    public class server_connection
+    public static class server_connection
     {
         private static readonly Socket serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         private static readonly List<Socket> clientSockets = new List<Socket>();
         private const int BUFFER_SIZE = 2048;
         private const int PORT = 100;
         private static readonly byte[] buffer = new byte[BUFFER_SIZE];
+
+        // Create clients socket that active with string authorized-information of clients
+        private static readonly List<Active_Clients> clientSockets_active = new List<Active_Clients>();
+
+        public class Active_Clients
+        {
+            public Socket Currently_Active_Client_Socket { get; set; }
+            public string UserID { get; set; }
+            public string Username { get; set; }
+            public string Password { get; set; }
+            public string Email { get; set; }
+        }
 
         ////static void Main()
         ////{
@@ -63,6 +76,7 @@ namespace server
 
         private static void ReceiveCallback(IAsyncResult AR)
         {
+            string respond = "Empty";
             Socket current = (Socket)AR.AsyncState;
             int received;
 
@@ -133,9 +147,38 @@ namespace server
              * If return false, server will sent respond "SignUpFailed" to Clients side for ask for enter another username that valid
              *
              *//////////////////
-            if(Items_After_Decypted.Length == 4)
+            if (Items_After_Decypted.Length == 4) // Register
             {
-                // Route to function 2
+                // Route to function 2 and Assign the respond back to clients
+                string respond_From_Function = Clients_SignUp.Sign_Up_Clients(Items_After_Decypted[1], Items_After_Decypted[2], Items_After_Decypted[3]);
+                // Assign sockets to the list that currently active authorized
+                string[] Items_in_respond = respond_From_Function.Split('-');
+                // string Items_in_respond[0] = SignUpSuccessfully/SignUpFailed (Signal to route program)
+                // string Items_in_respond[1] = UserID (Clients_SignUpSuccessfully)
+                // string Items_in_respond[2] = username (Clients_SignUpSuccessfully)
+                // string Items_in_respond[3] = password (Clients_SignUpSuccessfully)
+                // string Items_in_respond[4] = email (Clients_SignUpSuccessfully)
+                if (Items_in_respond[0] == "SignUpSuccessfully")
+                {
+                    Active_Clients active_Clients_SignUpSuccessfully = new Active_Clients();
+                    active_Clients_SignUpSuccessfully.UserID = Items_in_respond[1];
+                    active_Clients_SignUpSuccessfully.Username = Items_in_respond[2];
+                    active_Clients_SignUpSuccessfully.Password = Items_in_respond[3];
+                    active_Clients_SignUpSuccessfully.Email = Items_in_respond[4];
+                    active_Clients_SignUpSuccessfully.Currently_Active_Client_Socket = current;
+
+                    // Add information of active clients to the list
+                    clientSockets_active.Add(active_Clients_SignUpSuccessfully);
+
+                    string final_respond = Encryption_.Quick_Encypted_Account_by_Using_Hashing_Key_By_Username(active_Clients_SignUpSuccessfully.Username, 
+                        active_Clients_SignUpSuccessfully.Password, active_Clients_SignUpSuccessfully.Email);
+                    respond = "SignUpSuccessfully" + "-" + final_respond;
+                }
+                else
+                {
+                    respond = "SignUpFailed";
+                }
+            
             }
 
             //Function 3: Forgot Password
@@ -171,11 +214,9 @@ namespace server
                 // Route to function 4
             }
 
-            byte[] data = Encoding.ASCII.GetBytes("Received");
+            byte[] data = Encoding.ASCII.GetBytes(respond);
             current.Send(data);
             Console.WriteLine("Respond sent");
-
-
             current.BeginReceive(buffer, 0, BUFFER_SIZE, SocketFlags.None, ReceiveCallback, current);
         }
 

@@ -29,6 +29,23 @@ namespace server
             return result.ToString();
         }
 
+        public static string Quick_Encypted_Account_by_Using_Hashing_Key_By_Username(string username,string password, string email)
+        {
+            string raw_material = username;
+            string UserID = Encryption_.ComputeSha256Hash(raw_material);
+
+            // Take 16 chars from userID for the key for AES the data
+            string public_key = UserID.Substring(0, 8);
+            string secret_key = UserID.Substring(8, 8);
+
+            // Combine all the data together
+            string final_string = username + "-" + password + "-" + email;
+
+            // Encypted the final_string (User data) by the key
+            string final_encryption = Encryption_.Encrypt(final_string, public_key, secret_key);
+
+            return final_encryption;
+        }
         //public static string ShuffleKeyEncryption(string raw_key)
         //{
         //    return 
