@@ -1,10 +1,12 @@
 ﻿using DocumentFormat.OpenXml.Spreadsheet;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using static server.ExcelApiTest;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace server
 {
@@ -118,11 +120,13 @@ namespace server
              */
 
             // Using string split and take the first items to get the type of request
+            // string Items_After_Decypted[0] = Login/Register/Forgotpassword/RequestPrompt
+            // string Items_After_Decypted[1] = Username
+            // string Items_After_Decypted[2] = Password (format 1,2)/ PromptContent (format 4)
+            // string Items_After_Decypted[3] = Email (format 2)
             string[] Items_After_Decypted = decrypted_data.Split('-');
 
-
             // Then route the program to function due to the request
-
 
             //Function 1: Login
             /* If [Encypted-data] -> decypted = "Login-Username-Password";
@@ -130,12 +134,58 @@ namespace server
              * 
              * If return true, program will add the socket of user to the list and append to the runtime generate list has item has 2 attribute are: Socket-UserID - Authorization( Verified/ Unverified)
              * When ever receive a request prompt from user server just respond to the prompt that come from verified client UserID and Correct Socket link with that userID current time
-             * If return false, server will sent respond Unauthorization to Clients side for ask for Login again
+             * If return "LoginFailed", server will sent respond Unauthorization to Clients side for ask for Login again
+             *
+             * string Items_After_Decypted[0] = Login 
+             * string Items_After_Decypted[1] = Username
+             * string Items_After_Decypted[2] = Password
              *
              *//////////////////
             if (Items_After_Decypted.Length == 3 && Items_After_Decypted[0] == "Login")
             {
                 // Route to function 1
+                //
+                // Format of Respond_From_Functions are
+                // Format 1: LoginSuccessful-UserID-Username-Password-Emails
+                // Format 2: LoginFailed-
+                //
+                //////////////////////////////////
+                string respond_From_Functions = Clients_Login.Function_Excel_Login_Clients(Items_After_Decypted[1], Items_After_Decypted[2]);
+
+                string[] Items_in_respond = respond_From_Functions.Split('-');
+
+                if (Items_in_respond[0] == "LoginSuccessful")
+                {
+                    // Format 1
+                    // string Items_in_respond[0] = LoginSuccessful
+                    // string Items_in_respond[1] = UserID (Clients_LoginSuccessful)
+                    // string Items_in_respond[2] = username (Clients_LoginSuccessful)
+                    // string Items_in_respond[3] = password (Clients_LoginSuccessful)
+                    // string Items_in_respond[4] = email (Clients_LoginSuccessful)
+
+                    // Assign to the class object to store inside the functions
+                    Active_Clients active_Clients_SignUpSuccessfully = new Active_Clients();
+                    active_Clients_SignUpSuccessfully.UserID = Items_in_respond[1];
+                    active_Clients_SignUpSuccessfully.Username = Items_in_respond[2];
+                    active_Clients_SignUpSuccessfully.Password = Items_in_respond[3];
+                    active_Clients_SignUpSuccessfully.Email = Items_in_respond[4];
+                    active_Clients_SignUpSuccessfully.Currently_Active_Client_Socket = current;
+
+                    // Add information of active clients to the list
+                    clientSockets_active.Add(active_Clients_SignUpSuccessfully);
+
+                    // Encypted the respond to the Client side 
+                    string final_respond = Encryption_.Quick_Encypted_Account_by_Using_Hashing_Key_By_Username(active_Clients_SignUpSuccessfully.Username,
+                        active_Clients_SignUpSuccessfully.Password, active_Clients_SignUpSuccessfully.Email);
+
+                    string key = active_Clients_SignUpSuccessfully.UserID;
+                    // Modify the respond that actually be sent
+                    respond = "LoginSuccessful" + "-" + key + "-" + final_respond;
+                }
+                else
+                {
+                    respond = "LoginFailed-Please check your username or password again";
+                }
             }
 
             //Function 2: Register
@@ -149,6 +199,8 @@ namespace server
              *//////////////////
             if (Items_After_Decypted.Length == 4) // Register
             {
+                bool Flag = Clients_SignUp.Check_If_Duplicate_Username_Clients(Items_After_Decypted[1]);
+
                 // Route to function 2 and Assign the respond back to clients
                 string respond_From_Function = Clients_SignUp.Sign_Up_Clients(Items_After_Decypted[1], Items_After_Decypted[2], Items_After_Decypted[3]);
                 // Assign sockets to the list that currently active authorized
@@ -160,6 +212,7 @@ namespace server
                 // string Items_in_respond[4] = email (Clients_SignUpSuccessfully)
                 if (Items_in_respond[0] == "SignUpSuccessfully")
                 {
+                    // Assign to the class object to store inside the functions
                     Active_Clients active_Clients_SignUpSuccessfully = new Active_Clients();
                     active_Clients_SignUpSuccessfully.UserID = Items_in_respond[1];
                     active_Clients_SignUpSuccessfully.Username = Items_in_respond[2];
@@ -170,13 +223,22 @@ namespace server
                     // Add information of active clients to the list
                     clientSockets_active.Add(active_Clients_SignUpSuccessfully);
 
+                    // Encypted the respond to the Client side 
                     string final_respond = Encryption_.Quick_Encypted_Account_by_Using_Hashing_Key_By_Username(active_Clients_SignUpSuccessfully.Username, 
                         active_Clients_SignUpSuccessfully.Password, active_Clients_SignUpSuccessfully.Email);
-                    respond = "SignUpSuccessfully" + "-" + final_respond;
+
+                    string key = active_Clients_SignUpSuccessfully.UserID;
+                    // Modify the respond that actually be sent
+                    respond = "SignUpSuccessfully" + "-" + key + "-" + final_respond;
                 }
-                else
+                // Check if SignUpFailed because of duplicate username or not to send SignUp Failed respond to the clients
+                else if (Items_in_respond[0] == "SignUpFailed" && Flag == true)
                 {
-                    respond = "SignUpFailed";
+                    respond = "SignUpFailed-Duplicate Username";
+                }
+                else if (Items_in_respond[0] == "SignUpFailed" && Flag == false)
+                {
+                    respond = "SignUpFailed-";
                 }
             
             }

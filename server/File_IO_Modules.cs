@@ -337,6 +337,70 @@ namespace server
             }
 
         }
+        public static class Clients_Login
+        {
+            public static string Function_Excel_Login_Clients(string username, string password)
+            {
+                WorkBook wb = WorkBook.Load("sample_Clients.xlsx");
+                WorkSheet ws = wb.GetWorkSheet("Sheet1");
+                string respond = "Empty";
+                string raw_material = username;
+                string UserID = Encryption_.ComputeSha256Hash(raw_material);
+
+                string key = "Empty";
+                string data_result = "Empty";
+                //Traverse all rows of Excel WorkSheet
+                for (int i = 0; i < ws.Rows.Count(); i++)
+                {
+                    //Traverse all columns of specific Row
+                    for (int j = 0; j < ws.Columns.Count(); j++)
+                    {
+                        //Get the values of UserID if it match with hashing code from hashing
+                        string val = ws.Rows[i].Columns[0].Value.ToString();
+                        if (val == UserID)
+                        {
+                            // Assign the key
+                            key = ws.Rows[i].Columns[0].Value.ToString();
+                            // Take the encypted data out
+                            data_result = ws.Rows[i].Columns[1].Value.ToString();
+                        }
+
+                    }
+                }
+                // Take 16 chars for the key to decypted the data in the second column in the same row
+                string public_key = key.Substring(0, 8);
+                string secret_key = key.Substring(8, 8);
+                string decrypted_data = Encryption_.Decrypt(data_result, public_key, secret_key);
+
+                string[] Items = decrypted_data.Split('-');
+                // string Items[0] = Username
+                // string Items[1] = Password;
+                // string Items[2] = Email;
+
+                if (Items[1] == password)
+                {
+                    //Console.WriteLine(Items[0]);
+                    //Console.WriteLine(Items[1]);
+                    //Console.WriteLine(Items[2]);
+
+                    //Console.WriteLine("Login function build successfully\n");
+                    //Console.WriteLine("The data of the user are\n");
+                    //Console.WriteLine(decrypted_data);
+                    //Console.ReadLine();
+                    respond = "LoginSuccessful" +"-"+ UserID + "-" + decrypted_data;
+                    MessageBox.Show("LoginSuccessful", "Warning");
+                    return respond;
+
+                }
+                else
+                {
+                    respond = "LoginFailed-";
+                    return respond;
+                }
+
+
+            }
+        }
         public static class Clients_SignUp
         {
             public static string Sign_Up_Clients(string username, string password, string email)
