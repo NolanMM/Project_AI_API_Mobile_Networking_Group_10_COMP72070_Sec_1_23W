@@ -30,8 +30,8 @@ namespace server
         }
         private void Server_Menu_Form_Load(object sender, EventArgs e)
         {
-            Welcome_Back_Menu_UC temp = new Welcome_Back_Menu_UC();
-            addUC(temp);
+            //Welcome_Back_Menu_UC temp = new Welcome_Back_Menu_UC();
+            //addUC(temp);
             timer1.Start();
         }
 
@@ -57,6 +57,16 @@ namespace server
         }
 
         private void OFF_btn_Click(object sender, EventArgs e)
+        {
+            server_connection.CloseAllSockets();
+        }
+
+        public void On_Btn_Click(object sender, EventArgs e)
+        {
+            server_connection.SetupServer();
+        }
+
+        private void Refresh_btn_Click(object sender, EventArgs e)
         {
 
         }

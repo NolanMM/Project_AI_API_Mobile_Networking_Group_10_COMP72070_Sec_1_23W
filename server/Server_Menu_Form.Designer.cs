@@ -40,6 +40,10 @@
             this.Current_Time_Label_Change = new System.Windows.Forms.Label();
             this.Current_Time_Label = new System.Windows.Forms.Label();
             this.UC_Control_Panel = new System.Windows.Forms.Panel();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.Connection_ID_Online_Listview = new System.Windows.Forms.ListView();
             this.UserID_Client = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Status_Client = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -50,10 +54,7 @@
             this.Date = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Status = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.Refresh_btn = new System.Windows.Forms.Button();
             this.Side_Panel.SuspendLayout();
             this.Logo_Panel.SuspendLayout();
             this.Tool_Bar_Panel.SuspendLayout();
@@ -202,6 +203,7 @@
             // 
             // UC_Control_Panel
             // 
+            this.UC_Control_Panel.Controls.Add(this.Refresh_btn);
             this.UC_Control_Panel.Controls.Add(this.textBox1);
             this.UC_Control_Panel.Controls.Add(this.label3);
             this.UC_Control_Panel.Controls.Add(this.label2);
@@ -215,6 +217,50 @@
             this.UC_Control_Panel.Name = "UC_Control_Panel";
             this.UC_Control_Panel.Size = new System.Drawing.Size(811, 555);
             this.UC_Control_Panel.TabIndex = 2;
+            // 
+            // textBox1
+            // 
+            this.textBox1.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.textBox1.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold);
+            this.textBox1.ForeColor = System.Drawing.Color.White;
+            this.textBox1.Location = new System.Drawing.Point(315, 329);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.ReadOnly = true;
+            this.textBox1.Size = new System.Drawing.Size(100, 39);
+            this.textBox1.TabIndex = 39;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Cooper Black", 20.25F);
+            this.label3.ForeColor = System.Drawing.Color.White;
+            this.label3.Location = new System.Drawing.Point(261, 282);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(220, 31);
+            this.label3.TabIndex = 38;
+            this.label3.Text = "Current Status";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Cooper Black", 20.25F);
+            this.label2.ForeColor = System.Drawing.Color.White;
+            this.label2.Location = new System.Drawing.Point(462, 29);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(239, 31);
+            this.label2.TabIndex = 37;
+            this.label2.Text = "State Server Log";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Cooper Black", 20.25F);
+            this.label1.ForeColor = System.Drawing.Color.White;
+            this.label1.Location = new System.Drawing.Point(48, 29);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(262, 31);
+            this.label1.TabIndex = 36;
+            this.label1.Text = "Connected Clients";
             // 
             // Connection_ID_Online_Listview
             // 
@@ -265,6 +311,7 @@
             this.On_Btn.TabIndex = 33;
             this.On_Btn.Text = "ON";
             this.On_Btn.UseVisualStyleBackColor = false;
+            this.On_Btn.Click += new System.EventHandler(this.On_Btn_Click);
             // 
             // ON_OFF_log_listview
             // 
@@ -305,49 +352,18 @@
             this.timer1.Enabled = true;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // label1
+            // Refresh_btn
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Cooper Black", 20.25F);
-            this.label1.ForeColor = System.Drawing.Color.White;
-            this.label1.Location = new System.Drawing.Point(48, 29);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(262, 31);
-            this.label1.TabIndex = 36;
-            this.label1.Text = "Connected Clients";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Cooper Black", 20.25F);
-            this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(462, 29);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(239, 31);
-            this.label2.TabIndex = 37;
-            this.label2.Text = "State Server Log";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Cooper Black", 20.25F);
-            this.label3.ForeColor = System.Drawing.Color.White;
-            this.label3.Location = new System.Drawing.Point(261, 282);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(220, 31);
-            this.label3.TabIndex = 38;
-            this.label3.Text = "Current Status";
-            // 
-            // textBox1
-            // 
-            this.textBox1.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.textBox1.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold);
-            this.textBox1.ForeColor = System.Drawing.Color.White;
-            this.textBox1.Location = new System.Drawing.Point(315, 329);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(100, 39);
-            this.textBox1.TabIndex = 39;
+            this.Refresh_btn.BackColor = System.Drawing.Color.Black;
+            this.Refresh_btn.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Refresh_btn.ForeColor = System.Drawing.Color.Snow;
+            this.Refresh_btn.Location = new System.Drawing.Point(18, 268);
+            this.Refresh_btn.Name = "Refresh_btn";
+            this.Refresh_btn.Size = new System.Drawing.Size(144, 45);
+            this.Refresh_btn.TabIndex = 40;
+            this.Refresh_btn.Text = "Refresh";
+            this.Refresh_btn.UseVisualStyleBackColor = false;
+            this.Refresh_btn.Click += new System.EventHandler(this.Refresh_btn_Click);
             // 
             // Server_Menu_Form
             // 
@@ -400,6 +416,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox textBox1;
+        public System.Windows.Forms.Button Refresh_btn;
     }
 }
 

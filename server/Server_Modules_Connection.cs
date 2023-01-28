@@ -12,6 +12,7 @@ namespace server
 {
     public static class server_connection
     {
+        
         private static readonly Socket serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         private static readonly List<Socket> clientSockets = new List<Socket>();
         private const int BUFFER_SIZE = 2048;
@@ -19,7 +20,7 @@ namespace server
         private static readonly byte[] buffer = new byte[BUFFER_SIZE];
 
         // Create clients socket that active with string authorized-information of clients
-        private static readonly List<Active_Clients> clientSockets_active = new List<Active_Clients>();
+        public static readonly List<Active_Clients> clientSockets_active = new List<Active_Clients>();
 
         public class Active_Clients
         {
@@ -38,7 +39,7 @@ namespace server
         //    CloseAllSockets();
         //}
 
-        private static void SetupServer()
+        public static void SetupServer()
         {
             serverSocket.Bind(new IPEndPoint(IPAddress.Any, PORT));
             serverSocket.Listen(0);
@@ -47,7 +48,7 @@ namespace server
 
         /// Close all connected client (we do not need to shutdown the server socket as its connections
         /// are already closed with the clients).
-        private static void CloseAllSockets()
+        public static void CloseAllSockets()
         {
             foreach (Socket socket in clientSockets)
             {
@@ -230,15 +231,21 @@ namespace server
                     string key = active_Clients_SignUpSuccessfully.UserID;
                     // Modify the respond that actually be sent
                     respond = "SignUpSuccessfully" + "-" + key + "-" + final_respond;
+                    byte[] data_test = Encoding.ASCII.GetBytes(respond);
+                    current.Send(data_test);
                 }
                 // Check if SignUpFailed because of duplicate username or not to send SignUp Failed respond to the clients
                 else if (Items_in_respond[0] == "SignUpFailed" && Flag == true)
                 {
                     respond = "SignUpFailed-Duplicate Username";
+                    byte[] data_test = Encoding.ASCII.GetBytes(respond);
+                    current.Send(data_test);
                 }
                 else if (Items_in_respond[0] == "SignUpFailed" && Flag == false)
                 {
                     respond = "SignUpFailed-";
+                    byte[] data_test = Encoding.ASCII.GetBytes(respond);
+                    current.Send(data_test);
                 }
             
             }
@@ -268,7 +275,7 @@ namespace server
              * Then take first 16 chars from the hashing code to generate the key to Encypted data string encypted = "PromptRespond" + '-' + "Respond_Content";
              * server send the respond back to the socket that link to that clients in the list enrypted data string
              * 
-             *
+             * 
              *//////////////////
 
             if (Items_After_Decypted.Length == 3 && Items_After_Decypted[0] == "RequestPrompt")
