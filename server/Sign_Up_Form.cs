@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using static server.ExcelApiTest;
 
@@ -23,18 +17,16 @@ namespace server
             string usernname = Username_txtbox.Text;
             string password = Password_txtbox.Text;
             string email = Email_txtbox.Text;
-            Server_SignUp.Sign_Up(usernname,password,email);
-            // Redirect to main menu 
+            Server_SignUp.Sign_Up(usernname, password, email);
+            // Redirect to main menu
 
             Server_Menu_Form temp = new Server_Menu_Form();
-
         }
 
         private void Username_txtbox_TextChanged(object sender, EventArgs e)
         {
             try
             {
-
                 Username_txtbox.ForeColor = Color.White;
 
                 //else { Username_txtbox.ForeColor = Color.Gray; Username_txtbox.Text = "Username"; }

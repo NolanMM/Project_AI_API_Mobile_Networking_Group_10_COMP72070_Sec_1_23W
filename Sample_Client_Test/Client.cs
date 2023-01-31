@@ -1,7 +1,7 @@
-﻿using System;
+﻿using System.Net;
 using System.Net.Sockets;
-using System.Net;
 using System.Text;
+
 namespace MultiClient
 {
     public static class Client
@@ -11,7 +11,7 @@ namespace MultiClient
 
         private const int PORT = 100;
 
-        static void Main()
+        private static void Main()
         {
             Console.Title = "Client";
             ConnectToServer();
@@ -68,7 +68,8 @@ namespace MultiClient
         private static void SendRequest()
         {
             bool Flag = true;
-            while (Flag) {
+            while (Flag)
+            {
                 Console.WriteLine("Please Enter the mode you want to\n");
                 Console.WriteLine("1. Sign In\n");
                 Console.WriteLine("2. Sign Up\n");
@@ -81,30 +82,37 @@ namespace MultiClient
                 {
                     case "1":
                         break;
+
                     case "2":
                         string respond_message = Clients_Services.Sing_Up_Clients();
                         Console.WriteLine();
                         Console.WriteLine(respond_message);
                         Flag = false;
                         break;
+
                     case "3":
                         break;
+
                     case "Disconnect":
                         break;
+
                     case "4":
                         Exit();
                         break;
+
                     case "exit":
                         Exit();
                         break;
+
                     case "sign in":
                         break;
+
                     case "sign up":
                         break;
+
                     default:
                         Console.WriteLine("Wrong input. Please input again\n");
                         break;
-
                 }
             }
         }
@@ -117,7 +125,9 @@ namespace MultiClient
             byte[] buffer = Encoding.ASCII.GetBytes(text);
             ClientSocket.Send(buffer, 0, buffer.Length, SocketFlags.None);
         }
+
         public static string resond_from_server = "Empty";
+
         private static void ReceiveResponse()
         {
             var buffer = new byte[2048];

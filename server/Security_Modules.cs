@@ -1,7 +1,7 @@
-﻿using System.Security.Cryptography;
-using System.Text;
+﻿using System;
 using System.IO;
-using System;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace server
 {
@@ -29,7 +29,7 @@ namespace server
             return result.ToString();
         }
 
-        public static string Quick_Encypted_Account_by_Using_Hashing_Key_By_Username(string username,string password, string email)
+        public static string Quick_Encypted_Account_by_Using_Hashing_Key_By_Username(string username, string password, string email)
         {
             string raw_material = username;
             string UserID = Encryption_.ComputeSha256Hash(raw_material);
@@ -46,19 +46,20 @@ namespace server
 
             return final_encryption;
         }
+
         //public static string ShuffleKeyEncryption(string raw_key)
         //{
-        //    return 
+        //    return
         //}
         public static string ComputeSha256Hash(string rawData)
         {
-            // Create a SHA256   
+            // Create a SHA256
             using (SHA256 sha256Hash = SHA256.Create())
             {
-                // ComputeHash - returns byte array  
+                // ComputeHash - returns byte array
                 byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(rawData));
 
-                // Convert byte array to a string   
+                // Convert byte array to a string
                 StringBuilder builder = new StringBuilder();
                 for (int i = 0; i < bytes.Length; i++)
                 {
@@ -67,6 +68,7 @@ namespace server
                 return builder.ToString();
             }
         }
+
         public static string Encrypt(string str, string public_key, string secret_key)
         {
             try
@@ -98,6 +100,7 @@ namespace server
                 throw new Exception(ex.Message, ex.InnerException);
             }
         }
+
         public static string Decrypt(string str, string public_key, string secret_key)
         {
             try

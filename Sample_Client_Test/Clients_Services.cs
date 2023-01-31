@@ -1,9 +1,5 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
-using System.IO;
-using System;
-using Microsoft.Win32;
-using static MultiClient.Client; 
 
 namespace MultiClient
 {
@@ -48,19 +44,20 @@ namespace MultiClient
 
             return final_encryption;
         }
+
         //public static string ShuffleKeyEncryption(string raw_key)
         //{
-        //    return 
+        //    return
         //}
         public static string ComputeSha256Hash(string rawData)
         {
-            // Create a SHA256   
+            // Create a SHA256
             using (SHA256 sha256Hash = SHA256.Create())
             {
-                // ComputeHash - returns byte array  
+                // ComputeHash - returns byte array
                 byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(rawData));
 
-                // Convert byte array to a string   
+                // Convert byte array to a string
                 StringBuilder builder = new StringBuilder();
                 for (int i = 0; i < bytes.Length; i++)
                 {
@@ -69,6 +66,7 @@ namespace MultiClient
                 return builder.ToString();
             }
         }
+
         public static string Encrypt(string str, string public_key, string secret_key)
         {
             try
@@ -100,6 +98,7 @@ namespace MultiClient
                 throw new Exception(ex.Message, ex.InnerException);
             }
         }
+
         public static string Decrypt(string str, string public_key, string secret_key)
         {
             try
@@ -134,6 +133,7 @@ namespace MultiClient
             }
         }
     }
+
     public static class Clients_Services
     {
         public static string Sing_Up_Clients()
@@ -181,6 +181,5 @@ namespace MultiClient
                 return return_message;
             }
         }
-
     }
 }
