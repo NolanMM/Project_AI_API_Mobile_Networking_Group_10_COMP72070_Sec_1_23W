@@ -2,8 +2,10 @@
 using System.Text;
 using System.IO;
 using System;
+using Microsoft.Win32;
+using static MultiClient.Client; 
 
-namespace server
+namespace MultiClient
 {
     public static class Encryption_
     {
@@ -29,7 +31,7 @@ namespace server
             return result.ToString();
         }
 
-        public static string Quick_Encypted_Account_by_Using_Hashing_Key_By_Username(string username,string password, string email)
+        public static string Quick_Encypted_Account_by_Using_Hashing_Key_By_Username(string username, string password, string email)
         {
             string raw_material = username;
             string UserID = Encryption_.ComputeSha256Hash(raw_material);
@@ -131,5 +133,54 @@ namespace server
                 throw new Exception(ae.Message, ae.InnerException);
             }
         }
+    }
+    public static class Clients_Services
+    {
+        public static string Sing_Up_Clients()
+        {
+            string return_message = "Empty";
+            try
+            {
+                string request_type = "Register";
+                Console.WriteLine("Please Enter Username\n");
+                string username = Console.ReadLine();
+                Console.WriteLine("Please Enter Password\n");
+                string password = Console.ReadLine();
+                Console.WriteLine("Please Enter Emails\n");
+                string email = Console.ReadLine();
+
+                string raw_material = username;
+                string UserID = Encryption_.ComputeSha256Hash(raw_material);
+
+                // Take 16 chars from userID for the key for AES the data
+                string public_key = UserID.Substring(0, 8);
+                string secret_key = UserID.Substring(8, 8);
+
+                // Combine all the data together
+                // Format: Register - Username - Password - Email
+
+                string final_string = request_type + "-" + username + "-" + password + "-" + email;
+
+                // Encypted the final_string (User data) by the key
+                string send_infor_string = Encryption_.Encrypt(final_string, public_key, secret_key);
+
+                string respond = UserID + "-" + send_infor_string;
+
+                Client.SendString(respond);
+
+                Console.WriteLine();
+                Console.WriteLine("String send: " + respond);
+                Console.WriteLine();
+
+                return_message = "\nSend Successful to server Sign Up request\n";
+                return return_message;
+            }
+            catch
+            {
+                return_message = "\nCannot send to server Sign Up request\n";
+                return return_message;
+            }
+        }
+
     }
 }

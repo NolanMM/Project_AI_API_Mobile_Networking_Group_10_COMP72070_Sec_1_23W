@@ -22,6 +22,8 @@ namespace server
         string OTP_CODE_PUBLIC = "Empty";
         private void Sent_btn_Click(object sender, EventArgs e)
         {
+            Timer_Sent_Label.Visible = true;
+
             seconds = Convert.ToInt32("180");
             Timer_Sent.Start();
             Sent_btn.Visible = false;
@@ -48,7 +50,6 @@ namespace server
 
         private void Timer_Sent_Tick(object sender, EventArgs e)
         {
-            Timer_Sent_Label.Visible = true;
             Timer_Sent_Label.Text = seconds--.ToString();
             if (seconds == 0)
             {
@@ -60,6 +61,7 @@ namespace server
 
         private void Confirm_btn_Click(object sender, EventArgs e)
         {
+            string username = Username_txtbox.Text;
             string new_password = Password_txtbox.Text;
             string confirm_password = Confirm_password_txtbox.Text;
 
@@ -80,9 +82,20 @@ namespace server
             if(Flag_password == Flag_OTP_Code == true && seconds > 0)
             {
                 // Rewrite the new information to the excel file
-                MessageBox.Show("Change password Successfully", "Alert");
+                bool Flag = ExcelApiTest.Re_Write_Password_To_Excel_Specific_Location(username, new_password);
+                if (Flag == true)
+                {
+                    MessageBox.Show("Change password Successfully", "Alert");
+                }else { MessageBox.Show("Save the File Failed", "Warning"); }
             }
             else { MessageBox.Show("Change password Failed", "Warning"); }
+        }
+
+        private void Return_btn_Click(object sender, EventArgs e)
+        {
+            Login_Server_Form login_Server_Form = new Login_Server_Form();
+            this.Hide();
+            login_Server_Form.ShowDialog();
         }
     }
 }

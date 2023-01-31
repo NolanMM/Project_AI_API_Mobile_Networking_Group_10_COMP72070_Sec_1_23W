@@ -91,6 +91,12 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Control_UC.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Control_UC.Designer.cs">
+      <DependentUpon>Control_UC.cs</DependentUpon>
+    </Compile>
     <Compile Include="File_IO_Modules.cs" />
     <Compile Include="Forgot_Password.cs">
       <SubType>Form</SubType>
@@ -114,12 +120,22 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Server_Modules_Connection.cs" />
     <Compile Include="Sign_Up_Form.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Sign_Up_Form.Designer.cs">
       <DependentUpon>Sign_Up_Form.cs</DependentUpon>
     </Compile>
+    <Compile Include="Welcome_Back_Menu_UC.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Welcome_Back_Menu_UC.Designer.cs">
+      <DependentUpon>Welcome_Back_Menu_UC.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="Control_UC.resx">
+      <DependentUpon>Control_UC.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forgot_Password.resx">
       <DependentUpon>Forgot_Password.cs</DependentUpon>
     </EmbeddedResource>
@@ -141,6 +157,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Sign_Up_Form.resx">
       <DependentUpon>Sign_Up_Form.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Welcome_Back_Menu_UC.resx">
+      <DependentUpon>Welcome_Back_Menu_UC.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -170,6 +189,24 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\134146_mail_email_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\servers.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\servers1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\servers2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\control-panel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\register.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\file.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
