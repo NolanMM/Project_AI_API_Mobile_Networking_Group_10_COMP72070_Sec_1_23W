@@ -303,6 +303,49 @@ namespace MultiClient
                 return return_message;
             }
         }
+        public static string Sign_In_Client()
+        {
+            string return_message = "Empty";
+            try
+            {
+                string request_type = "Login";
+                Console.WriteLine("Please Enter Username\n");
+                string username = Console.ReadLine();
+                Console.WriteLine("Please Enter Password\n");
+                string password = Console.ReadLine();
+
+                string raw_material = username;
+                string UserID = Encryption_.ComputeSha256Hash(raw_material);
+
+                // Take 16 chars from userID for the key for AES the data
+                string public_key = UserID.Substring(0, 8);
+                string secret_key = UserID.Substring(8, 8);
+
+                // Combine all the data together
+                // Format: Register - Username - Password - Email
+
+                string final_string = request_type + "-" + username + "-" + password;
+
+                // Encypted the final_string (User data) by the key
+                string send_infor_string = Encryption_.Encrypt(final_string, public_key, secret_key);
+
+                string respond = UserID + "-" + send_infor_string;
+
+                Client.SendString(respond);
+
+                Console.WriteLine();
+                Console.WriteLine("String send: " + respond);
+                Console.WriteLine();
+
+                return_message = "\nSend Successful to server Sign In request\n";
+                return return_message;
+            }
+            catch
+            {
+                return_message = "\nCannot send to server Sign In request\n";
+                return return_message;
+            }
+        }
 
     }
 }

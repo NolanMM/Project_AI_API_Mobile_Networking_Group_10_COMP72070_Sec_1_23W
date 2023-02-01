@@ -135,8 +135,8 @@ namespace MultiClient
             byte[] buffer = Encoding.ASCII.GetBytes(text);
             ClientSocket.Send(buffer, 0, buffer.Length, SocketFlags.None);
         }
-        public static string resond_from_server = "Empty";
-        private static void ReceiveResponse()
+        //public static string resond_from_server = "Empty";
+        private static string ReceiveResponse()
         {
             var buffer = new byte[2048];
             int received = ClientSocket.Receive(buffer, SocketFlags.None);

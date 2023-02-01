@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using static server.server_connection;
 
@@ -57,7 +58,7 @@ namespace server
         {
             server_connection.CloseAllSockets();
         }
-        List<Active_Clients> active_Clients1 = new List<Active_Clients>();
+            List<Active_Clients> active_Clients1 = new List<Active_Clients>();
 
         public void On_Btn_Click(object sender, EventArgs e)
         {
