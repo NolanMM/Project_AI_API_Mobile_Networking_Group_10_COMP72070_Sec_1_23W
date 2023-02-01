@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using static server.server_connection;
 
@@ -17,6 +10,7 @@ namespace server
         {
             InitializeComponent();
         }
+
         private void addUC(UserControl uc)
         {
             UC_Control_Panel.Controls.Clear();
@@ -24,11 +18,13 @@ namespace server
             UC_Control_Panel.Controls.Clear();
             UC_Control_Panel.Controls.Add(uc);
         }
+
         private void movesidepanel_Show(Button btn)
         {
             Side_Panel_Run.Top = btn.Top;
             Side_Panel_Run.Height = btn.Height;
         }
+
         private void Server_Menu_Form_Load(object sender, EventArgs e)
         {
             //Welcome_Back_Menu_UC temp = new Welcome_Back_Menu_UC();

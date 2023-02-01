@@ -1,14 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using static server.ExcelApiTest;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace server
 {
@@ -21,8 +13,8 @@ namespace server
 
         private void Username_txtbox_TextChanged(object sender, EventArgs e)
         {
-            try {
-
+            try
+            {
                 Username_txtbox.ForeColor = Color.White;
 
                 //else { Username_txtbox.ForeColor = Color.Gray; Username_txtbox.Text = "Username"; }
@@ -32,7 +24,8 @@ namespace server
 
         private void Password_txtbox_TextChanged(object sender, EventArgs e)
         {
-            try {
+            try
+            {
                 Password_txtbox.ForeColor = Color.White;
                 Password_txtbox.PasswordChar = '*';
             }
@@ -67,7 +60,7 @@ namespace server
 
         private void Login_Btn_Click(object sender, EventArgs e)
         {
-            try 
+            try
             {
                 string username = Username_txtbox.Text;
                 string password = Password_txtbox.Text;
@@ -77,10 +70,9 @@ namespace server
                 Server_Menu_Form server_Menu_Form = new Server_Menu_Form();
                 this.Hide();
                 server_Menu_Form.ShowDialog();
-
-            } catch
+            }
+            catch
             {
-
             }
         }
 
@@ -95,10 +87,8 @@ namespace server
             }
             catch
             {
-
             }
         }
-
 
         private void Forgot_Password_btn_MouseClick(object sender, MouseEventArgs e)
         {

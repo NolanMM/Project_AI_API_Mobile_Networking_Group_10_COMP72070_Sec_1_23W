@@ -1,13 +1,14 @@
 ﻿using System;
-using System.Net.Mail;
 using System.Net;
+using System.Net.Mail;
 
 namespace server
 {
     public class OTP_module
     {
-        Random random = new Random();
-        static public bool Send_OTP_Code(string randomCode, string email_to)
+        private Random random = new Random();
+
+        public static bool Send_OTP_Code(string randomCode, string email_to)
         {
             /* @ Create new variable to hold the sender email, password of the sender, and the message is the code */
             String from, pass, messageBody;
@@ -45,10 +46,11 @@ namespace server
                 return false;
             }
         }
-        static public bool Checking_OTP_code(string randomCode)
+
+        public static bool Checking_OTP_code(string randomCode)
         {
-            /* @ Checking the verify code 3 times or 
-             * @ Else logout and start from beginning due to the security 
+            /* @ Checking the verify code 3 times or
+             * @ Else logout and start from beginning due to the security
              */
             int count = 0;
             while (count >= 0)

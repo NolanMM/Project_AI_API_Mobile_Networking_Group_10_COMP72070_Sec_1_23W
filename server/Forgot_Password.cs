@@ -1,25 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using static server.ExcelApiTest;
 
 namespace server
 {
     public partial class Forgot_Password : Form
     {
-        int seconds;
+        private int seconds;
+
         public Forgot_Password()
         {
             InitializeComponent();
         }
 
-        string OTP_CODE_PUBLIC = "Empty";
+        private string OTP_CODE_PUBLIC = "Empty";
+
         private void Sent_btn_Click(object sender, EventArgs e)
         {
             Timer_Sent_Label.Visible = true;
@@ -31,7 +25,7 @@ namespace server
             string username = Username_txtbox.Text;
 
             string[] Items = ExcelApiTest.Take_Information_By_Username(username);
-            if(Items != null)
+            if (Items != null)
             {
                 // Hide the message show incorrect username
                 incorrect_message_username.Visible = false;
@@ -68,25 +62,26 @@ namespace server
             // If flag = true, confirmation new password successful
             bool Flag_password = false;
 
-            if(new_password == confirm_password) { Wrong_Confirm_lable.Visible = false; Flag_password = true; }
+            if (new_password == confirm_password) { Wrong_Confirm_lable.Visible = false; Flag_password = true; }
             else { Wrong_Confirm_lable.Visible = true; Flag_password = false; }
 
             string OTP_Input = OTP_Input_txtbox.Text;
             // If flag = true, confirmation OTP code sent successful
             bool Flag_OTP_Code = false;
 
-            if(OTP_Input == OTP_CODE_PUBLIC) { incorrect_message_OTP.Visible = false; Flag_OTP_Code = true; }
+            if (OTP_Input == OTP_CODE_PUBLIC) { incorrect_message_OTP.Visible = false; Flag_OTP_Code = true; }
             else { incorrect_message_OTP.Visible = true; Flag_OTP_Code = false; }
 
             // Check if the user input in 180 second to confirm the otp code else it will be expried
-            if(Flag_password == Flag_OTP_Code == true && seconds > 0)
+            if (Flag_password == Flag_OTP_Code == true && seconds > 0)
             {
                 // Rewrite the new information to the excel file
                 bool Flag = ExcelApiTest.Re_Write_Password_To_Excel_Specific_Location(username, new_password);
                 if (Flag == true)
                 {
                     MessageBox.Show("Change password Successfully", "Alert");
-                }else { MessageBox.Show("Save the File Failed", "Warning"); }
+                }
+                else { MessageBox.Show("Save the File Failed", "Warning"); }
             }
             else { MessageBox.Show("Change password Failed", "Warning"); }
         }

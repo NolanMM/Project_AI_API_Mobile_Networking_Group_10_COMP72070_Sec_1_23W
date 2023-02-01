@@ -166,19 +166,20 @@ namespace MultiClient
 
             return final_encryption;
         }
+
         //public static string ShuffleKeyEncryption(string raw_key)
         //{
-        //    return 
+        //    return
         //}
         public static string ComputeSha256Hash(string rawData)
         {
-            // Create a SHA256   
+            // Create a SHA256
             using (SHA256 sha256Hash = SHA256.Create())
             {
-                // ComputeHash - returns byte array  
+                // ComputeHash - returns byte array
                 byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(rawData));
 
-                // Convert byte array to a string   
+                // Convert byte array to a string
                 StringBuilder builder = new StringBuilder();
                 for (int i = 0; i < bytes.Length; i++)
                 {
@@ -187,6 +188,7 @@ namespace MultiClient
                 return builder.ToString();
             }
         }
+
         public static string Encrypt(string str, string public_key, string secret_key)
         {
             try
@@ -218,6 +220,7 @@ namespace MultiClient
                 throw new Exception(ex.Message, ex.InnerException);
             }
         }
+
         public static string Decrypt(string str, string public_key, string secret_key)
         {
             try
@@ -252,6 +255,7 @@ namespace MultiClient
             }
         }
     }
+
     public static class Clients_Services
     {
         public static string Sing_Up_Clients()
@@ -299,48 +303,6 @@ namespace MultiClient
                 return return_message;
             }
         }
-        public static string Sign_In_Client()
-        {
-            string return_message = "Empty";
-            try
-            {
-                string request_type = "Login";
-                Console.WriteLine("Please Enter Username\n");
-                string username = Console.ReadLine();
-                Console.WriteLine("Please Enter Password\n");
-                string password = Console.ReadLine();
 
-                string raw_material = username;
-                string UserID = Encryption_.ComputeSha256Hash(raw_material);
-
-                // Take 16 chars from userID for the key for AES the data
-                string public_key = UserID.Substring(0, 8);
-                string secret_key = UserID.Substring(8, 8);
-
-                // Combine all the data together
-                // Format: Register - Username - Password - Email
-
-                string final_string = request_type + "-" + username + "-" + password;
-
-                // Encypted the final_string (User data) by the key
-                string send_infor_string = Encryption_.Encrypt(final_string, public_key, secret_key);
-
-                string respond = UserID + "-" + send_infor_string;
-
-                Client.SendString(respond);
-
-                Console.WriteLine();
-                Console.WriteLine("String send: " + respond);
-                Console.WriteLine();
-
-                return_message = "\nSend Successful to server Sign In request\n";
-                return return_message;
-            }
-            catch
-            {
-                return_message = "\nCannot send to server Sign In request\n";
-                return return_message;
-            }
-        }
     }
 }

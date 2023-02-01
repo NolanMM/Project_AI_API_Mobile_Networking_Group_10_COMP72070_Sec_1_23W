@@ -1,15 +1,8 @@
-﻿using DocumentFormat.OpenXml.Spreadsheet;
-using Microsoft.Office.Interop.Excel;
+﻿using IronXL;
 using System;
-using System.Collections;
-using System.Runtime.InteropServices;
-using IronXL;
-using xl = Microsoft.Office.Interop.Excel;
-using XLs = Spire.Xls;
-using Spire.Xls.Core.Spreadsheet;
-using server;
 using System.Linq;
 using System.Windows.Forms;
+using XLs = Spire.Xls;
 
 namespace server
 {
@@ -37,7 +30,8 @@ namespace server
             //Save to an Excel file
             workbook.SaveToFile("sample.xlsx", XLs.ExcelVersion.Version2016);
         }
-        public static void Write_To_Excel_By_Worksheets_Index_Clients(int index_Worksheets,string key, string encrypted_data)
+
+        public static void Write_To_Excel_By_Worksheets_Index_Clients(int index_Worksheets, string key, string encrypted_data)
         {
             //Create a Workbook object
             XLs.Workbook workbook = new XLs.Workbook();
@@ -56,6 +50,7 @@ namespace server
             //Save to an Excel file
             workbook.SaveToFile("sample_Clients.xlsx", XLs.ExcelVersion.Version2016);
         }
+
         public static void Function_Excel_Login(string username, string password)
         {
             WorkBook wb = WorkBook.Load("sample.xlsx");
@@ -81,7 +76,6 @@ namespace server
                         // Take the encypted data out
                         data_result = ws.Rows[i].Columns[1].Value.ToString();
                     }
-
                 }
             }
             // Take 16 chars for the key to decypted the data in the second column in the same row
@@ -107,20 +101,17 @@ namespace server
 
                 MessageBox.Show("LoginSuccessful", "Warning");
                 MessageBox.Show(decrypted_data, "Warning");
-
             }
             else
             {
                 Console.WriteLine("Errors");
                 Console.ReadLine();
             }
-
-
         }
 
         public static class Server_SignUp
         {
-            public static void Sign_Up(string username,string password,string email)
+            public static void Sign_Up(string username, string password, string email)
             {
                 // Generate Sample data by Hard Code
 
@@ -155,10 +146,9 @@ namespace server
                     MessageBox.Show("Sign Up Successful", "Warning");
                 }
                 else { MessageBox.Show("Duplicate Username", "Warning"); }
-
             }
-
         }
+
         public static bool Check_If_Duplicate_Username(string username)
         {
             WorkBook wb = WorkBook.Load("sample.xlsx");
@@ -181,7 +171,6 @@ namespace server
                         // Assign the key
                         key = true;
                     }
-
                 }
             }
             return key;
@@ -205,13 +194,12 @@ namespace server
                     //Get the values of UserID if it match with hashing code from hashing
                     string val = ws.Rows[i].Columns[0].Value.ToString();
                     if (val == UserID)
-                    {   
+                    {
                         // Assign the key
                         key = ws.Rows[i].Columns[0].Value.ToString();
                         // Take the encypted data out
                         data_result = ws.Rows[i].Columns[1].Value.ToString();
                     }
-
                 }
             }
             if (key != "Empty" && data_result != "Empty")
@@ -232,6 +220,7 @@ namespace server
                 return null;
             }
         }
+
         public static void Write_To_Excel(string key, string encrypted_data)
         {
             //Create a Workbook object
@@ -251,6 +240,7 @@ namespace server
             //Save to an Excel file
             workbook.SaveToFile("sample.xlsx", XLs.ExcelVersion.Version2016);
         }
+
         public static bool Re_Write_Password_To_Excel_Specific_Location(string username, string newpassword)
         {
             // Find the Location of Item inside the file
@@ -281,7 +271,6 @@ namespace server
                         // Store the row position
                         Row = i;
                     }
-
                 }
             }
 
@@ -304,7 +293,6 @@ namespace server
                 // Generate new hashing code by username for the key
                 // Encypted new data -> new encypted file
 
-
                 // Combine all the data together
                 string final_string = Items[0] + "-" + Items[1] + "-" + Items[2];
 
@@ -322,8 +310,8 @@ namespace server
                 //Add a worksheet and name it
                 XLs.Worksheet worksheet = workbook.Worksheets[0];
                 //Write new data to specific cells
-                worksheet.Range[Row , 1].Value = key;
-                worksheet.Range[Row , 2].Value = write_to_file_encypted_data;
+                worksheet.Range[Row, 1].Value = key;
+                worksheet.Range[Row, 2].Value = write_to_file_encypted_data;
 
                 //Auto fit column width
                 //worksheet.AllocatedRange.AutoFitColumns();
@@ -335,8 +323,8 @@ namespace server
             {
                 return false;
             }
-
         }
+
         public static class Clients_Login
         {
             public static string Function_Excel_Login_Clients(string username, string password)
@@ -364,7 +352,6 @@ namespace server
                             // Take the encypted data out
                             data_result = ws.Rows[i].Columns[1].Value.ToString();
                         }
-
                     }
                 }
                 // Take 16 chars for the key to decypted the data in the second column in the same row
@@ -390,22 +377,19 @@ namespace server
                     respond = "LoginSuccessful" +"-"+ UserID + "-" + decrypted_data;
                     //MessageBox.Show("LoginSuccessful", "Warning");
                     return respond;
-
                 }
                 else
                 {
                     respond = "LoginFailed-";
                     return respond;
                 }
-
-
             }
         }
+
         public static class Clients_SignUp
         {
             public static string Sign_Up_Clients(string username, string password, string email)
             {
-
                 // String return for respond to the client sign
                 string respond = "Empty";
 
@@ -436,10 +420,10 @@ namespace server
 
                     // Combine the encypted data with the key and store it into the file first for test
                     //string store_data = UserID + "-" + write_to_file_encypted_data;
-                    ExcelApiTest.Write_To_Excel_By_Worksheets_Index_Clients(0,UserID, write_to_file_encypted_data);
+                    ExcelApiTest.Write_To_Excel_By_Worksheets_Index_Clients(0, UserID, write_to_file_encypted_data);
 
                     //System.IO.File.AppendAllText(@"./Test.txt", store_data + "\n");
-                    respond = "SignUpSuccessfully"+ "-" + UserID + "-" + final_string;
+                    respond = "SignUpSuccessfully" + "-" + UserID + "-" + final_string;
                     MessageBox.Show("Sign Up Successful", "Warning");
                 }
                 else { respond = "SignUpFailed-"; MessageBox.Show("Duplicate Username", "Warning"); }
@@ -468,16 +452,10 @@ namespace server
                             // Assign the key
                             key = true;
                         }
-
                     }
                 }
                 return key;
             }
-
-            
-
         }
-        
-
     }
 }

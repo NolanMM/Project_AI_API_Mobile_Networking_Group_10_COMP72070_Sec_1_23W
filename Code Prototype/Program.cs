@@ -1,14 +1,11 @@
-﻿using System;
+﻿using Newtonsoft.Json;
 using System.Globalization;
-using System.Net;
-using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-class Program
+
+internal class Program
 {
-    static void Main(string[] args)
+    private static void Main(string[] args)
     {
         //AI SETTINGS:
         //API KEY
@@ -27,7 +24,6 @@ class Program
         bool run = true;
         while (run == true)
         {
-
             //UI
             Console.WriteLine("\nUI choices:\n1. Text\n2. Images\n3. Image To Text\n4. Exit");
             var UIChoice = Console.ReadLine();
@@ -65,7 +61,6 @@ class Program
                 run = false;
             }
         }
-
     }
 
     private static string callOpenAIText(int tokens, string input, string engine,
@@ -101,7 +96,6 @@ class Program
         return null;
     }
 
-
     private static string callOpenAIImage(string input, int number, string imagesize, string apikey)
     {
         var openAiKey = apikey;
@@ -110,7 +104,6 @@ class Program
             // Create an HttpClient
             using (var client = new HttpClient())
             {
-
                 // Add the API key to the request headers
                 client.DefaultRequestHeaders.Add("Authorization", "Bearer " + openAiKey);
 
@@ -140,7 +133,6 @@ class Program
         }
         return null;
     }
-
 
     //not working yet
     private static string callOpenAIImageToText(string input, string apikey)

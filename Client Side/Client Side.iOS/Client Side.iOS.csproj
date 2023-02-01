@@ -11,7 +11,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>Client_Side.iOS</RootNamespace>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
-    <AssemblyName>Client_Side.iOS</AssemblyName>
+    <AssemblyName>Client Side.iOS</AssemblyName>
     <MtouchEnableSGenConc>true</MtouchEnableSGenConc>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
     <ProvisioningType>automatic</ProvisioningType>
