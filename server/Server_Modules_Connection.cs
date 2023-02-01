@@ -2,6 +2,7 @@
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -13,14 +14,14 @@ namespace server
     public static class server_connection
     {
         
-        private static readonly Socket serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        private static Socket serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         private static readonly List<Socket> clientSockets = new List<Socket>();
         private const int BUFFER_SIZE = 2048;
         private const int PORT = 100;
         private static readonly byte[] buffer = new byte[BUFFER_SIZE];
 
         // Create clients socket that active with string authorized-information of clients
-        public static readonly List<Active_Clients> clientSockets_active = new List<Active_Clients>();
+        public static  List<Active_Clients> clientSockets_active = new List<Active_Clients>();
 
         public class Active_Clients
         {
@@ -39,24 +40,39 @@ namespace server
         //    CloseAllSockets();
         //}
 
-        public static void SetupServer()
+        public static List<Active_Clients> SetupServer()
         {
-            serverSocket.Bind(new IPEndPoint(IPAddress.Any, PORT));
-            serverSocket.Listen(0);
-            serverSocket.BeginAccept(AcceptCallback, null);
+            if (serverSocket != null)
+            {
+                serverSocket.Close();
+            }
+            Socket temp = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            temp.Bind(new IPEndPoint(IPAddress.Any, PORT));
+            temp.Listen(0);
+            temp.BeginAccept(AcceptCallback, null);
+            serverSocket = temp;
+            return clientSockets_active;
         }
 
         /// Close all connected client (we do not need to shutdown the server socket as its connections
         /// are already closed with the clients).
         public static void CloseAllSockets()
         {
-            foreach (Socket socket in clientSockets)
+            try
             {
-                socket.Shutdown(SocketShutdown.Both);
-                socket.Close();
-            }
+                foreach (Socket socket in clientSockets)
+                {
+                    socket.Shutdown(SocketShutdown.Both);
+                    socket.Close();
+                }
 
-            serverSocket.Close();
+                serverSocket.Close();
+            }
+            catch(ObjectDisposedException)
+            {
+                serverSocket.Close();
+                return;
+            }
         }
 
         private static void AcceptCallback(IAsyncResult AR)
@@ -76,11 +92,35 @@ namespace server
             //Client connected, waiting for request...
             serverSocket.BeginAccept(AcceptCallback, null);
         }
+        static bool IsSocketConnected(Socket s)
+        {
+            //return !((s.Poll(1000, SelectMode.SelectRead) && (s.Available == 0)) || !s.Connected);
 
+            /* Logic inside */
+            try
+            {
+                bool part1 = s.Poll(1000, SelectMode.SelectRead);
+                bool part2 = (s.Available == 0);
+                if ((part1 && part2) || !s.Connected)
+                    return false;
+                else
+                    return true;
+            }catch(ObjectDisposedException e)
+            {
+                return false;
+            }
+
+        }
         private static void ReceiveCallback(IAsyncResult AR)
         {
             string respond = "Empty";
             Socket current = (Socket)AR.AsyncState;
+
+            bool flag = IsSocketConnected(current);
+            if (flag != true)
+            {
+                return ;
+            }
             int received;
 
             try
@@ -98,7 +138,22 @@ namespace server
             byte[] recBuf = new byte[received];
             Array.Copy(buffer, recBuf, received);
             string text = Encoding.ASCII.GetString(recBuf);
-
+            if (text.ToLower() == "disconnected")
+            {
+                foreach (Active_Clients temp in clientSockets_active.ToList())
+                {
+                    if(temp.Currently_Active_Client_Socket == current)
+                    {
+                        clientSockets_active.Remove(temp);
+                    }
+                }
+                // Always Shutdown before closing
+                current.Shutdown(SocketShutdown.Both);
+                current.Close();
+                clientSockets.Remove(current);
+                Console.WriteLine("Client disconnected");
+                return;
+            }
             // Text equal to encypted data receive from User First check for the Login then check for the Prompt
 
             // Sample String First Time Login From User
@@ -118,6 +173,7 @@ namespace server
              * Format 2: Register-Username-Password-Email
              * Format 3: Forgotpassword-Username
              * Format 4: RequestPrompt-Username-PromptContent
+             * Format 5: Disconnect-Username-Password
              */
 
             // Using string split and take the first items to get the type of request
@@ -182,10 +238,14 @@ namespace server
                     string key = active_Clients_SignUpSuccessfully.UserID;
                     // Modify the respond that actually be sent
                     respond = "LoginSuccessful" + "-" + key + "-" + final_respond;
+                    byte[] data = Encoding.ASCII.GetBytes(respond);
+                    current.Send(data);
                 }
                 else
                 {
                     respond = "LoginFailed-Please check your username or password again";
+                    byte[] data = Encoding.ASCII.GetBytes(respond);
+                    current.Send(data);
                 }
             }
 
@@ -260,10 +320,10 @@ namespace server
              * If return false, server will sent respond "VerifiedOTPFailed" to Clients side for ask for asking re-sent OTP code and input again
              *
              *//////////////////
-            if (Items_After_Decypted.Length == 2)
-            {
-                // Route to function 3
-            }
+            //if (Items_After_Decypted.Length == 2)
+            //{
+            //    // Route to function 3
+            //}
 
             //Function 4: RequestPrompt
             /* [Encypted-data] -> decypted = "RequestPrompt-Username-PromptContent"
@@ -278,13 +338,51 @@ namespace server
              * 
              *//////////////////
 
-            if (Items_After_Decypted.Length == 3 && Items_After_Decypted[0] == "RequestPrompt")
+            if (Items_After_Decypted.Length == 3 && Items_After_Decypted[0] == "Text_to_Text")
             {
                 // Route to function 4
+
+                bool flag_Check_Authorized = false;
+                // Check if that client has been authorized or not
+                foreach (Active_Clients temp in clientSockets_active.ToList())
+                {
+                    if (temp.UserID == Items[0])
+                    {
+                        flag_Check_Authorized = true;
+                    }
+                }
+
+                if ( flag_Check_Authorized == true)
+                {
+                    // Items_After_Decypted[1] = Username
+                    // Items_After_Decypted[2] = Prompt input
+
+                    // Take the prompt input and put into AI to take respond
+                    string response_from_AI = AI_API.callOpenAIText(Items_After_Decypted[2]);
+
+                    string UserID = Encryption_.ComputeSha256Hash(Items_After_Decypted[1]);
+
+
+                    string raw_data_be_encrypted = Items_After_Decypted[2] + "-" + response_from_AI;
+
+                    // Encypted the final_string (User data) by the key
+                    string send_infor_string = Encryption_.Encrypt(raw_data_be_encrypted, public_key, secret_key);
+
+                    respond = UserID + "-" + send_infor_string;
+                    byte[] data = Encoding.ASCII.GetBytes(respond);
+                    current.Send(data);
+
+                    current.BeginReceive(buffer, 0, BUFFER_SIZE, SocketFlags.None, ReceiveCallback, current);
+
+                }
+                else
+                {
+                    return;
+                }
             }
 
-            byte[] data = Encoding.ASCII.GetBytes(respond);
-            current.Send(data);
+            //byte[] data = Encoding.ASCII.GetBytes(respond);
+            //current.Send(data);
             Console.WriteLine("Respond sent");
             current.BeginReceive(buffer, 0, BUFFER_SIZE, SocketFlags.None, ReceiveCallback, current);
         }

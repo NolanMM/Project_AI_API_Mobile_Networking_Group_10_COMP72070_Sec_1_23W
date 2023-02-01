@@ -388,7 +388,7 @@ namespace server
                     //Console.WriteLine(decrypted_data);
                     //Console.ReadLine();
                     respond = "LoginSuccessful" +"-"+ UserID + "-" + decrypted_data;
-                    MessageBox.Show("LoginSuccessful", "Warning");
+                    //MessageBox.Show("LoginSuccessful", "Warning");
                     return respond;
 
                 }

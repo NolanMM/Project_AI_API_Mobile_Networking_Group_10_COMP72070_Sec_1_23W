@@ -16,7 +16,7 @@ namespace server
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Login_Server_Form());
+            Application.Run(new Server_Menu_Form());
         }
     }
 }

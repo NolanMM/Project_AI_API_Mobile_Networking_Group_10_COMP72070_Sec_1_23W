@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static server.server_connection;
 
 namespace server
 {
@@ -60,15 +61,28 @@ namespace server
         {
             server_connection.CloseAllSockets();
         }
+        List<Active_Clients> active_Clients1 = new List<Active_Clients>();
 
         public void On_Btn_Click(object sender, EventArgs e)
         {
-            server_connection.SetupServer();
+            active_Clients1 = server_connection.SetupServer();
+
         }
 
         private void Refresh_btn_Click(object sender, EventArgs e)
         {
+            Connection_ID_Online_Listview.Items.Clear();
+            active_Clients1 = server_connection.clientSockets_active;
 
+            foreach (Active_Clients temp in active_Clients1)
+            {
+                string[] _Item = new string[2];
+                _Item[0] = temp.Username;
+                _Item[1] = "Connected";
+
+                ListViewItem items = new ListViewItem(_Item);
+                Connection_ID_Online_Listview.Items.Add(items);
+            }
         }
     }
 }

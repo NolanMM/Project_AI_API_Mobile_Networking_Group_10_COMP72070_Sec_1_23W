@@ -40,6 +40,7 @@
             this.Current_Time_Label_Change = new System.Windows.Forms.Label();
             this.Current_Time_Label = new System.Windows.Forms.Label();
             this.UC_Control_Panel = new System.Windows.Forms.Panel();
+            this.Refresh_btn = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -54,7 +55,6 @@
             this.Date = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Status = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.Refresh_btn = new System.Windows.Forms.Button();
             this.Side_Panel.SuspendLayout();
             this.Logo_Panel.SuspendLayout();
             this.Tool_Bar_Panel.SuspendLayout();
@@ -218,6 +218,19 @@
             this.UC_Control_Panel.Size = new System.Drawing.Size(811, 555);
             this.UC_Control_Panel.TabIndex = 2;
             // 
+            // Refresh_btn
+            // 
+            this.Refresh_btn.BackColor = System.Drawing.Color.Black;
+            this.Refresh_btn.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Refresh_btn.ForeColor = System.Drawing.Color.Snow;
+            this.Refresh_btn.Location = new System.Drawing.Point(18, 268);
+            this.Refresh_btn.Name = "Refresh_btn";
+            this.Refresh_btn.Size = new System.Drawing.Size(144, 45);
+            this.Refresh_btn.TabIndex = 40;
+            this.Refresh_btn.Text = "Refresh";
+            this.Refresh_btn.UseVisualStyleBackColor = false;
+            this.Refresh_btn.Click += new System.EventHandler(this.Refresh_btn_Click);
+            // 
             // textBox1
             // 
             this.textBox1.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
@@ -268,6 +281,7 @@
             this.Connection_ID_Online_Listview.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.UserID_Client,
             this.Status_Client});
+            this.Connection_ID_Online_Listview.ForeColor = System.Drawing.SystemColors.Window;
             this.Connection_ID_Online_Listview.GridLines = true;
             this.Connection_ID_Online_Listview.HideSelection = false;
             this.Connection_ID_Online_Listview.Location = new System.Drawing.Point(18, 72);
@@ -351,19 +365,6 @@
             // 
             this.timer1.Enabled = true;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
-            // Refresh_btn
-            // 
-            this.Refresh_btn.BackColor = System.Drawing.Color.Black;
-            this.Refresh_btn.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Refresh_btn.ForeColor = System.Drawing.Color.Snow;
-            this.Refresh_btn.Location = new System.Drawing.Point(18, 268);
-            this.Refresh_btn.Name = "Refresh_btn";
-            this.Refresh_btn.Size = new System.Drawing.Size(144, 45);
-            this.Refresh_btn.TabIndex = 40;
-            this.Refresh_btn.Text = "Refresh";
-            this.Refresh_btn.UseVisualStyleBackColor = false;
-            this.Refresh_btn.Click += new System.EventHandler(this.Refresh_btn_Click);
             // 
             // Server_Menu_Form
             // 
