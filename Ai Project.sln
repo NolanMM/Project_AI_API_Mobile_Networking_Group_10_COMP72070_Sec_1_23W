@@ -15,7 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Client Side", "Client Side\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sample_Client_Test", "Sample_Client_Test\Sample_Client_Test.csproj", "{453CBF35-A426-4721-94AB-0A65505C6443}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample_Multiple_Client_Test", "Sample_Multiple_Client_Test\Sample_Multiple_Client_Test.csproj", "{23881DA5-B999-4D71-A094-CBCB0AFBD917}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sample_Multiple_Client_Test", "Sample_Multiple_Client_Test\Sample_Multiple_Client_Test.csproj", "{23881DA5-B999-4D71-A094-CBCB0AFBD917}"
+EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Server_LAVIS_ImageToText", "Server_LAVIS_ImageToText\Server_LAVIS_ImageToText.pyproj", "{3619A75B-6B4E-4C2D-AC01-D838A038064D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -117,6 +119,12 @@ Global
 		{23881DA5-B999-4D71-A094-CBCB0AFBD917}.Release|iPhone.Build.0 = Release|Any CPU
 		{23881DA5-B999-4D71-A094-CBCB0AFBD917}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
 		{23881DA5-B999-4D71-A094-CBCB0AFBD917}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{3619A75B-6B4E-4C2D-AC01-D838A038064D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3619A75B-6B4E-4C2D-AC01-D838A038064D}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{3619A75B-6B4E-4C2D-AC01-D838A038064D}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{3619A75B-6B4E-4C2D-AC01-D838A038064D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3619A75B-6B4E-4C2D-AC01-D838A038064D}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{3619A75B-6B4E-4C2D-AC01-D838A038064D}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

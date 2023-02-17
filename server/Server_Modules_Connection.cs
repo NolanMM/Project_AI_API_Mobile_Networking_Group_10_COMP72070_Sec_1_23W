@@ -29,14 +29,6 @@ namespace server
             public string Email { get; set; }
         }
 
-        ////static void Main()
-        ////{
-        //    Console.Title = "Server";
-        //    SetupServer();
-        //    Console.ReadLine(); // When we press enter close everything
-        //    CloseAllSockets();
-        //}
-
         public static List<Active_Clients> SetupServer()
         {
             if (serverSocket != null)
@@ -169,8 +161,10 @@ namespace server
             /* Format 1: Login-Username-Password
              * Format 2: Register-Username-Password-Email
              * Format 3: Forgotpassword-Username
-             * Format 4: RequestPrompt-Username-PromptContent
+             * Format 4: Text_To_Image-Username-PromptContent
              * Format 5: Disconnect-Username-Password
+             * Format 6: Text_To_Text-Username-PromptContent
+             * Format 7: Image_To_Text-Username-PromptContent
              */
 
             // Using string split and take the first items to get the type of request
