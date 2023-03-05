@@ -1,8 +1,4 @@
-﻿using Client_UI.Services;
-using Client_UI.Views;
-using System;
-using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
+﻿using Xamarin.Forms;
 
 namespace Client_UI
 {
@@ -13,7 +9,6 @@ namespace Client_UI
         {
             InitializeComponent();
 
-            DependencyService.Register<MockDataStore>();
             MainPage = new AppShell();
         }
 
