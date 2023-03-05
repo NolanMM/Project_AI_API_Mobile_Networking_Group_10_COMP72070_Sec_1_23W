@@ -20,47 +20,86 @@ namespace MultiClient
         public static string resond_from_server = "Empty";
         public static void _menu_client(Clients_infor clients_Infor)
         {
-            Console.WriteLine("Please Enter the mode you want to\n");
-            Console.WriteLine("1. Text\n");
-            Console.WriteLine("2. Image\n");
-            Console.WriteLine("3. Image to Text\n");
-            Console.WriteLine("4. Exit\n");
-            
-            string choice = Console.ReadLine();
-
-            switch (choice.ToLower())
+            bool flag = true;
+            while (flag == true)
             {
-                case "1":
-                    Request_Text_to_Text(clients_Infor);
-                    _menu_client(clients_Infor);
-                    break;
-                case "2":
-                    break;
-                case "3":
-                    break;
-                case "image to text":
-                    break;
-                case "4":
-                    string respond_message_disconnect = "disconnected";
-                    SendString(respond_message_disconnect);
-                    Client.Exit();
-                    break;
-                case "exit":
-                    string respond_message_disconnect_exit = "disconnected";
-                    SendString(respond_message_disconnect_exit);
-                    Client.Exit();
-                    break;
-                case "text":
-                    Request_Text_to_Text(clients_Infor);
-                    _menu_client(clients_Infor);
-                    break;
-                case "image":
-                    break;
-                default:
-                    Console.WriteLine("Wrong input. Please input again\n");
-                    break;
+                Console.WriteLine("Please Enter the mode you want to\n");
+                Console.WriteLine("1. Text\n");
+                Console.WriteLine("2. Image\n");
+                Console.WriteLine("3. Image to Text\n");
+                Console.WriteLine("4. Exit\n");
 
+                string choice = Console.ReadLine();
+
+                switch (choice.ToLower())
+                {
+                    case "1":
+                        Request_Text_to_Text(clients_Infor);
+                        break;
+                    case "2":
+                        Request_Text_to_Image(clients_Infor);
+                        break;
+                    case "3":
+                        break;
+                    case "image to text":
+                        break;
+                    case "4":
+                        string respond_message_disconnect = "disconnected";
+                        Client.SendString(respond_message_disconnect);
+                        flag = false;
+                        Client.Exit();
+                        break;
+                    case "exit":
+                        string respond_message_disconnect_exit = "disconnected";
+                        Client.SendString(respond_message_disconnect_exit);
+                        flag = false;
+                        Client.Exit();
+                        break;
+                    case "text":
+                        Request_Text_to_Text(clients_Infor);
+                        break;
+                    case "image":
+                        Request_Text_to_Image(clients_Infor);
+                        break;
+                    default:
+                        Console.WriteLine("\nWrong input. Please input again\n");
+                        break;
+
+                }
             }
+        }
+
+        public static void Request_Text_to_Image(Clients_infor clients_Infor)
+        {
+            // Declare the type of Request
+            string request_type = "Text_to_Image";
+            string prompt_input = "Empty";
+            Console.WriteLine("Please enter the prompt\n");
+            prompt_input = Console.ReadLine();
+
+            // Create send message to server by format RequestPrompt-Username-PromptContent
+            string send_message_raw = request_type + "-" + clients_Infor.Username + "-" + prompt_input;
+
+            // Take 16 chars from userID for the key for AES the data
+            string public_key = clients_Infor.UserID.Substring(0, 8);
+            string secret_key = clients_Infor.UserID.Substring(8, 8);
+
+            string send_infor_string = Encryption_.Encrypt(send_message_raw, public_key, secret_key);
+
+            string respond = clients_Infor.UserID + "-" + send_infor_string;
+
+            Client.SendString(respond);
+
+            // Receive the respond from server
+            //resond_from_server = Client.ReceiveResponse();
+            var buffer = new byte[2048];
+            int received = ClientSocket.Receive(buffer, SocketFlags.None);
+            if (received == 0) { Console.WriteLine("cannot receive\n"); }
+            var data = new byte[received];
+            Array.Copy(buffer, data, received);
+            string text = Encoding.ASCII.GetString(data);
+            resond_from_server = text;
+            Decrypted_and_show_respond_Text_to_Text();
         }
         public static void Request_Text_to_Text(Clients_infor clients_Infor)
         {
@@ -114,7 +153,7 @@ namespace MultiClient
             // Take items from decrypted_data 
             // decrypted_data[0] Prompt
             // decrypted_data[1] Respond
-            string[] Items_in_decrypted_data = decrypted_data.Split('-');
+            string[] Items_in_decrypted_data = decrypted_data.Split("*/()/*");
 
             Console.WriteLine("The prompt is: " + Items_in_decrypted_data[0]);
             Console.WriteLine("The Respond is: " + Items_in_decrypted_data[1]);

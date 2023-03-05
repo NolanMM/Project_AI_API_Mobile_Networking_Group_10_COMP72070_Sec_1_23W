@@ -14,7 +14,7 @@ namespace server
     {
         //AI SETTINGS:
         //API KEY
-        public static string apiKey = "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"; // sets the key to be used for the api functions
+        public static string apiKey = "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"; // sets the key to be used for the api functions
         public static int token = 1000; // max characters the ai can respond with
         public static double creativity = 1; // the creativity of the ai's response
         public static string engine = "text-davinci-003"; // the engine used in OpenAi api
@@ -22,8 +22,8 @@ namespace server
         public static int frequency_penalty = 0;
         public static int presence_penalty = 0;
         //IMAGE CREATE SETTINGS
-        public static int n = 1; // number of images to be made
-        public static string size = "256x256"; // size of the image to be made
+        public static int number_image_make = 1; // number of images to be made
+        public static string size_image = "256x256"; // size of the image to be made
 
         //static void Sample_Main()
         //{
@@ -107,9 +107,9 @@ namespace server
         }
 
 
-        public static string callOpenAIImage(string input, int number, string imagesize, string apikey)
+        public static string callOpenAIImage(string input)
         {
-            var openAiKey = apikey;
+            var openAiKey = apiKey;
             try
             {
                 // Create an HttpClient
@@ -124,8 +124,8 @@ namespace server
                     {
                         model = "image-alpha-001",
                         prompt = input,
-                        n = number,
-                        size = imagesize
+                        n = number_image_make,
+                        size = size_image
                     });
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
 

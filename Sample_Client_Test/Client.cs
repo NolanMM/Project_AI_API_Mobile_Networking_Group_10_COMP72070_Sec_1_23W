@@ -61,7 +61,7 @@ namespace MultiClient
         /// </summary>
         public static void Exit()
         {
-            SendString("exit"); // Tell the server we are exiting
+            //SendString("disconnected"); // Tell the server we are exiting
             ClientSocket.Shutdown(SocketShutdown.Both);
             ClientSocket.Close();
             Environment.Exit(0);
@@ -111,6 +111,8 @@ namespace MultiClient
                         break;
 
                     case "exit":
+                        string respond_message_exit = "disconnected";
+                        SendString(respond_message_exit);
                         Exit();
                         break;
 

@@ -359,7 +359,49 @@ namespace server
                     string UserID = Encryption_.ComputeSha256Hash(Items_After_Decypted[1]);
 
 
-                    string raw_data_be_encrypted = Items_After_Decypted[2] + "-" + response_from_AI;
+                    string raw_data_be_encrypted = Items_After_Decypted[2] + "*/()/*" + response_from_AI;
+
+                    // Encypted the final_string (User data) by the key
+                    string send_infor_string = Encryption_.Encrypt(raw_data_be_encrypted, public_key, secret_key);
+
+                    respond = UserID + "-" + send_infor_string;
+                    byte[] data = Encoding.ASCII.GetBytes(respond);
+                    current.Send(data);
+
+                    current.BeginReceive(buffer, 0, BUFFER_SIZE, SocketFlags.None, ReceiveCallback, current);
+
+                }
+                else
+                {
+                    return;
+                }
+            }
+            if (Items_After_Decypted.Length == 3 && Items_After_Decypted[0] == "Text_to_Image")
+            {
+                // Route to function 4
+
+                bool flag_Check_Authorized = false;
+                // Check if that client has been authorized or not
+                foreach (Active_Clients temp in clientSockets_active.ToList())
+                {
+                    if (temp.UserID == Items[0])
+                    {
+                        flag_Check_Authorized = true;
+                    }
+                }
+
+                if (flag_Check_Authorized == true)
+                {
+                    // Items_After_Decypted[1] = Username
+                    // Items_After_Decypted[2] = Prompt input
+
+                    // Take the prompt input and put into AI to take respond
+                    string response_from_AI = AI_API.callOpenAIImage(Items_After_Decypted[2]);
+
+                    string UserID = Encryption_.ComputeSha256Hash(Items_After_Decypted[1]);
+
+
+                    string raw_data_be_encrypted = Items_After_Decypted[2] + "*/()/*" + response_from_AI;
 
                     // Encypted the final_string (User data) by the key
                     string send_infor_string = Encryption_.Encrypt(raw_data_be_encrypted, public_key, secret_key);
