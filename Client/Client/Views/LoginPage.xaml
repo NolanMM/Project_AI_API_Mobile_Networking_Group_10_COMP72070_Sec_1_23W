@@ -1,20 +1,52 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:Client.ViewModels"
              x:Class="Client.Views.LoginPage"
              Shell.FlyoutBehavior="Disabled"
-             Shell.NavBarIsVisible="False">
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="{AppThemeBinding Dark=Black,Light= White}">
+
+    <ContentPage.BindingContext>
+        <viewmodels:LoginViewModel />
+    </ContentPage.BindingContext>
+
     <ContentPage.Content>
-        <StackLayout Padding="40" VerticalOptions="Center"
+        <StackLayout Padding="40"
+                     VerticalOptions="Center"
                      HorizontalOptions="FillAndExpand">
-            <Label Text="Username:" FontAttributes="Bold"/>
-            <Entry Placeholder="Username" TextColor="Gray"/>
-            <Label Text="Password:" FontAttributes="Bold"/>
-            <Entry IsPassword="True" Placeholder="Password" TextColor="Gray"/>
-            <Button Text="Login" Clicked="Button_Clicked" BackgroundColor="Red"/>
-            <Label Text="Register" HorizontalOptions="Center">
+            <Label Text="Username"
+                   FontAttributes="Bold"
+                   TextColor="{AppThemeBinding Dark=White,Light= Black}"
+                   FontFamily="FS9" FontSize="18" />
+            <Entry Placeholder="Username"
+                   TextColor="{AppThemeBinding Dark=White,Light= Black}"
+                   Text="{Binding Username}"
+                   PlaceholderColor="{AppThemeBinding Dark=Gray,Light= Gray}"
+                   HeightRequest="40">
+            </Entry>
+            <Label  Text="Password"
+                    FontAttributes="Bold"
+                    TextColor="{AppThemeBinding Dark=White,Light= Black}"
+                    FontFamily="FS9" FontSize="18" />
+            <Entry  IsPassword="True" Placeholder="Password"
+                    TextColor="{AppThemeBinding Dark=White,Light= Black}"
+                    Text="{Binding Password}"
+                    PlaceholderColor="{AppThemeBinding Dark=Gray,Light= Gray}"
+                    HeightRequest="40">
+            </Entry>
+
+            <Button Text="Login"
+                    BackgroundColor="Red"
+                    Command="{Binding Login_Checking}"
+                    TextColor="White">
+            </Button>
+
+            <Label Text="Register"
+                   HorizontalOptions="Center"
+                   TextColor="{AppThemeBinding Dark=White,Light= Black}">
                 <Label.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
                 </Label.GestureRecognizers>
             </Label>
         </StackLayout>

@@ -1,12 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Globalization;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using server;
 
 namespace server
 {
@@ -15,25 +12,24 @@ namespace server
         //AI SETTINGS:
         //API KEY
         public static string apiKey = "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"; // sets the key to be used for the api functions
+
         public static int token = 1000; // max characters the ai can respond with
         public static double creativity = 1; // the creativity of the ai's response
         public static string engine = "text-davinci-003"; // the engine used in OpenAi api
         public static int top_P = 1;
         public static int frequency_penalty = 0;
         public static int presence_penalty = 0;
+
         //IMAGE CREATE SETTINGS
         public static int number_image_make = 1; // number of images to be made
+
         public static string size_image = "256x256"; // size of the image to be made
 
         //static void Sample_Main()
         //{
-
-
-
         //    bool run = true;
         //    while (run == true)
         //    {
-
         //        //UI
         //        Console.WriteLine("\nUI choices:\n1. Text\n2. Images\n3. Image To Text\n4. Exit");
         //        var UIChoice = Console.ReadLine();
@@ -74,7 +70,7 @@ namespace server
 
         //}
 
-        public static string callOpenAIText( string input)
+        public static string callOpenAIText(string input)
         {
             var openAiKey = apiKey;
             var apiCall = "https://api.openai.com/v1/engines/" + engine + "/completions";
@@ -106,7 +102,6 @@ namespace server
             return null;
         }
 
-
         public static string callOpenAIImage(string input)
         {
             var openAiKey = apiKey;
@@ -115,7 +110,6 @@ namespace server
                 // Create an HttpClient
                 using (var client = new HttpClient())
                 {
-
                     // Add the API key to the request headers
                     client.DefaultRequestHeaders.Add("Authorization", "Bearer " + openAiKey);
 
@@ -145,7 +139,6 @@ namespace server
             }
             return null;
         }
-
 
         //not working yet
         public static string callOpenAIImageToText(string input, string apikey)

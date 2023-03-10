@@ -4,9 +4,9 @@ using Xamarin.Forms.Xaml;
 namespace Client.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class RegisterPage : ContentPage
+    public partial class TabbedPageMain : TabbedPage
     {
-        public RegisterPage()
+        public TabbedPageMain()
         {
             InitializeComponent();
         }

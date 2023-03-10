@@ -1,7 +1,6 @@
 ﻿using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using System.Data;
 
 namespace MultiClient
 {
@@ -9,6 +8,7 @@ namespace MultiClient
     {
         public static readonly Socket ClientSocket = new Socket
             (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+
         public static string resond_from_server = "Empty";
 
         private const int PORT = 100;
@@ -137,6 +137,7 @@ namespace MultiClient
             byte[] buffer = Encoding.ASCII.GetBytes(text);
             ClientSocket.Send(buffer, 0, buffer.Length, SocketFlags.None);
         }
+
         //public static string resond_from_server = "Empty";
         private static string ReceiveResponse()
         {
@@ -181,7 +182,7 @@ namespace MultiClient
                 clients_Infor.Password = Items_After_Decypted[1];
                 clients_Infor.Email = Items_After_Decypted[2];
 
-                // Route to the main menu of client and transfer the data of client 
+                // Route to the main menu of client and transfer the data of client
                 Main_Menu_Client._menu_client(clients_Infor);
             }
             else

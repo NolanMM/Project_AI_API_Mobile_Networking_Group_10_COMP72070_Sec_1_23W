@@ -1,10 +1,6 @@
-﻿using System.Security.Cryptography;
+﻿using System.Net.Sockets;
+using System.Security.Cryptography;
 using System.Text;
-using System.IO;
-using System;
-using Microsoft.Win32;
-using static MultiClient.Client;
-using System.Net.Sockets;
 
 namespace MultiClient
 {
@@ -15,9 +11,11 @@ namespace MultiClient
         public string Password { get; set; }
         public string Email { get; set; }
     }
+
     public static class Main_Menu_Client
     {
         public static string resond_from_server = "Empty";
+
         public static void _menu_client(Clients_infor clients_Infor)
         {
             bool flag = true;
@@ -36,35 +34,42 @@ namespace MultiClient
                     case "1":
                         Request_Text_to_Text(clients_Infor);
                         break;
+
                     case "2":
                         Request_Text_to_Image(clients_Infor);
                         break;
+
                     case "3":
                         break;
+
                     case "image to text":
                         break;
+
                     case "4":
                         string respond_message_disconnect = "disconnected";
                         Client.SendString(respond_message_disconnect);
                         flag = false;
                         Client.Exit();
                         break;
+
                     case "exit":
                         string respond_message_disconnect_exit = "disconnected";
                         Client.SendString(respond_message_disconnect_exit);
                         flag = false;
                         Client.Exit();
                         break;
+
                     case "text":
                         Request_Text_to_Text(clients_Infor);
                         break;
+
                     case "image":
                         Request_Text_to_Image(clients_Infor);
                         break;
+
                     default:
                         Console.WriteLine("\nWrong input. Please input again\n");
                         break;
-
                 }
             }
         }
@@ -101,6 +106,7 @@ namespace MultiClient
             resond_from_server = text;
             Decrypted_and_show_respond_Text_to_Text();
         }
+
         public static void Request_Text_to_Text(Clients_infor clients_Infor)
         {
             // Declare the type of Request
@@ -132,8 +138,8 @@ namespace MultiClient
             string text = Encoding.ASCII.GetString(data);
             resond_from_server = text;
             Decrypted_and_show_respond_Text_to_Text();
-
         }
+
         private static readonly Socket ClientSocket = Client.ClientSocket;
         private const int PORT = 100;
 
@@ -150,19 +156,15 @@ namespace MultiClient
 
             string decrypted_data = Encryption_.Decrypt(Items_in_respond[1], public_key, secret_key);
 
-            // Take items from decrypted_data 
+            // Take items from decrypted_data
             // decrypted_data[0] Prompt
             // decrypted_data[1] Respond
             string[] Items_in_decrypted_data = decrypted_data.Split("*/()/*");
 
             Console.WriteLine("The prompt is: " + Items_in_decrypted_data[0]);
             Console.WriteLine("The Respond is: " + Items_in_decrypted_data[1]);
-
-
         }
     }
-
-
 
     public static class Encryption_
     {
@@ -342,6 +344,7 @@ namespace MultiClient
                 return return_message;
             }
         }
+
         public static string Sign_In_Client()
         {
             string return_message = "Empty";
@@ -385,6 +388,5 @@ namespace MultiClient
                 return return_message;
             }
         }
-
     }
 }

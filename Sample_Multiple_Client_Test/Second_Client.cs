@@ -1,8 +1,6 @@
-﻿using System;
+﻿using System.Net;
 using System.Net.Sockets;
-using System.Net;
 using System.Text;
-using System.Data;
 
 namespace MultiClient
 {
@@ -13,7 +11,7 @@ namespace MultiClient
 
         private const int PORT = 100;
 
-        static void Main()
+        private static void Main()
         {
             Console.Title = "Client_2";
             ConnectToServer();
@@ -88,32 +86,39 @@ namespace MultiClient
                         Console.WriteLine(respond_message_sign_in);
                         Flag = false;
                         break;
+
                     case "2":
                         string respond_message = Clients_Services.Sing_Up_Clients();
                         Console.WriteLine();
                         Console.WriteLine(respond_message);
                         Flag = false;
                         break;
+
                     case "3":
                         break;
+
                     case "Disconnect":
                         break;
+
                     case "4":
                         string respond_message_disconnect = "disconnected";
                         SendString(respond_message_disconnect);
                         Exit();
                         break;
+
                     case "exit":
                         Exit();
                         break;
+
                     case "sign in":
                         break;
+
                     case "sign up":
                         break;
+
                     default:
                         Console.WriteLine("Wrong input. Please input again\n");
                         break;
-
                 }
             }
         }
@@ -126,7 +131,9 @@ namespace MultiClient
             byte[] buffer = Encoding.ASCII.GetBytes(text);
             ClientSocket.Send(buffer, 0, buffer.Length, SocketFlags.None);
         }
+
         public static string resond_from_server = "Empty";
+
         private static void ReceiveResponse()
         {
             var buffer = new byte[2048];

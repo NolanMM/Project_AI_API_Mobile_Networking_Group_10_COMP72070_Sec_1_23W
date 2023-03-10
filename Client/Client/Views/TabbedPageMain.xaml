@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TabbedPage xmlns="http://xamarin.com/schemas/2014/forms"
+            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+            xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
+            x:Class="Client.Views.TabbedPageMain"
+            BarBackgroundColor="Black"
+            UnselectedTabColor="DarkGray"
+            SelectedTabColor="White"
+            android:TabbedPage.ToolbarPlacement="Bottom">
+    <!--Pages can be added as references or inline-->
+    <NavigationPage x:Name="HomeTab" Title="Home" BackgroundColor="Black">
+        <x:Arguments>
+            <ContentPage />
+        </x:Arguments>
+    </NavigationPage>
+
+    <NavigationPage x:Name="CardTab" BackgroundColor="Black" Title="Card">
+        <x:Arguments>
+            <ContentPage />
+        </x:Arguments>
+    </NavigationPage>
+
+    <NavigationPage x:Name="SettingTab" BackgroundColor="Black" Title="Settings">
+        <x:Arguments>
+            <ContentPage />
+        </x:Arguments>
+    </NavigationPage>
+
+    <NavigationPage x:Name="HistoryTab" BackgroundColor="Black" Title="History">
+        <x:Arguments>
+            <ContentPage />
+        </x:Arguments>
+    </NavigationPage>
+
+    <NavigationPage x:Name="ProfileTab" BackgroundColor="Black" Title="Profile">
+        <x:Arguments>
+            <ContentPage />
+        </x:Arguments>
+    </NavigationPage>
+</TabbedPage>

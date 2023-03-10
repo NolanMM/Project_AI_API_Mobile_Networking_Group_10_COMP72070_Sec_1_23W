@@ -1,7 +1,4 @@
-﻿using System;
-using Xamarin.Forms;
-
-namespace Client
+﻿namespace Client
 {
     public partial class AppShell : Xamarin.Forms.Shell
     {
@@ -10,9 +7,9 @@ namespace Client
             InitializeComponent();
         }
 
-        private async void OnMenuItemClicked(object sender, EventArgs e)
-        {
-            await Shell.Current.GoToAsync("//LoginPage");
-        }
+        //private async void OnMenuItemClicked(object sender, EventArgs e)
+        //{
+        //    //await Shell.Current.GoToAsync("//LoginPage");
+        //}
     }
 }

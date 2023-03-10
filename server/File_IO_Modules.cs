@@ -374,7 +374,7 @@ namespace server
                     //Console.WriteLine("The data of the user are\n");
                     //Console.WriteLine(decrypted_data);
                     //Console.ReadLine();
-                    respond = "LoginSuccessful" +"-"+ UserID + "-" + decrypted_data;
+                    respond = "LoginSuccessful" + "-" + UserID + "-" + decrypted_data;
                     //MessageBox.Show("LoginSuccessful", "Warning");
                     return respond;
                 }

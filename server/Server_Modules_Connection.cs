@@ -10,7 +10,6 @@ namespace server
 {
     public static class server_connection
     {
-        
         private static Socket serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         private static readonly List<Socket> clientSockets = new List<Socket>();
         private const int BUFFER_SIZE = 2048;
@@ -18,7 +17,7 @@ namespace server
         private static readonly byte[] buffer = new byte[BUFFER_SIZE];
 
         // Create clients socket that active with string authorized-information of clients
-        public static  List<Active_Clients> clientSockets_active = new List<Active_Clients>();
+        public static List<Active_Clients> clientSockets_active = new List<Active_Clients>();
 
         public class Active_Clients
         {
@@ -65,7 +64,7 @@ namespace server
 
                 serverSocket.Close();
             }
-            catch(ObjectDisposedException)
+            catch (ObjectDisposedException)
             {
                 serverSocket.Close();
                 return;
@@ -89,7 +88,8 @@ namespace server
             //Client connected, waiting for request...
             serverSocket.BeginAccept(AcceptCallback, null);
         }
-        static bool IsSocketConnected(Socket s)
+
+        private static bool IsSocketConnected(Socket s)
         {
             //return !((s.Poll(1000, SelectMode.SelectRead) && (s.Available == 0)) || !s.Connected);
 
@@ -102,12 +102,13 @@ namespace server
                     return false;
                 else
                     return true;
-            }catch(ObjectDisposedException e)
+            }
+            catch (ObjectDisposedException e)
             {
                 return false;
             }
-
         }
+
         private static void ReceiveCallback(IAsyncResult AR)
         {
             string respond = "Empty";
@@ -116,7 +117,7 @@ namespace server
             bool flag = IsSocketConnected(current);
             if (flag != true)
             {
-                return ;
+                return;
             }
             int received;
 
@@ -139,7 +140,7 @@ namespace server
             {
                 foreach (Active_Clients temp in clientSockets_active.ToList())
                 {
-                    if(temp.Currently_Active_Client_Socket == current)
+                    if (temp.Currently_Active_Client_Socket == current)
                     {
                         clientSockets_active.Remove(temp);
                     }
@@ -348,7 +349,7 @@ namespace server
                     }
                 }
 
-                if ( flag_Check_Authorized == true)
+                if (flag_Check_Authorized == true)
                 {
                     // Items_After_Decypted[1] = Username
                     // Items_After_Decypted[2] = Prompt input
@@ -357,7 +358,6 @@ namespace server
                     string response_from_AI = AI_API.callOpenAIText(Items_After_Decypted[2]);
 
                     string UserID = Encryption_.ComputeSha256Hash(Items_After_Decypted[1]);
-
 
                     string raw_data_be_encrypted = Items_After_Decypted[2] + "*/()/*" + response_from_AI;
 
@@ -369,7 +369,6 @@ namespace server
                     current.Send(data);
 
                     current.BeginReceive(buffer, 0, BUFFER_SIZE, SocketFlags.None, ReceiveCallback, current);
-
                 }
                 else
                 {
@@ -400,7 +399,6 @@ namespace server
 
                     string UserID = Encryption_.ComputeSha256Hash(Items_After_Decypted[1]);
 
-
                     string raw_data_be_encrypted = Items_After_Decypted[2] + "*/()/*" + response_from_AI;
 
                     // Encypted the final_string (User data) by the key
@@ -411,7 +409,6 @@ namespace server
                     current.Send(data);
 
                     current.BeginReceive(buffer, 0, BUFFER_SIZE, SocketFlags.None, ReceiveCallback, current);
-
                 }
                 else
                 {

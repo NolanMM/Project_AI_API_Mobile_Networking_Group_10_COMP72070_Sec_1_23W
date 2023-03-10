@@ -58,12 +58,12 @@ namespace server
         {
             server_connection.CloseAllSockets();
         }
-            List<Active_Clients> active_Clients1 = new List<Active_Clients>();
+
+        private List<Active_Clients> active_Clients1 = new List<Active_Clients>();
 
         public void On_Btn_Click(object sender, EventArgs e)
         {
             active_Clients1 = server_connection.SetupServer();
-
         }
 
         private void Refresh_btn_Click(object sender, EventArgs e)
