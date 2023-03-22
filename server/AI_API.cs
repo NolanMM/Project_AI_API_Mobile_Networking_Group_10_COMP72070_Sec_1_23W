@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using DocumentFormat.OpenXml.Office.Word;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using server;
@@ -25,54 +28,6 @@ namespace server
         public static int n = 1; // number of images to be made
         public static string size = "256x256"; // size of the image to be made
 
-        //static void Sample_Main()
-        //{
-
-
-
-        //    bool run = true;
-        //    while (run == true)
-        //    {
-
-        //        //UI
-        //        Console.WriteLine("\nUI choices:\n1. Text\n2. Images\n3. Image To Text\n4. Exit");
-        //        var UIChoice = Console.ReadLine();
-
-        //        if (UIChoice == "1") // text ai
-        //        {
-        //            //to ask the user to enter their prompt
-        //            Console.WriteLine("\nEnter your prompt:");
-        //            var prompt = Console.ReadLine();
-
-        //            //call the open ai
-        //            var response = callOpenAIText(token, prompt, engine, creativity, top_P, frequency_penalty, presence_penalty, apiKey);
-        //            Console.WriteLine(response);
-        //        }
-        //        if (UIChoice == "2") // image ai
-        //        {
-        //            //to ask the user to enter their prompt
-        //            Console.WriteLine("\nEnter your prompt:");
-        //            var prompt = Console.ReadLine();
-
-        //            var response = callOpenAIImage(prompt, n, size, apiKey);
-        //            Console.WriteLine(response);
-        //        }
-        //        if (UIChoice == "3") // image to text
-        //        {
-        //            //to ask the user to enter their prompt
-        //            Console.WriteLine("\nEnter your prompt:");
-        //            var prompt = Console.ReadLine();
-
-        //            var response = callOpenAIImageToText(prompt, apiKey);
-        //            Console.WriteLine(response);
-        //        }
-        //        if (UIChoice == "4") // exit
-        //        {
-        //            run = false;
-        //        }
-        //    }
-
-        //}
 
         public static string callOpenAIText( string input)
         {
@@ -148,36 +103,48 @@ namespace server
 
 
         //not working yet
-        public static string callOpenAIImageToText(string input, string apikey)
+        public static string[] callOpenAIImageToText()
         {
-            var OpenAiKey = apikey;
-            var imageUrl = input;
-            var url = "https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg";
-            var apiUrl = "https://api.openai.com/v1/images/generations";
             try
             {
-                using (var client = new HttpClient())
-                {
-                    client.DefaultRequestHeaders.Add("Authorization", "Bearer " + OpenAiKey);
-                    var data = new
-                    {
-                        model = "image-alpha-001",
-                        prompt = $"Describe this image: {url}",
-                    };
+                string[] result;
 
-                    var jsonData = JsonConvert.SerializeObject(data);
-                    var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
-                    var response = client.PostAsync(apiUrl, content).Result;
-                    var result = JsonConvert.DeserializeObject<dynamic>(response.Content.ReadAsStringAsync().Result);
-                    Console.WriteLine(result.data.text);
+                //string imagePath = GetImagePath();
+                string imagePath = @"C:\Users\user\Downloads\movie.jpg";
+                string pythonFileName = "C:\\Users\\user\\Source\\Repos\\Project_AI_API_Mobile_Networking_Group_10_COMP72070_Sec_1_23W\\Server_LAVIS_ImageToText\\Server_LAVIS_ImageToText.py";
 
-                    return result;
-                }
+                result = runPythonImageToText(pythonFileName, imagePath);
+
+                return result;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
+            return null;
+        }
+
+
+        private static string[] runPythonImageToText(string fileName, string imagePath)
+        {
+            ProcessStartInfo start = new ProcessStartInfo();
+            start.FileName = "C:\\Users\\user\\anaconda3\\python.exe";
+            start.Arguments = string.Format("{0} {1}", fileName, imagePath);
+            start.UseShellExecute = false;
+            start.RedirectStandardOutput = true;
+
+            Process process = Process.Start(start);
+
+            process.WaitForExit();
+
+            string[] result = System.IO.File.ReadAllLines("C:\\Users\\user\\Source\\Repos\\Project_AI_API_Mobile_Networking_Group_10_COMP72070_Sec_1_23W\\ImageCaptionTemp.txt"); ;
+
+            return result;
+        }
+
+        public static string GetImagePath()
+        {
+            
             return null;
         }
     }
