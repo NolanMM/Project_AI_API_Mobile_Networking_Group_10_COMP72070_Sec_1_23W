@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms;
+﻿using Client.Views;
+using Xamarin.Forms;
 
 namespace Client
 {

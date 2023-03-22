@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms;
+﻿using Client.Views;
+using Xamarin.Forms;
 
 namespace Client.ViewModels
 {
@@ -29,7 +30,10 @@ namespace Client.ViewModels
             if (checking_Status)
             {
                 await Application.Current.MainPage.DisplayAlert("Notification", "LoginSuccessFully", "OK.");
-                await Shell.Current.GoToAsync("//HomePage");
+                //await Shell.Current.GoToAsync("//HomePage");
+                //await Application.Current.MainPage.Navigation.PushModalAsync(new AppShell());
+                await Shell.Current.GoToAsync("///HomePage");
+
             }
             else { await Application.Current.MainPage.DisplayAlert("Notification", "LoginFailed", "OK."); }
         });

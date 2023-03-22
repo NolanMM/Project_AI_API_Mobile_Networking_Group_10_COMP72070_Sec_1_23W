@@ -11,7 +11,7 @@ namespace server
         // Fix Write to excel by the index of worksheets
         // Excel sample is for server side
         // Excel sample_Clients is for saving information of clients
-        public static void Write_To_Excel_By_Worksheets_Index_Server(int index_Worksheets, string key, string encrypted_data)
+        public static bool Write_To_Excel_By_Worksheets_Index_Server(int index_Worksheets, string key, string encrypted_data)
         {
             //Create a Workbook object
             XLs.Workbook workbook = new XLs.Workbook();
@@ -28,10 +28,19 @@ namespace server
             //Auto fit column width
             //worksheet.AllocatedRange.AutoFitColumns();
             //Save to an Excel file
-            workbook.SaveToFile("sample.xlsx", XLs.ExcelVersion.Version2016);
+            try
+            {
+                workbook.SaveToFile("sample.xlsx", XLs.ExcelVersion.Version2016);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+
         }
 
-        public static void Write_To_Excel_By_Worksheets_Index_Clients(int index_Worksheets, string key, string encrypted_data)
+        public static bool Write_To_Excel_By_Worksheets_Index_Clients(int index_Worksheets, string key, string encrypted_data)
         {
             //Create a Workbook object
             XLs.Workbook workbook = new XLs.Workbook();
@@ -48,10 +57,18 @@ namespace server
             //Auto fit column width
             //worksheet.AllocatedRange.AutoFitColumns();
             //Save to an Excel file
-            workbook.SaveToFile("sample_Clients.xlsx", XLs.ExcelVersion.Version2016);
+            try
+            {
+                workbook.SaveToFile("sample_Clients.xlsx", XLs.ExcelVersion.Version2016);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
-        public static void Function_Excel_Login(string username, string password)
+        public static bool Function_Excel_Login(string username, string password)
         {
             WorkBook wb = WorkBook.Load("sample.xlsx");
             WorkSheet ws = wb.GetWorkSheet("Sheet1");
@@ -101,9 +118,11 @@ namespace server
 
                 MessageBox.Show("LoginSuccessful", "Warning");
                 MessageBox.Show(decrypted_data, "Warning");
+                return true;
             }
             else
             {
+                return false;
                 Console.WriteLine("Errors");
                 Console.ReadLine();
             }
@@ -111,7 +130,7 @@ namespace server
 
         public static class Server_SignUp
         {
-            public static void Sign_Up(string username, string password, string email)
+            public static bool Sign_Up(string username, string password, string email)
             {
                 // Generate Sample data by Hard Code
 
@@ -144,8 +163,9 @@ namespace server
                     //System.IO.File.AppendAllText(@"./Test.txt", store_data + "\n");
 
                     MessageBox.Show("Sign Up Successful", "Warning");
+                    return true;
                 }
-                else { MessageBox.Show("Duplicate Username", "Warning"); }
+                else { MessageBox.Show("Duplicate Username", "Warning"); return false; }
             }
         }
 
