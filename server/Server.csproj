@@ -104,6 +104,7 @@
     <Compile Include="Control_UC.Designer.cs">
       <DependentUpon>Control_UC.cs</DependentUpon>
     </Compile>
+    <Compile Include="DataPacket.cs" />
     <Compile Include="File_IO_Modules.cs" />
     <Compile Include="Forgot_Password.cs">
       <SubType>Form</SubType>
