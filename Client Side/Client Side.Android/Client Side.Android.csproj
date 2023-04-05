@@ -86,11 +86,5 @@
   <ItemGroup>
     <Folder Include="Resources\drawable\" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Client Side\Client Side.csproj">
-      <Project>{CA76018F-A57A-4FB2-8B8E-B6229FB8FF4F}</Project>
-      <Name>Client Side</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>
