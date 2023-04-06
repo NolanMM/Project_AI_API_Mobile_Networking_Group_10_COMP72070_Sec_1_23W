@@ -9,6 +9,7 @@ namespace MultiServer
         public static TcpClient client;
         private static TcpListener listener;
         private static string ipString;
+        private static NetworkStream ConnectedClient;
 
         // Main Method
         static public void Main(String[] args)
@@ -16,6 +17,7 @@ namespace MultiServer
 
             returnIP();
             Accept();
+            Receiving();
             Console.WriteLine(0);
         }
 
@@ -42,7 +44,41 @@ namespace MultiServer
             ===================================================",
             ep.Address, ep.Port);
             client = listener.AcceptTcpClient();
+            ConnectedClient = client.GetStream();
             Console.WriteLine("Connected to client!" + " \n");
+        }
+        public static void Receiving()
+        {
+            while (client.Connected)
+            {
+                try
+                {
+                    const int bytesize = 1024 * 1024;
+                    byte[] buffer = new byte[bytesize];
+                    string x = ConnectedClient.Read(buffer, 0, bytesize).ToString();
+                    var data = ASCIIEncoding.ASCII.GetString(buffer);
+                    Console.WriteLine(data);
+                    string test = "Recieved";
+                    byte[] bytes_data = Encoding.ASCII.GetBytes(test);
+                    sendRespond(bytes_data);
+                }
+                catch (Exception exc)
+                {
+                    client.Dispose();
+                    client.Close();
+                }
+            }
+        }
+        public static void sendRespond(byte[] data)
+        {
+            if (ConnectedClient.CanWrite)
+            {
+                ConnectedClient.Write(data, 0, data.Length);
+            }
+            else
+            {
+                Console.WriteLine("Sorry.  You cannot write to this NetworkStream.");
+            }
         }
     }
 }
