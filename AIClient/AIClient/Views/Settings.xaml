@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AIClient.Views.Settings"
+             BackgroundColor="Black"
+             xmlns:viewmodels="clr-namespace:AIClient.ViewModels"
+             Shell.NavBarIsVisible="False">
+    <ContentPage.BindingContext>
+        <viewmodels:SettingPageViewModel/>
+    </ContentPage.BindingContext>
+    
+    <StackLayout>
+
+        <Grid RowSpacing="25" RowDefinitions="Auto,Auto,Auto,Auto">
+            <StackLayout Grid.Row="1">
+                <Label Text="Setting" FontSize="25" TextColor="White"
+                       HorizontalTextAlignment="Center"
+                       FontAttributes="Bold"
+                       Margin="40,50,40,0"/>
+                <Button Text="Sign Out" Grid.Row="0"
+                    Margin="40,100,40,0"
+                    BackgroundColor="Red"
+                    Command="{Binding SignOut}"
+                    TextColor="White"
+                    CornerRadius="20"
+                    Padding="20">
+                </Button>
+            </StackLayout>
+        </Grid>
+    </StackLayout>
+</ContentPage>

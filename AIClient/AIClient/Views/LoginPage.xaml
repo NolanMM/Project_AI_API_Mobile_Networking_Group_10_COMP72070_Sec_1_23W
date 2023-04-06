@@ -13,25 +13,33 @@
 
     <StackLayout>
         <Grid RowSpacing="25" RowDefinitions="Auto,Auto,Auto,Auto">
-            <StackLayout Grid.Row="4">
-                <Label Text="Sign In" FontSize="25" TextColor="White"
+            <BoxView Grid.RowSpan="5">
+                <BoxView.Background>
+                    <LinearGradientBrush>
+                        <GradientStopCollection>
+                            <GradientStop Color="Black" Offset="0.5"/>
+                            <GradientStop Color="#30343F" Offset="2"/>
+                        </GradientStopCollection>
+                    </LinearGradientBrush>
+                </BoxView.Background>
+            </BoxView>
+
+            <StackLayout Grid.Row="1">
+                <Label Text="Sign In" FontSize="38" TextColor="White"
                        HorizontalTextAlignment="Center"
-                       FontAttributes="Bold"/>
-                <Frame BorderColor = "White" BackgroundColor="Transparent" Margin="15" Padding="0" CornerRadius="50">
+                       FontAttributes="Bold"
+                       Margin="0,50,0,100"/>
+                <Frame BorderColor = "White" BackgroundColor="Transparent" Margin="40,0,40,20" Padding="0" CornerRadius="50">
                     <Frame BorderColor = "White" BackgroundColor="Transparent" Margin="1" Padding="25,0,25,0" CornerRadius="50" HeightRequest="60">
                         <Entry
                                     TextColor="White"
                                     FontSize="18"
                                     Placeholder="Username"
                                     PlaceholderColor="White"
-                                                   Text="{Binding Username}"
-                                />
-
-
+                                    Text="{Binding Username}"/>
                     </Frame>
-
                 </Frame>
-                <Frame BorderColor = "White" BackgroundColor="Transparent" Margin="15" Padding="0" CornerRadius="50">
+                <Frame BorderColor = "White" BackgroundColor="Transparent" Margin="40,10,40,50" Padding="0" CornerRadius="50">
                     <Frame BorderColor = "White" BackgroundColor="Transparent" Margin="1" Padding="25,0,25,0" CornerRadius="50" HeightRequest="60">
                         <Entry
                                     TextColor="White"
@@ -50,20 +58,22 @@
                         IsChecked="False"
                         CheckedChanged="CheckBox_CheckedChanged"
                         x:Name="CheckBox" 
-                        Margin="15,0,0,0"/>
+                        Margin="20,0,0,0"
+                        HeightRequest="15"
+                        WidthRequest="24"/>
                     <Label
                         Text="Show Password" TextColor="White"
                         FontSize="18"
                         RelativeLayout.XConstraint="50"
-                        RelativeLayout.YConstraint="3"/>
+                        RelativeLayout.YConstraint="-4"/>
                     <Button
                         x:Name="ForgotPasswordButton"
                         Text="Forgot Password"
                         TextColor="White"
                         FontSize="18"
                         BackgroundColor="Transparent"
-                        RelativeLayout.XConstraint="205"
-                        RelativeLayout.YConstraint="-8"
+                        RelativeLayout.XConstraint="220"
+                        RelativeLayout.YConstraint="-14"
                         Command="{Binding ForgotPassword}"
                         TextTransform="None"/>
 
@@ -73,14 +83,15 @@
                     Command="{Binding Login_Checking}"
                     TextColor="White"
                     CornerRadius="20"
-                    Margin="10,0,10,0"/>
+                    Margin="40,60,40,30"/>
                 <Button Text="Sign Up" Grid.Row="1"
-                    Margin="10,10,10,0"
+                    Margin="40,0,40,0"
                     BackgroundColor="Red"
                     Command="{Binding SignUp}"
                     TextColor="White"
                     CornerRadius="20">
                 </Button>
+
             </StackLayout>
 
 

@@ -33,7 +33,6 @@
                                     FontSize="18"
                                     Placeholder="Password"
                                     PlaceholderColor="White"
-                                    IsPassword="True"
                                     Text="{Binding Password}"
                                     x:Name="PasswordText"/>
                     </Frame>
@@ -45,7 +44,6 @@
                                     FontSize="18"
                                     Placeholder="Email"
                                     PlaceholderColor="White"
-                                    IsPassword="True"
                                     Text="{Binding Email}"
                                     x:Name="EmailText"/>
                     </Frame>

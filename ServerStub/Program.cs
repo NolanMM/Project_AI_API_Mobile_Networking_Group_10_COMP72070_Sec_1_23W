@@ -78,7 +78,7 @@ namespace MultiServer
                     // Data after decypted stub format like request_type-Username-Password
                     string[] Items_After_Derypted = decrypted_data.Split("-");
 
-                    if (Items_After_Derypted[0] == "Login")
+                    if (Items_After_Derypted[0] == "Login" && Items_After_Derypted.Length == 3)
                     {
                         if (Items_After_Derypted[1] == "Nguyen" && Items_After_Derypted[2] == "Minh")
                         {
@@ -87,6 +87,12 @@ namespace MultiServer
                             DataPacket dataheader = new DataPacket(send_infor_string, public_key);
                             final_respond = dataheader.DataPacketToString() + "-" + send_infor_string;
                         }
+                    }else if(Items_After_Derypted[0] == "SignUp" && Items_After_Derypted.Length == 4)
+                        {
+                        string respondSucess = "SignUpSuccessfully";
+                        string send_infor_string = Sercurity.Encrypt(respondSucess, public_key);
+                        DataPacket dataheader = new DataPacket(send_infor_string, public_key);
+                        final_respond = dataheader.DataPacketToString() + "-" + send_infor_string;
                     }
                     byte[] bytes_data = Encoding.ASCII.GetBytes(final_respond);
                     sendRespond(bytes_data);
