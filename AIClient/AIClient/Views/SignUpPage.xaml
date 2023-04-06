@@ -1,22 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="AIClient.Views.LoginPage"
-             Shell.NavBarIsVisible="False"
-                Shell.FlyoutBehavior="Disabled"
-                BackgroundColor="Black"
+             x:Class="AIClient.Views.SignUpPage"
+             BackgroundColor="Black"
+             Shell.BackgroundColor="Black"
              xmlns:viewmodels="clr-namespace:AIClient.ViewModels">
-
     <ContentPage.BindingContext>
-        <viewmodels:LoginViewModel/>
+        <viewmodels:SignUpPageViewModel/>
     </ContentPage.BindingContext>
 
     <StackLayout>
-        <Grid RowSpacing="25" RowDefinitions="Auto,Auto,Auto,Auto">
-            <StackLayout Grid.Row="4">
-                <Label Text="Sign In" FontSize="25" TextColor="White"
+        <Grid RowSpacing="25" RowDefinitions="Auto,Auto,Auto,Auto,Auto">
+            <StackLayout Grid.Row="1">
+                <Label Text="Sign Up" FontSize="25" TextColor="White"
                        HorizontalTextAlignment="Center"
-                       FontAttributes="Bold"/>
+                       FontAttributes="Bold"
+                       Margin="0,0,0,90"/>
                 <Frame BorderColor = "White" BackgroundColor="Transparent" Margin="15" Padding="0" CornerRadius="50">
                     <Frame BorderColor = "White" BackgroundColor="Transparent" Margin="1" Padding="25,0,25,0" CornerRadius="50" HeightRequest="60">
                         <Entry
@@ -24,12 +23,8 @@
                                     FontSize="18"
                                     Placeholder="Username"
                                     PlaceholderColor="White"
-                                                   Text="{Binding Username}"
-                                />
-
-
+                                    Text="{Binding Username}"/>
                     </Frame>
-
                 </Frame>
                 <Frame BorderColor = "White" BackgroundColor="Transparent" Margin="15" Padding="0" CornerRadius="50">
                     <Frame BorderColor = "White" BackgroundColor="Transparent" Margin="1" Padding="25,0,25,0" CornerRadius="50" HeightRequest="60">
@@ -42,49 +37,32 @@
                                     Text="{Binding Password}"
                                     x:Name="PasswordText"/>
                     </Frame>
-
                 </Frame>
-                <RelativeLayout Padding="25">
-                    <CheckBox
-                        Color="White"
-                        IsChecked="False"
-                        CheckedChanged="CheckBox_CheckedChanged"
-                        x:Name="CheckBox" 
-                        Margin="15,0,0,0"/>
-                    <Label
-                        Text="Show Password" TextColor="White"
-                        FontSize="18"
-                        RelativeLayout.XConstraint="50"
-                        RelativeLayout.YConstraint="3"/>
-                    <Button
-                        x:Name="ForgotPasswordButton"
-                        Text="Forgot Password"
-                        TextColor="White"
-                        FontSize="18"
-                        BackgroundColor="Transparent"
-                        RelativeLayout.XConstraint="205"
-                        RelativeLayout.YConstraint="-8"
-                        Command="{Binding ForgotPassword}"
-                        TextTransform="None"/>
+                <Frame BorderColor = "White" BackgroundColor="Transparent" Margin="15" Padding="0" CornerRadius="50">
+                    <Frame BorderColor = "White" BackgroundColor="Transparent" Margin="1" Padding="25,0,25,0" CornerRadius="50" HeightRequest="60">
+                        <Entry
+                                    TextColor="White"
+                                    FontSize="18"
+                                    Placeholder="Email"
+                                    PlaceholderColor="White"
+                                    IsPassword="True"
+                                    Text="{Binding Email}"
+                                    x:Name="EmailText"/>
+                    </Frame>
+                </Frame>
 
-                </RelativeLayout>
-                <Button Text="Login" Grid.Row="1"
-                    BackgroundColor="Red"
-                    Command="{Binding Login_Checking}"
-                    TextColor="White"
-                    CornerRadius="20"
-                    Margin="10,0,10,0"/>
                 <Button Text="Sign Up" Grid.Row="1"
-                    Margin="10,10,10,0"
+                    Margin="40,160,40,0"
                     BackgroundColor="Red"
                     Command="{Binding SignUp}"
                     TextColor="White"
-                    CornerRadius="20">
+                    CornerRadius="20"
+                    Padding="20">
+
                 </Button>
             </StackLayout>
-
-
         </Grid>
 
     </StackLayout>
+
 </ContentPage>

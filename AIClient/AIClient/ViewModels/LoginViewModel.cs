@@ -65,6 +65,9 @@ namespace AIClient.ViewModels
             }
             else { await Application.Current.MainPage.DisplayAlert("Notification", "Login Failed", "OK."); }
         });
+
+        public Command SignUp => new Command(async () =>{ await Shell.Current.GoToAsync("//LoginPage/SignUpPage"); });
+
         public Command ForgotPassword => new Command(async () =>
         {
             //Connect to SMTP and send the email to the client
