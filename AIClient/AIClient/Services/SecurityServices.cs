@@ -1,15 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace server
+namespace AIClient.Services
 {
-    public static class Encryption_
+    public static class SecurityServices
     {
         internal static readonly char[] chars =
             "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".ToCharArray();
         private static readonly string privatekey = "FixedKey";
+
         public static string GetUniqueKey(int size)
         {
             byte[] data = new byte[4 * size];
@@ -32,7 +34,7 @@ namespace server
         public static string Quick_Encypted_Account_by_Using_Hashing_Key_By_Username(string username, string password, string email)
         {
             string raw_material = username;
-            string UserID = Encryption_.ComputeSha256Hash(raw_material);
+            string UserID = SecurityServices.ComputeSha256Hash(raw_material);
 
             // Take 16 chars from userID for the key for AES the data
             string public_key = UserID.Substring(0, 8);
@@ -41,15 +43,10 @@ namespace server
             string final_string = username + "-" + password + "-" + email;
 
             // Encypted the final_string (User data) by the key
-            string final_encryption = Encryption_.Encrypt(final_string, public_key);
+            string final_encryption = SecurityServices.Encrypt(final_string, public_key);
 
             return final_encryption;
         }
-
-        //public static string ShuffleKeyEncryption(string raw_key)
-        //{
-        //    return
-        //}
         public static string ComputeSha256Hash(string rawData)
         {
             // Create a SHA256
@@ -67,7 +64,6 @@ namespace server
                 return builder.ToString();
             }
         }
-
         public static string Encrypt(string str, string public_key)
         {
             try
@@ -90,7 +86,6 @@ namespace server
                     cs.FlushFinalBlock();
                     ToReturn = Convert.ToBase64String(ms.ToArray());
                 }
-                //Console.WriteLine(ToReturn);
                 return ToReturn;
             }
             catch (Exception ex)
@@ -123,7 +118,6 @@ namespace server
                     Encoding encoding = Encoding.UTF8;
                     ToReturn = encoding.GetString(ms.ToArray());
                 }
-                //Console.WriteLine(ToReturn);
                 return ToReturn;
             }
             catch (Exception ae)

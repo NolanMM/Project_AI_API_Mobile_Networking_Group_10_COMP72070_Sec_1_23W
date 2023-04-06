@@ -22,27 +22,35 @@ namespace AIClient.Services
             await ConnectToServerAsync();
             string test = "Hello to server";
             byte[] bytes_data = Encoding.ASCII.GetBytes(test);
-            sendData(bytes_data);
-            Receiving();
+            SendReceiveProcess(bytes_data);
         }
 
         private static async Task ConnectToServerAsync()
         {
             int attempts = 0;
-            try
+            bool flag = false;
+            while (flag == false)
             {
-                attempts++;
-                //Console.WriteLine("Connection attempt " + attempts);
-                // Change IPAddress.Loopback to a remote IP to connect to a remote host.
-                await ClientSocket.ConnectAsync(IPAddress.Parse("172.29.48.1"), PORT);
-                Connection = new NetworkStream(ClientSocket);
-                await Application.Current.MainPage.DisplayAlert("Notification", "Pass To this", "OK.");
+                try
+                {
+                    attempts++;
+                    await ClientSocket.ConnectAsync(IPAddress.Parse("172.29.48.1"), PORT);
+                    Connection = new NetworkStream(ClientSocket);
+                    flag = true;
+                }
+                catch (SocketException e)
+                {
+                    await Application.Current.MainPage.DisplayAlert("Notification", e.ToString(), "OK.");
+                }
             }
-            catch (SocketException)
-            {
-                await Task.Delay(1000);
-            }
-            await Application.Current.MainPage.DisplayAlert("Notification", "OutWhileLoop", "OK.");
+            await Application.Current.MainPage.DisplayAlert("Notification", "Out While Loop", "OK.");
+        }
+
+        public static async void SendReceiveProcess(byte[] data)
+        {
+            sendData(data);
+            string receive = await Receiving();
+            await Application.Current.MainPage.DisplayAlert("Notification", "Successful received data: " + receive, "OK.");
         }
 
         public static async void sendData(byte[] data)
@@ -56,21 +64,28 @@ namespace AIClient.Services
                 await Application.Current.MainPage.DisplayAlert("Notification", "Sorry.  You cannot write to this NetworkStream.", "OK.");
             }
         }
-        public static async void Receiving()
+        public static async Task<string> Receiving()
         {
-            while (Connection.CanRead)
+            if(Connection.CanRead)
             {
                 try
                 {
                     const int bytesize = 1024 * 1024;
                     byte[] buffer = new byte[bytesize];
                     string x = Connection.Read(buffer, 0, bytesize).ToString();
-                    var data = ASCIIEncoding.ASCII.GetString(buffer);
+                    string data = ASCIIEncoding.ASCII.GetString(buffer);
+                    return data;
                 }
                 catch (Exception exc)
                 {
-                    await Application.Current.MainPage.DisplayAlert("Notification", "Sorry.  You cannot write to this NetworkStream.", "OK.");
+                    await Application.Current.MainPage.DisplayAlert("Notification", exc.ToString(), "OK.");
+                    return null;
                 }
+            }
+            else
+            {
+                await Application.Current.MainPage.DisplayAlert("Notification", "Sorry.  You cannot read from this NetworkStream.", "OK.");
+                return null;
             }
         }
 
