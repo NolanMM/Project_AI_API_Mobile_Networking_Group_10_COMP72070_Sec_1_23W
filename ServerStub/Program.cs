@@ -73,8 +73,22 @@ namespace MultiServer
 
                     string decrypted_data = Sercurity.Decrypt(data_encypted_received, public_key);
                     Console.WriteLine("Data after decrypted: " + decrypted_data);
-                    string test = "Recieved";
-                    byte[] bytes_data = Encoding.ASCII.GetBytes(test);
+
+                    string final_respond = "Declined";
+                    // Data after decypted stub format like request_type-Username-Password
+                    string[] Items_After_Derypted = decrypted_data.Split("-");
+
+                    if (Items_After_Derypted[0] == "Login")
+                    {
+                        if (Items_After_Derypted[1] == "Nguyen" && Items_After_Derypted[2] == "Minh")
+                        {
+                            string respondSucess = "LoginSuccessfully";
+                            string send_infor_string = Sercurity.Encrypt(respondSucess, public_key);
+                            DataPacket dataheader = new DataPacket(send_infor_string, public_key);
+                            final_respond = dataheader.DataPacketToString() + "-" + send_infor_string;
+                        }
+                    }
+                    byte[] bytes_data = Encoding.ASCII.GetBytes(final_respond);
                     sendRespond(bytes_data);
                 }
                 catch (Exception exc)

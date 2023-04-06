@@ -46,14 +46,13 @@ namespace AIClient.Services
                     await Application.Current.MainPage.DisplayAlert("Notification", e.ToString(), "OK.");
                 }
             }
-            await Application.Current.MainPage.DisplayAlert("Notification", "Out While Loop", "OK.");
         }
 
         public static async Task<String> SendReceiveProcess(byte[] data)
         {
             sendData(data);
             string receive = await Receiving();
-            await Application.Current.MainPage.DisplayAlert("Notification", "Successful received data: " + receive, "OK.");
+            //await Application.Current.MainPage.DisplayAlert("Notification", "Successful received data: " + receive, "OK.");
             return receive;
         }
 

@@ -32,8 +32,9 @@ namespace AIClient.Models
         public DataPacket(string overload)
         {
             string[] Items = overload.Split('>');
-            source = Items[0];
-            Destination = Items[1];
+            //Swap source with destination set destination to server
+            Destination = Items[0];
+            source = Items[1];
             DataLength = Items[2];
         }
 

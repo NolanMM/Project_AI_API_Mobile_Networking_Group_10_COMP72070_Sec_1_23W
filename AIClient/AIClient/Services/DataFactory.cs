@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AIClient.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,10 +7,32 @@ namespace AIClient.Services
 {
     public static class DataFactory
     {
-        //public static string DataPacketCreateForLoginProcess()
-        //{
+        public static string DataPacketCreateForLoginProcess(string Username, string Password)
+        {
+            string request_type = "Login";
+            string username = Username;
+            string password = Password;
+            string UserID = SecurityServices.ComputeSha256Hash(username);
 
-        //}
+            // Take 16 chars from userID for the key for AES the data
+            string public_key = UserID.Substring(0, 8);
+
+            // Combine all the data together
+            // Format: Login-Username-Password
+
+            string final_string = request_type + "-" + username + "-" + password;
+
+            // Encypted the final_string (User data) by the key
+            string send_infor_string = SecurityServices.Encrypt(final_string, public_key);
+
+            DataPacket dataheader = new DataPacket(send_infor_string, public_key);
+
+            // source>Destination>DataLength-send_infor_string(data encrypted. Format: Login-Username-Password) 
+            // using DataPacket.getUserID() to be the key to decrypted the send_infor_string
+            string final = dataheader.DataPacketToString() + "-" + send_infor_string;
+
+            return final;
+        }
 
         //public static string DataPacketCreateForSignUpProcess()
         //{

@@ -11,7 +11,7 @@ namespace MultiServer
         // 1 byte for Source 1 byte for Destination 4 byte for dataLength()
         public string Destination;
         public string DataLength;
-        public string source = "Server";
+        public string source;
 
         /// <summary>
         /// Data Packet for Server side to attract header in respond
@@ -23,8 +23,9 @@ namespace MultiServer
         public DataPacket(string data, string UserId)
         {
             Destination = UserId;
+            source = "Server";
             // Assign the length of data
-            int datacount = data.Count() + 1;         // +1 because Count() from 0    
+            int datacount = data.Count();   
             DataLength = datacount.ToString();  //fixed 4 bytes for int
             // Assign the Destination of the data packet
         }
