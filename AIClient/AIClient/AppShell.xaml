@@ -88,7 +88,7 @@
             <ShellContent Route="Request_Page_Route" ContentTemplate="{DataTemplate local:RequestPage}" />
         </Tab>
         <Tab Title="History">
-            <ShellContent Route="History_Page_Route" ContentTemplate="{DataTemplate local:MainPage}" />
+            <ShellContent Route="History_Page_Route" ContentTemplate="{DataTemplate local:HistoryBoardPage}" />
         </Tab>
         <Tab Title="Settings">
             <ShellContent Route="Setting_Page_Route" ContentTemplate="{DataTemplate local:MainPage}" />

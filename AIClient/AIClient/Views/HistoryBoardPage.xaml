@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AIClient.Views.HistoryBoardPage"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+                 Shell.NavBarIsVisible="False"
+    x:Name="HistoryPage"
+             xmlns:viewmodels="clr-namespace:AIClient.ViewModels">
+    <ContentPage.BindingContext>
+        <viewmodels:HistoryBoardViewModel/>
+    </ContentPage.BindingContext>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <xct:ItemSelectedEventArgsConverter x:Key="ItemSelectedEventArgsConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Add" Command="{Binding AddCommand}"/>
+
+    </ContentPage.ToolbarItems>
+
+    <Grid RowDefinitions="100,*">
+        <BoxView Grid.RowSpan="2">
+            <BoxView.Background>
+                <LinearGradientBrush>
+                    <GradientStopCollection>
+                        <GradientStop Color="Black" Offset="0"/>
+                        <GradientStop Color="#30343F" Offset="1"/>
+                    </GradientStopCollection>
+                </LinearGradientBrush>
+            </BoxView.Background>
+        </BoxView>
+        <Label Grid.Row="0" Text="History" TextColor="#fff" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" FontSize="46" FontAttributes="Bold"></Label>
+        <ListView SelectedItem="{Binding SelectedHistoryRequestCard, Mode=TwoWay}" CachingStrategy="RecycleElement" Grid.Row="1" BackgroundColor="Transparent"
+                  ItemsSource="{Binding requestGroup}"
+                  IsGroupingEnabled="True"
+
+                  IsPullToRefreshEnabled="True"
+                  IsRefreshing="{Binding IsBusy,Mode=OneWay}"
+                  RefreshCommand="{Binding RefreshCommand}"
+
+
+                  HasUnevenRows="True"
+                  SeparatorVisibility="None">
+            <ListView.Behaviors>
+                <xct:EventToCommandBehavior
+                    EventName="ItemSelected"
+                    Command="{Binding SelectedCommand}"
+                    EventArgsConverter="{StaticResource ItemSelectedEventArgsConverter}"/>
+            </ListView.Behaviors>
+
+            <ListView.GroupHeaderTemplate>
+                <DataTemplate xmlns:viewmodels="clr-namespace:AIClient.ViewModels">
+                    <ViewCell>
+                        <Grid>
+                            <Frame BackgroundColor="Transparent">
+                                <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
+                                    <StackLayout HorizontalOptions="Center">
+                                        <Label HorizontalOptions="Center"
+                                                   Text="{Binding Key}"
+                                                   TextColor="White"
+                                                   FontSize="22"/>
+                                    </StackLayout>
+                                </StackLayout>
+                            </Frame>
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+
+            </ListView.GroupHeaderTemplate>
+            <ListView.ItemTemplate>
+                <DataTemplate xmlns:x="clr-namespace:AIClient.ViewModels">
+                    <ViewCell>
+                        <ViewCell.ContextActions>
+                            <MenuItem Text="Delete" IsDestructive="True"/>
+                            <MenuItem Text="Delete All" IsDestructive="True"/>
+                        </ViewCell.ContextActions>
+                        <Grid Padding="10" BackgroundColor="Black">
+                            <Frame CornerRadius="20" HasShadow="True">
+                                <StackLayout Orientation="Horizontal">
+                                    <Image Source="{Binding Image_Res}" WidthRequest="100"/>
+                                    <StackLayout VerticalOptions="Center">
+                                        <Label VerticalOptions="Center"
+                                                   Text="{Binding contentRequest}"
+                                                   TextColor="Black"
+                                                   FontSize="22"/>
+                                        <Label VerticalOptions="Center"
+                                                   Text="{Binding respondFromServer}"
+                                                   TextColor="Black"
+                                                   FontSize="18"/>
+                                        <Label VerticalOptions="Center"
+                                                   Text="{Binding typeRequest}"
+                                                   TextColor="Black"
+                                                   FontSize="18"/>
+                                    </StackLayout>
+                                </StackLayout>
+                            </Frame>
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+
+            </ListView.ItemTemplate>
+            <ListView.Header>
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Center" BackgroundColor="Black">
+                    <Label HorizontalOptions="Center" HorizontalTextAlignment="Center" FontSize="22" Text="The List of Requested" TextColor="White"/>
+                </StackLayout>
+            </ListView.Header>
+            <ListView.Footer>
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Center" BackgroundColor="Black">
+                    <Button Text="Load More" BackgroundColor="Black" TextColor="White" CornerRadius="20" Command="{Binding LoadMoreCommand}"></Button>
+                </StackLayout>
+            </ListView.Footer>
+        </ListView>
+
+    </Grid>
+</ContentPage>
