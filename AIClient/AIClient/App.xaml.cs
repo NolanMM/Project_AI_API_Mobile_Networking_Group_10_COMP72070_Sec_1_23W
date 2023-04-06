@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms;
+﻿using AIClient.Services;
+using Xamarin.Forms;
 
 namespace AIClient
 {
@@ -13,6 +14,7 @@ namespace AIClient
 
         protected override void OnStart()
         {
+            ConnectionServices.Set_up_Connection();
         }
 
         protected override void OnSleep()
