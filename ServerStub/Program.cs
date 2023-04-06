@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace MultiServer
 {
@@ -56,8 +57,12 @@ namespace MultiServer
                     const int bytesize = 1024 * 1024;
                     byte[] buffer = new byte[bytesize];
                     string x = ConnectedClient.Read(buffer, 0, bytesize).ToString();
-                    var data = ASCIIEncoding.ASCII.GetString(buffer);
-                    Console.WriteLine(data);
+                    string data = Encoding.ASCII.GetString(buffer);
+                    Console.WriteLine("Data before decrypted: " + data);
+                    string[] Items = data.Split("*&*&*");
+                    string public_key = Items[0].Substring(0, 8);
+                    string decrypted_data = Sercurity.Decrypt(Items[1], public_key);
+                    Console.WriteLine("Data after decrypted: " + decrypted_data);
                     string test = "Recieved";
                     byte[] bytes_data = Encoding.ASCII.GetBytes(test);
                     sendRespond(bytes_data);

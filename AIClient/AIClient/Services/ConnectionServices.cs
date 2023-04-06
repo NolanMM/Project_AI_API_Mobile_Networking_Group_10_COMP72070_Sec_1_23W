@@ -21,7 +21,10 @@ namespace AIClient.Services
         {
             await ConnectToServerAsync();
             string test = "Hello to server";
-            byte[] bytes_data = Encoding.ASCII.GetBytes(test);
+            string Hash = SecurityServices.ComputeSha256Hash(test);
+            string public_key = Hash.Substring(0, 8);
+            string final_string = Hash + "*&*&*" + SecurityServices.Encrypt(test,public_key) + "*&*&*";
+            byte[] bytes_data = Encoding.ASCII.GetBytes(final_string);
             SendReceiveProcess(bytes_data);
         }
 
