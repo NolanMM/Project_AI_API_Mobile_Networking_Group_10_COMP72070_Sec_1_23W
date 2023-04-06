@@ -135,11 +135,5 @@
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2196" />
     <PackageReference Include="Xamarin.Essentials" Version="1.7.0" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\FinalDesign\FinalDesign.csproj">
-      <Project>{E5F378C3-3FB2-46B0-BFD3-751261B8864A}</Project>
-      <Name>FinalDesign</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>

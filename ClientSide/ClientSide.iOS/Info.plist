@@ -25,7 +25,7 @@
     <key>CFBundleDisplayName</key>
     <string>ClientSide</string>
     <key>CFBundleIdentifier</key>
-    <string>NolanM.ClientSide</string>
+    <string>com.companyname.ClientSide</string>
     <key>CFBundleVersion</key>
     <string>1.0</string>
     <key>UILaunchStoryboardName</key>

@@ -1,6 +1,6 @@
-﻿using System.ComponentModel;
+﻿using ClientSide.ViewModels;
+using System.ComponentModel;
 using Xamarin.Forms;
-using ClientSide.ViewModels;
 
 namespace ClientSide.Views
 {

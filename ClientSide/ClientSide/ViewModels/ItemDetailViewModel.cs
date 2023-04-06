@@ -1,7 +1,7 @@
-﻿using System;
+﻿using ClientSide.Models;
+using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using ClientSide.Models;
 using Xamarin.Forms;
 
 namespace ClientSide.ViewModels
@@ -37,7 +37,7 @@ namespace ClientSide.ViewModels
                 itemId = value;
                 LoadItemId(value);
             }
-        }        
+        }
 
         public async void LoadItemId(string itemId)
         {
@@ -55,4 +55,3 @@ namespace ClientSide.ViewModels
         }
     }
 }
-

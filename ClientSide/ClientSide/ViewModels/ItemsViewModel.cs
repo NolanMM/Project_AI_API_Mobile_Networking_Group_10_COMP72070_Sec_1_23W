@@ -1,12 +1,10 @@
-﻿using System;
+﻿using ClientSide.Models;
+using ClientSide.Views;
+using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
-
 using Xamarin.Forms;
-
-using ClientSide.Models;
-using ClientSide.Views;
 
 namespace ClientSide.ViewModels
 {
@@ -16,7 +14,7 @@ namespace ClientSide.ViewModels
 
         public ObservableCollection<Item> Items { get; }
         public Command LoadItemsCommand { get; }
-        public Command AddItemCommand { get;  }
+        public Command AddItemCommand { get; }
         public Command<Item> ItemTapped { get; }
 
         public ItemsViewModel()

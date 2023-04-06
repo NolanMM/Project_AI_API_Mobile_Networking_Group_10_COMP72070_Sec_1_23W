@@ -1,8 +1,8 @@
-﻿using System;
+﻿using ClientSide.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Input;
-using ClientSide.Models;
 using Xamarin.Forms;
 
 namespace ClientSide.ViewModels
@@ -16,7 +16,7 @@ namespace ClientSide.ViewModels
         {
             SaveCommand = new Command(OnSave, ValidateSave);
             CancelCommand = new Command(OnCancel);
-            this.PropertyChanged += 
+            this.PropertyChanged +=
                 (_, __) => SaveCommand.ChangeCanExecute();
         }
 
@@ -55,7 +55,7 @@ namespace ClientSide.ViewModels
                 Text = Text,
                 Description = Description
             };
-            
+
             await DataStore.AddItemAsync(newItem);
 
             // This will pop the current page off the navigation stack
@@ -63,4 +63,3 @@ namespace ClientSide.ViewModels
         }
     }
 }
-

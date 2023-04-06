@@ -1,15 +1,15 @@
-﻿using System;
+﻿using ClientSide.Services;
+using ClientSide.Views;
+using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-using ClientSide.Services;
-using ClientSide.Views;
 
 namespace ClientSide
 {
     public partial class App : Application
     {
 
-        public App ()
+        public App()
         {
             InitializeComponent();
 
@@ -17,17 +17,16 @@ namespace ClientSide
             MainPage = new AppShell();
         }
 
-        protected override void OnStart ()
+        protected override void OnStart()
         {
         }
 
-        protected override void OnSleep ()
+        protected override void OnSleep()
         {
         }
 
-        protected override void OnResume ()
+        protected override void OnResume()
         {
         }
     }
 }
-

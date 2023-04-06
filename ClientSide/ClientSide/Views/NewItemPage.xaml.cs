@@ -1,11 +1,10 @@
-﻿using System;
+﻿using ClientSide.Models;
+using ClientSide.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-
-using ClientSide.Models;
-using ClientSide.ViewModels;
 
 namespace ClientSide.Views
 {

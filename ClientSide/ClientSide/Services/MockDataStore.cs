@@ -1,8 +1,8 @@
-﻿using System;
+﻿using ClientSide.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ClientSide.Models;
 
 namespace ClientSide.Services
 {

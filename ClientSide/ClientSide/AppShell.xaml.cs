@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using ClientSide.ViewModels;
+﻿using ClientSide.ViewModels;
 using ClientSide.Views;
+using System;
+using System.Collections.Generic;
 using Xamarin.Forms;
 
 namespace ClientSide
@@ -21,4 +21,3 @@ namespace ClientSide
         }
     }
 }
-
