@@ -1,18 +1,16 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace server
+namespace AIClient.Models
 {
     public class DataPacket
     {
         // 1 byte for Source 1 byte for Destination 4 byte for dataLength()
-        public string Destination;
+        public string Destination = "Server";
         public string DataLength;
-        public string source = "Server";
+        public string source;
 
         /// <summary>
         /// Data Packet for Server side to attract header in respond
@@ -21,7 +19,7 @@ namespace server
         /// <param int="UserId">This is the UserID (public key only (int , 4 bytes)) to set the destination of data packet and send the public key to the client side</param>
         public DataPacket(string data, string UserId)
         {
-            Destination = UserId;
+            source = UserId;
             // Assign the length of data
             int datacount = data.Count() + 1;         // +1 because Count() from 0    
             DataLength = datacount.ToString();  //fixed 4 bytes for int
@@ -39,5 +37,6 @@ namespace server
         {
             return source + ">" + Destination + ">" + DataLength;
         }
+
     }
 }
