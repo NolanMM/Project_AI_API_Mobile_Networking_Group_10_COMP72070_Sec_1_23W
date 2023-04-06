@@ -15,5 +15,7 @@ namespace AIClient.Models
         public string typeRequest { get; set; }
         public string timeOccured { get; set; }
         public string Image_Res { get; set; }
+
+        // Should inclue data packet header here
     }
 }

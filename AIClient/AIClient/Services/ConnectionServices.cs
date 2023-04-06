@@ -20,12 +20,12 @@ namespace AIClient.Services
         public static async void Set_up_Connection()
         {
             await ConnectToServerAsync();
-            string test = "Hello to server";
-            string Hash = SecurityServices.ComputeSha256Hash(test);
-            string public_key = Hash.Substring(0, 8);
-            string final_string = Hash + "*&*&*" + SecurityServices.Encrypt(test,public_key) + "*&*&*";
-            byte[] bytes_data = Encoding.ASCII.GetBytes(final_string);
-            SendReceiveProcess(bytes_data);
+            //string test = "Hello to server";
+            //string Hash = SecurityServices.ComputeSha256Hash(test);
+            //string public_key = Hash.Substring(0, 8);
+            //string final_string = Hash + "*&*&*" + SecurityServices.Encrypt(test,public_key) + "*&*&*";
+            //byte[] bytes_data = Encoding.ASCII.GetBytes(final_string);
+            //await SendReceiveProcess(bytes_data);
         }
 
         private static async Task ConnectToServerAsync()
@@ -49,11 +49,12 @@ namespace AIClient.Services
             await Application.Current.MainPage.DisplayAlert("Notification", "Out While Loop", "OK.");
         }
 
-        public static async void SendReceiveProcess(byte[] data)
+        public static async Task<String> SendReceiveProcess(byte[] data)
         {
             sendData(data);
             string receive = await Receiving();
             await Application.Current.MainPage.DisplayAlert("Notification", "Successful received data: " + receive, "OK.");
+            return receive;
         }
 
         public static async void sendData(byte[] data)

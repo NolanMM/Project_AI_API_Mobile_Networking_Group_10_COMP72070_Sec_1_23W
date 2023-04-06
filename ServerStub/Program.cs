@@ -59,9 +59,19 @@ namespace MultiServer
                     string x = ConnectedClient.Read(buffer, 0, bytesize).ToString();
                     string data = Encoding.ASCII.GetString(buffer);
                     Console.WriteLine("Data before decrypted: " + data);
-                    string[] Items = data.Split("*&*&*");
-                    string public_key = Items[0].Substring(0, 8);
-                    string decrypted_data = Sercurity.Decrypt(Items[1], public_key);
+
+                    // Split to take the Datapacket part and the data part
+                    string[] Items = data.Split("-");
+                    // client send we have format source>Destination>DataLength
+                    DataPacket Received_Datapacket = new DataPacket(Items[0]);
+
+                    string public_key = Received_Datapacket.source;
+                    int Datalength;
+                    bool success = int.TryParse(Received_Datapacket.DataLength, out Datalength);
+                    //Take the exactly amount bytes for data be encypted
+                    string data_encypted_received = Items[1].Substring(0, Datalength);
+
+                    string decrypted_data = Sercurity.Decrypt(data_encypted_received, public_key);
                     Console.WriteLine("Data after decrypted: " + decrypted_data);
                     string test = "Recieved";
                     byte[] bytes_data = Encoding.ASCII.GetBytes(test);
