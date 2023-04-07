@@ -1,9 +1,11 @@
 ﻿using AIClient.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using Xamarin.Essentials;
+using Xamarin.Forms;
 
 namespace AIClient.Services
 {
@@ -58,15 +60,37 @@ namespace AIClient.Services
             return final;
         }
 
+        public static string DataPacketCreateForHeaderCustomsizeFileRequest(string data)
+        {
+            string request_type = "DataHeaderImageToText";
+            string final_string = request_type + "-" + data.Length.ToString();
+            string send_infor_string = SecurityServices.Encrypt(final_string, UserID_For_Key);
+            DataPacket dataheader = new DataPacket(send_infor_string, UserID_For_Key);
+            string final = dataheader.DataPacketToString() + "-" + send_infor_string;
+            return final;
+        }
+
         //public static string DataPacketCreateForForgotPasswordProcess()
         //{
 
         //}
 
-        //public static string DataPacketCreateForImageToTextRequest()
-        //{
+        public static string DataPacketCreateForImageToTextRequest(string ImageBase64)
+        {
+            string request_type = "Image_To_Text";
+            string final_string = request_type+ "-" + ImageBase64;
+            //string send_infor_string = SecurityServices.Encrypt(final_string, UserID_For_Key);
+            DataPacket dataheader = new DataPacket(final_string, UserID_For_Key);
+            string final = dataheader.DataPacketToString() + "-" + final_string;
+            return final;
+        }
 
-        //}
+        public static string ImageToBase64(string filePath)
+        {
+            byte[] imageArray = File.ReadAllBytes(filePath);
+            string base64ImageRepresentation = Convert.ToBase64String(imageArray);
+            return base64ImageRepresentation;
+        }
 
         //public static string DataPacketCreateForTextToImageRequest()
         //{

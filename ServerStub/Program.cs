@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.IO;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using static System.Net.Mime.MediaTypeNames;
@@ -96,6 +97,26 @@ namespace MultiServer
                     }else if (Items_After_Derypted[0] == "Text_To_Text" && Items_After_Derypted.Length == 2){
                         // For Test
                         string respondSucess = "Text_To_TextRespond-Hi My name is Minh. I'm a second year student at Conestoga College!!!";
+                        string send_infor_string = Sercurity.Encrypt(respondSucess, public_key);
+                        DataPacket dataheader = new DataPacket(send_infor_string, public_key);
+                        final_respond = dataheader.DataPacketToString() + "-" + send_infor_string;
+                    }
+                    else if(Items_After_Derypted[0] == "DataHeaderImageToText" && Items_After_Derypted.Length == 2)
+                    {
+                        int SizeImage;
+                        bool TakeSizeImage = int.TryParse(Items_After_Derypted[1], out SizeImage);
+                        byte[] imageBytes = new byte[SizeImage];
+                        ConnectedClient.Socket.SendBufferSize = 100 * bytesize;
+                        ConnectedClient.Read(imageBytes, 0, imageBytes.Length);
+                        // For Test
+                        //using (MemoryStream ms = new MemoryStream(imageBytes))
+                        //{
+                        //    using (FileStream fs = new FileStream("Test.jpp", FileMode.Create))
+                        //    {
+                        //        ms.WriteTo(fs);
+                        //    }
+                        //}
+                        string respondSucess = "Image_To_TextRespond-Description is This is a picture Whyy the fuck u dont know it!!!";
                         string send_infor_string = Sercurity.Encrypt(respondSucess, public_key);
                         DataPacket dataheader = new DataPacket(send_infor_string, public_key);
                         final_respond = dataheader.DataPacketToString() + "-" + send_infor_string;

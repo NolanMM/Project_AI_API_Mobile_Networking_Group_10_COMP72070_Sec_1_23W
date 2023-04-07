@@ -43,14 +43,14 @@ namespace AIClient.ViewModels
         }
         async void NavigateToPage()
         {
-            if (Title == "Text To Text")
-            {
+            if (Title == "Text To Text"){
                 await Shell.Current.GoToAsync("/TextToTextRequestPage");
             }
-            else
-            {
-                await Shell.Current.GoToAsync("/TextAndImageRequestPage");
-
+            else if(Title == "Text To Image"){
+                await Shell.Current.GoToAsync("/TextToImageRequestPage");
+            }
+            else{
+                await Shell.Current.GoToAsync("/ImageToTextRequestPage");
             }
         }
     }

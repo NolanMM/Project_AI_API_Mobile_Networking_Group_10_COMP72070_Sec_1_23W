@@ -56,9 +56,28 @@ namespace AIClient.Services
             return receive;
         }
 
+        public static async Task<String> SendReceiveImageProcess(byte[] data)
+        {
+            SendImage(data);
+            string receive = await Receiving();
+            //await Application.Current.MainPage.DisplayAlert("Notification", "Successful received data: " + receive, "OK.");
+            return receive;
+        }
+        public static async void SendImage(byte[] data)
+        {
+            ClientSocket.SendBufferSize = 100*1024*1024;
+            if (Connection.CanWrite)
+            {
+                Connection.Write(data, 0, data.Length);
+            }
+            else
+            {
+                await Application.Current.MainPage.DisplayAlert("Notification", "Sorry.  You cannot write to this NetworkStream.", "OK.");
+            }
+        }
         public static async void sendData(byte[] data)
         {
-            if (Connection.CanWrite)
+            if(Connection.CanWrite)
             {
                 Connection.Write(data, 0, data.Length);
             }
