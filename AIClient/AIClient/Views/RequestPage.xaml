@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AIClient.Views.RequestPage"
              xmlns:vm="clr-namespace:AIClient.ViewModels"
-             Shell.NavBarIsVisible="False">
+             Shell.NavBarIsVisible="False"
+             x:Name="requestPage">
 
     <ContentPage.BindingContext>
         <vm:RequestPageViewModel x:Name="vm"/>
@@ -35,7 +36,8 @@
                 <DataTemplate>
                     <Grid HeightRequest="520" WidthRequest="412" HorizontalOptions="Center">
                         <Grid RowDefinitions="*,*,*" WidthRequest="475" HorizontalOptions="Center" Margin="0,15">
-                            <BoxView Grid.RowSpan="3" CornerRadius="20">
+
+                                <BoxView Grid.RowSpan="3" CornerRadius="20">
                                 <BoxView.Background>
                                     <LinearGradientBrush>
                                         <GradientStopCollection>
@@ -45,19 +47,17 @@
                                     </LinearGradientBrush>
                                 </BoxView.Background>
                             </BoxView>
-
                             <StackLayout Grid.Row="1" Padding="30" VerticalOptions="Center">
                                 <Label Text="{Binding Title}" TextColor="#fff" FontSize="22" FontAttributes="Bold"
                                         HorizontalTextAlignment="Center"/>
                                 <Label Text="{Binding Description}" TextColor="#fff" FontSize="16"
                                         HorizontalTextAlignment="Center" Padding="0,60"/>
                             </StackLayout>
-
                             <StackLayout Grid.Row="2" Spacing="20" Padding="20" VerticalOptions="End">
                                 <Label Text="{Binding Price}" TextColor="White" FontSize="20" FontAttributes="Bold"
                                          HorizontalOptions="Center"/>
                                 <Button Text="ADD" TextColor="Black" BackgroundColor="#fff" WidthRequest="100" HeightRequest="40" 
-                                        CornerRadius="20" HorizontalOptions="Center"/>
+                                        CornerRadius="20" HorizontalOptions="Center" Command="{Binding AddButtonClick}"/>
                             </StackLayout>
                         </Grid>
 
@@ -66,11 +66,9 @@
                             <Image x:Name="MenuImg" Source="{Binding Image}" HeightRequest="195" WidthRequest="195" HorizontalOptions="Center"
                                     VerticalOptions="Center" />
                         </Grid>
-
                     </Grid>
                 </DataTemplate>
             </CarouselView.ItemTemplate>
         </CarouselView>
-
     </Grid>
 </ContentPage>

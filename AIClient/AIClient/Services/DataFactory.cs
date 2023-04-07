@@ -1,6 +1,7 @@
 ﻿using AIClient.Models;
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using Xamarin.Essentials;
 
@@ -8,6 +9,7 @@ namespace AIClient.Services
 {
     public static class DataFactory
     {
+        private static string UserID_For_Key;
         public static string DataPacketCreateForLoginProcess(string Username, string Password)
         {
             string request_type = "Login";
@@ -17,7 +19,7 @@ namespace AIClient.Services
 
             // Take 16 chars from userID for the key for AES the data
             string public_key = UserID.Substring(0, 8);
-
+            UserID_For_Key = public_key;
             // Combine all the data together
             // Format: Login-Username-Password
 
@@ -31,7 +33,6 @@ namespace AIClient.Services
             // source>Destination>DataLength-send_infor_string(data encrypted. Format: Login-Username-Password) 
             // using DataPacket.getUserID() to be the key to decrypted the send_infor_string
             string final = dataheader.DataPacketToString() + "-" + send_infor_string;
-
             return final;
         }
 
@@ -44,16 +45,20 @@ namespace AIClient.Services
             string send_infor_string = SecurityServices.Encrypt(final_string, public_key);
             DataPacket dataheader = new DataPacket(send_infor_string, public_key);
             string final = dataheader.DataPacketToString() + "-" + send_infor_string;
+            return final;
+        }
 
+        public static string DataPacketCreateForTextToTextRequest(string question)
+        {
+            string request_type = "Text_To_Text";
+            string final_string = request_type + "-" + question;
+            string send_infor_string = SecurityServices.Encrypt(final_string, UserID_For_Key);
+            DataPacket dataheader = new DataPacket(send_infor_string, UserID_For_Key);
+            string final = dataheader.DataPacketToString() + "-" + send_infor_string;
             return final;
         }
 
         //public static string DataPacketCreateForForgotPasswordProcess()
-        //{
-
-        //}
-
-        //public static string DataPacketCreateForTextToTextRequest()
         //{
 
         //}

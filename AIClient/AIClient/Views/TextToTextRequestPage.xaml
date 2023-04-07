@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AIClient.Views.TextToTextRequestPage"
+             BackgroundColor="Black"
+             Shell.TabBarIsVisible="False"
+             xmlns:vm="clr-namespace:AIClient.ViewModels">
+    <ContentPage.BindingContext>
+        <vm:TextToTextRequestPageViewModel x:Name="vm"/>
+    </ContentPage.BindingContext>
+    <Grid RowDefinitions="Auto,2*,Auto">
+        <BoxView Grid.RowSpan="3">
+            <BoxView.Background>
+                <LinearGradientBrush>
+                    <GradientStopCollection>
+                        <GradientStop Color="Black" Offset="0.3"/>
+                        <GradientStop Color="#30343F" Offset="2"/>
+                    </GradientStopCollection>
+                </LinearGradientBrush>
+            </BoxView.Background>
+        </BoxView>
+        <StackLayout Grid.Row="0">
+            <Label Text="Request" TextColor="White" HorizontalOptions="Center" FontSize="54" Margin="0,20,0,0" FontAttributes="Bold"/>
+            <Label Text="Text To Text" TextColor="White" HorizontalOptions="Center" FontSize="20" Margin="0,0,0,20" FontAttributes="Bold"/>
+        </StackLayout>
+        <ScrollView BackgroundColor="Transparent" Grid.Row="1">
+            <StackLayout Spacing="20" Padding="20" VerticalOptions="FillAndExpand">
+                <Frame BorderColor = "White" BackgroundColor="Black" Margin="10,0,10,10" Padding="0" CornerRadius="50">
+                    <Frame BorderColor = "White" BackgroundColor="Transparent" Margin="1" Padding="25,0,25,0" CornerRadius="50" HeightRequest="60">
+                        <Entry
+                        TextColor="White"
+                        FontSize="18"
+                        Placeholder="Question..."
+                        PlaceholderColor="White"
+                        Text="{Binding QuestionInText}"/>
+                    </Frame>
+                </Frame>
+                <Label Text="Respond From Server" TextColor="White" HorizontalOptions="CenterAndExpand" VerticalOptions="Center" Margin="0,5,0,0" FontSize="20" FontAttributes="Bold"/>
+                <Frame BorderColor = "White" BackgroundColor="Black" Margin="10,0,10,20" Padding="0" CornerRadius="50" HeightRequest="300">
+                    <Frame BorderColor = "White" BackgroundColor="Transparent" Margin="1" Padding="25,0,25,0" CornerRadius="50" HeightRequest="60">
+                        <ScrollView Margin="5,30,5,30">
+                        <Label Text="{Binding RespondFromServer,Mode=TwoWay}" TextColor="White" HorizontalOptions="StartAndExpand" VerticalOptions="StartAndExpand" FontSize="18" Margin="10,25,10,0" />
+                        </ScrollView>
+                    </Frame>
+                </Frame>
+                <Button Text="Send" BackgroundColor="Red" Margin="10,0,10,0" CornerRadius="20" Padding="20" FontAttributes="Bold" Command="{Binding TextToTextSendButton}"/>
+            </StackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

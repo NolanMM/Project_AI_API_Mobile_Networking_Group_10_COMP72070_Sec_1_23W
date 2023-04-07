@@ -1,6 +1,11 @@
-﻿using System;
+﻿using MvvmHelpers.Commands;
+using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using Xamarin.Forms;
+using Command = MvvmHelpers.Commands.Command;
 
 namespace AIClient.ViewModels
 {
@@ -20,6 +25,33 @@ namespace AIClient.ViewModels
                 new Pick { Title = "Text To Image", Image = "IMG04.png", Description = "Describe an Image and we will draw it for you", Price = "$0.99" },
                 new Pick { Title = "Image To Text", Image = "IMG01.png", Description = "Input an Image and we will describe it for you", Price = "$1.25" }
             };
+        }
+
+}
+    public class Pick
+    {
+        public Command AddButtonClick { get; }
+        public string Title { get; set; }
+        public string Image { get; set; }
+        public string Description { get; set; }
+        public string Price { get; set; }
+
+        public Pick()
+        {
+            AddButtonClick = new Command(NavigateToPage);
+
+        }
+        async void NavigateToPage()
+        {
+            if (Title == "Text To Text")
+            {
+                await Shell.Current.GoToAsync("/TextToTextRequestPage");
+            }
+            else
+            {
+                await Shell.Current.GoToAsync("/TextAndImageRequestPage");
+
+            }
         }
     }
 }

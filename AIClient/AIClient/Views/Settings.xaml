@@ -8,9 +8,7 @@
     <ContentPage.BindingContext>
         <viewmodels:SettingPageViewModel/>
     </ContentPage.BindingContext>
-    
     <StackLayout>
-
         <Grid RowSpacing="25" RowDefinitions="Auto,Auto,Auto,Auto">
             <StackLayout Grid.Row="1">
                 <Label Text="Setting" FontSize="25" TextColor="White"

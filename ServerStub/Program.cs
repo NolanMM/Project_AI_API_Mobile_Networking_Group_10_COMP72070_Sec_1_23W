@@ -93,6 +93,12 @@ namespace MultiServer
                         string send_infor_string = Sercurity.Encrypt(respondSucess, public_key);
                         DataPacket dataheader = new DataPacket(send_infor_string, public_key);
                         final_respond = dataheader.DataPacketToString() + "-" + send_infor_string;
+                    }else if (Items_After_Derypted[0] == "Text_To_Text" && Items_After_Derypted.Length == 2){
+                        // For Test
+                        string respondSucess = "Text_To_TextRespond-Hi My name is Minh. I'm a second year student at Conestoga College!!!";
+                        string send_infor_string = Sercurity.Encrypt(respondSucess, public_key);
+                        DataPacket dataheader = new DataPacket(send_infor_string, public_key);
+                        final_respond = dataheader.DataPacketToString() + "-" + send_infor_string;
                     }
                     byte[] bytes_data = Encoding.ASCII.GetBytes(final_respond);
                     sendRespond(bytes_data);

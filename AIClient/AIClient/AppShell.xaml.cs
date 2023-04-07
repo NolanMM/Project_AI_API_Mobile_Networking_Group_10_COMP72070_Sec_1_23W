@@ -14,6 +14,8 @@ namespace AIClient
                 typeof(RequestPage));
             Routing.RegisterRoute(nameof(SignUpPage),
                 typeof(SignUpPage));
+            Routing.RegisterRoute(nameof(TextToTextRequestPage),
+                typeof(TextToTextRequestPage));
         }
 
     }

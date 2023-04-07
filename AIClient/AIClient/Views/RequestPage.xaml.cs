@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AIClient.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,7 +17,6 @@ namespace AIClient.Views
         {
             InitializeComponent();
         }
-
         private void CarouselView_PositionChanged(object sender, PositionChangedEventArgs e)
         {
             var carousel = sender as CarouselView;
@@ -32,6 +32,11 @@ namespace AIClient.Views
                     Task.Run(async () => await img.RelRotateTo(360, 5000, Easing.BounceOut));
                 }
             }
+        }
+
+        private async void TapGestureRecognizer_Tapped(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync("//Main_Page_Route");
         }
     }
 }
