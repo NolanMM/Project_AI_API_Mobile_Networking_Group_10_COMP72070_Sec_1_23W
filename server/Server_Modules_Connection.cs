@@ -1,20 +1,22 @@
-﻿using System;
+﻿using MultiServer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using static server.ExcelApiTest;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace server
 {
     public static class server_connection
     {
-        
+        //Define the port number, buffer size, server and client sockets
         private static Socket serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         private static readonly List<Socket> clientSockets = new List<Socket>();
         private const int BUFFER_SIZE = 2048;
-        private const int PORT = 100;
+        private const int PORT = 2700;
         private static readonly byte[] buffer = new byte[BUFFER_SIZE];
 
         // Create clients socket that active with string authorized-information of clients
@@ -31,20 +33,28 @@ namespace server
 
         public static List<Active_Clients> SetupServer()
         {
+            //Close the server socket if it is not null
             if (serverSocket != null)
             {
                 serverSocket.Close();
             }
+
+            //Create temporary socket 
             Socket temp = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+
+            //Bind -> Listen -> Accept using temp socket
             temp.Bind(new IPEndPoint(IPAddress.Any, PORT));
             temp.Listen(0);
             temp.BeginAccept(AcceptCallback, null);
+
+            //Assign the temp socket to the server socket
             serverSocket = temp;
+
             return clientSockets_active;
         }
 
-        /// Close all connected client (we do not need to shutdown the server socket as its connections
-        /// are already closed with the clients).
+        // Close all connected client (we do not need to shutdown the server socket as its connections
+        // are already closed with the clients).
         public static void CloseAllSockets()
         {
             try
@@ -60,7 +70,6 @@ namespace server
             catch(ObjectDisposedException)
             {
                 serverSocket.Close();
-                return;
             }
         }
 
@@ -78,38 +87,41 @@ namespace server
 
             clientSockets.Add(socket);
             socket.BeginReceive(buffer, 0, BUFFER_SIZE, SocketFlags.None, ReceiveCallback, socket);
+
             //Client connected, waiting for request...
             serverSocket.BeginAccept(AcceptCallback, null);
         }
+
+        //Checks if the socket is connected or not
         static bool IsSocketConnected(Socket s)
         {
-            //return !((s.Poll(1000, SelectMode.SelectRead) && (s.Available == 0)) || !s.Connected);
-
-            /* Logic inside */
             try
             {
                 bool part1 = s.Poll(1000, SelectMode.SelectRead);
                 bool part2 = (s.Available == 0);
+
                 if ((part1 && part2) || !s.Connected)
                     return false;
                 else
                     return true;
-            }catch(ObjectDisposedException e)
+            } 
+            catch(ObjectDisposedException e)
             {
                 return false;
             }
-
         }
+
+        //This method accepts a data packet from the client and based on the provided information and commands 
+        //Performs certain actions such as login, sign up, or proceed one of three prompts. 
         private static void ReceiveCallback(IAsyncResult AR)
         {
-            string respond = "Empty";
+            string final_response = "Empty";
             Socket current = (Socket)AR.AsyncState;
 
-            bool flag = IsSocketConnected(current);
-            if (flag != true)
-            {
-                return ;
-            }
+            //Check if the server connecter or not. If no, then return 
+            if (!IsSocketConnected(current))
+                return;
+
             int received;
 
             try
@@ -127,6 +139,8 @@ namespace server
             byte[] recBuf = new byte[received];
             Array.Copy(buffer, recBuf, received);
             string text = Encoding.ASCII.GetString(recBuf);
+
+            //Close the socket if disconnected 
             if (text.ToLower() == "disconnected")
             {
                 foreach (Active_Clients temp in clientSockets_active.ToList())
@@ -136,243 +150,316 @@ namespace server
                         clientSockets_active.Remove(temp);
                     }
                 }
+
                 // Always Shutdown before closing
                 current.Shutdown(SocketShutdown.Both);
                 current.Close();
                 clientSockets.Remove(current);
                 Console.WriteLine("Client disconnected");
+
                 return;
             }
+
             // Text equal to encypted data receive from User First check for the Login then check for the Prompt
-
-            // Sample String First Time Login From User
-            // Hashingcode ( [16 first chars is the key]-[Encypted_data]
-
             // String Split to take the UniqueKey for decyption the message from Clients
+            // The first part is a key,
+            // The second is the actual data,
+            // The splitter is "-".
             string[] Items = text.Split('-');
-            // string Items[0] = Key
-            // string Items[1] = Message_From_Clients
-            string public_key = Items[0].Substring(0, 8);
-            string secret_key = Items[0].Substring(8, 8);
 
-            string decrypted_data = Encryption_.Decrypt(Items[1], public_key, secret_key);
+			// String Items[0] = Key
+			DataPacket Received_Datapacket = new DataPacket(Items[0]);
 
-            // The decypted_data will be one of format below:
-            /* Format 1: Login-Username-Password
-             * Format 2: Register-Username-Password-Email
-             * Format 3: Forgotpassword-Username
-             * Format 4: Text_To_Image-Username-PromptContent
-             * Format 5: Disconnect-Username-Password
-             * Format 6: Text_To_Text-Username-PromptContent
-             * Format 7: Image_To_Text-Username-PromptContent
+            //Assign the public key
+			string public_key = Received_Datapacket.source;
+
+            //Parse the lenght of the data
+			int Datalength;
+			bool success = int.TryParse(Received_Datapacket.DataLength, out Datalength);
+
+			// String Items[1] = Message_From_Clients
+			string data_encypted_received = Items[1].Substring(0, Datalength);
+
+            //Decrypt the string using the public key 
+			string decrypted_data = Encryption_.Decrypt(data_encypted_received, public_key);
+
+            //Print the decrypting string 
+			Console.WriteLine("Data after decrypttion: " + decrypted_data);
+
+			// Using string split take the first items to get the type of request
+			string[] Items_After_Decypted = decrypted_data.Split('-');
+
+            //To setup the switch case statement. This will be used to determine the option the program should perform 
+            int optionNum = Items_After_Decypted.Length;
+            string optionString = Items_After_Decypted[0];
+
+			// The decypted data will be one of format below:
+			/* Login-Username-Password
+             * Register-Username-Password-Email
+             * Forgotpassword-Username
+             * Text_To_Image-Username-PromptContent
+             * Disconnect-Username-Password
+             * Text_To_Text-Username-PromptContent
+             * Image_To_Text-Username-PromptContent
              */
 
-            // Using string split and take the first items to get the type of request
-            // string Items_After_Decypted[0] = Login/Register/Forgotpassword/RequestPrompt
-            // string Items_After_Decypted[1] = Username
-            // string Items_After_Decypted[2] = Password (format 1,2)/ PromptContent (format 4)
-            // string Items_After_Decypted[3] = Email (format 2)
-            string[] Items_After_Decypted = decrypted_data.Split('-');
-
-            // Then route the program to function due to the request
-
-            //Function 1: Login
-            /* If [Encypted-data] -> decypted = "Login-Username-Password";
-             * The program will route the program to bool login_Client_Function (string username, string password)
-             *
-             * If return true, program will add the socket of user to the list and append to the runtime generate list has item has 2 attribute are: Socket-UserID - Authorization( Verified/ Unverified)
-             * When ever receive a request prompt from user server just respond to the prompt that come from verified client UserID and Correct Socket link with that userID current time
-             * If return "LoginFailed", server will sent respond Unauthorization to Clients side for ask for Login again
-             *
-             * string Items_After_Decypted[0] = Login
-             * string Items_After_Decypted[1] = Username
-             * string Items_After_Decypted[2] = Password
-             *
-             *//////////////////
-            if (Items_After_Decypted.Length == 3 && Items_After_Decypted[0] == "Login")
+			switch (optionNum)
             {
-                // Route to function 1
-                //
-                // Format of Respond_From_Functions are
-                // Format 1: LoginSuccessful-UserID-Username-Password-Emails
-                // Format 2: LoginFailed-
-                //
-                //////////////////////////////////
-                string respond_From_Functions = Clients_Login.Function_Excel_Login_Clients(Items_After_Decypted[1], Items_After_Decypted[2]);
+				//Case 2 handles all possible propts. There are 3 of them: 
+				//"Text_To_Text" - receives a text request from user to generate a text response.
+				//                 Uses GPT-3 Davinchi model developed by openAI
+				//"DataHeaderImageToText" - receives a text request from user to generate an image response.
+				//                 Uses GPT-3 Davinchi model developed by openAI
+				//"Image_Caption" - receives an image from user to generate a caption (text response) of the image.
+				//                 Uses BLIP model from LAVIS library developed by Salesforce
+				//
+				//LAVIS documentation URI: https://opensource.salesforce.com/LAVIS/latest/intro.html
+				//GPT-3 documentation URI: https://platform.openai.com/docs/introduction
+				case 2:
+					bool flag_Check_Authorized = false;
 
-                string[] Items_in_respond = respond_From_Functions.Split('-');
+					// Check if that client has been authorized or not
+					foreach (Active_Clients temp in clientSockets_active.ToList())
+					{
+						if (temp.UserID == Items[0])
+						{
+							flag_Check_Authorized = true;
+						}
+					}
 
-                if (Items_in_respond[0] == "LoginSuccessful")
-                {
-                    // Format 1
-                    // string Items_in_respond[0] = LoginSuccessful
-                    // string Items_in_respond[1] = UserID (Clients_LoginSuccessful)
-                    // string Items_in_respond[2] = username (Clients_LoginSuccessful)
-                    // string Items_in_respond[3] = password (Clients_LoginSuccessful)
-                    // string Items_in_respond[4] = email (Clients_LoginSuccessful)
+                    //Return if not authorized
+                    if (!flag_Check_Authorized)
+                        return;
 
-                    // Assign to the class object to store inside the functions
-                    Active_Clients active_Clients_SignUpSuccessfully = new Active_Clients();
-                    active_Clients_SignUpSuccessfully.UserID = Items_in_respond[1];
-                    active_Clients_SignUpSuccessfully.Username = Items_in_respond[2];
-                    active_Clients_SignUpSuccessfully.Password = Items_in_respond[3];
-                    active_Clients_SignUpSuccessfully.Email = Items_in_respond[4];
-                    active_Clients_SignUpSuccessfully.Currently_Active_Client_Socket = current;
-
-                    // Add information of active clients to the list
-                    clientSockets_active.Add(active_Clients_SignUpSuccessfully);
-
-                    // Encypted the respond to the Client side
-                    string final_respond = Encryption_.Quick_Encypted_Account_by_Using_Hashing_Key_By_Username(active_Clients_SignUpSuccessfully.Username,
-                        active_Clients_SignUpSuccessfully.Password, active_Clients_SignUpSuccessfully.Email);
-
-                    string key = active_Clients_SignUpSuccessfully.UserID;
-                    // Modify the respond that actually be sent
-                    respond = "LoginSuccessful" + "-" + key + "-" + final_respond;
-                    byte[] data = Encoding.ASCII.GetBytes(respond);
-                    current.Send(data);
-                }
-                else
-                {
-                    respond = "LoginFailed-Please check your username or password again";
-                    byte[] data = Encoding.ASCII.GetBytes(respond);
-                    current.Send(data);
-                }
-            }
-
-            //Function 2: Register
-            /* If [Encypted-data] -> decypted = "Register-Username-Password-Email";
-             * The program will route the program to bool signup_Client_Function (string username, string password,string email)
-             *
-             * If return true, program will Respond Successfull Register and link the socket with that new UserID
-             * Server will respond "SignUpSuccessfully" like signals to clients side login to the main menu clients
-             * If return false, server will sent respond "SignUpFailed" to Clients side for ask for enter another username that valid
-             *
-             *//////////////////
-            if (Items_After_Decypted.Length == 4) // Register
-            {
-                bool Flag = Clients_SignUp.Check_If_Duplicate_Username_Clients(Items_After_Decypted[1]);
-
-                // Route to function 2 and Assign the respond back to clients
-                string respond_From_Function = Clients_SignUp.Sign_Up_Clients(Items_After_Decypted[1], Items_After_Decypted[2], Items_After_Decypted[3]);
-                // Assign sockets to the list that currently active authorized
-                string[] Items_in_respond = respond_From_Function.Split('-');
-                // string Items_in_respond[0] = SignUpSuccessfully/SignUpFailed (Signal to route program)
-                // string Items_in_respond[1] = UserID (Clients_SignUpSuccessfully)
-                // string Items_in_respond[2] = username (Clients_SignUpSuccessfully)
-                // string Items_in_respond[3] = password (Clients_SignUpSuccessfully)
-                // string Items_in_respond[4] = email (Clients_SignUpSuccessfully)
-                if (Items_in_respond[0] == "SignUpSuccessfully")
-                {
-                    // Assign to the class object to store inside the functions
-                    Active_Clients active_Clients_SignUpSuccessfully = new Active_Clients();
-                    active_Clients_SignUpSuccessfully.UserID = Items_in_respond[1];
-                    active_Clients_SignUpSuccessfully.Username = Items_in_respond[2];
-                    active_Clients_SignUpSuccessfully.Password = Items_in_respond[3];
-                    active_Clients_SignUpSuccessfully.Email = Items_in_respond[4];
-                    active_Clients_SignUpSuccessfully.Currently_Active_Client_Socket = current;
-
-                    // Add information of active clients to the list
-                    clientSockets_active.Add(active_Clients_SignUpSuccessfully);
-
-                    // Encypted the respond to the Client side
-                    string final_respond = Encryption_.Quick_Encypted_Account_by_Using_Hashing_Key_By_Username(active_Clients_SignUpSuccessfully.Username,
-                        active_Clients_SignUpSuccessfully.Password, active_Clients_SignUpSuccessfully.Email);
-
-                    string key = active_Clients_SignUpSuccessfully.UserID;
-                    // Modify the respond that actually be sent
-                    respond = "SignUpSuccessfully" + "-" + key + "-" + final_respond;
-                    byte[] data_test = Encoding.ASCII.GetBytes(respond);
-                    current.Send(data_test);
-                }
-                // Check if SignUpFailed because of duplicate username or not to send SignUp Failed respond to the clients
-                else if (Items_in_respond[0] == "SignUpFailed" && Flag == true)
-                {
-                    respond = "SignUpFailed-Duplicate Username";
-                    byte[] data_test = Encoding.ASCII.GetBytes(respond);
-                    current.Send(data_test);
-                }
-                else if (Items_in_respond[0] == "SignUpFailed" && Flag == false)
-                {
-                    respond = "SignUpFailed-";
-                    byte[] data_test = Encoding.ASCII.GetBytes(respond);
-                    current.Send(data_test);
-                }
-            }
-
-            //Function 3: Forgot Password
-            /* [Encypted-data] -> decypted = "Forgotpassword-Username"
-             * The program will route the program to bool Forgotpassword_Clients(string username) to find the email that link with that username and send otp code to Clients side and wait for respond from that socket
-             *
-             * The server will receive data be encypted from that socket containts (username-NewPassword-OTPCode)
-             * The server will check for the OTP code if it match -> server send respond "ChangepasswordSuccessfully" to clients side for signal to ask for login again by new password
-             *
-             * If return false, server will sent respond "VerifiedOTPFailed" to Clients side for ask for asking re-sent OTP code and input again
-             *
-             *//////////////////
-            //if (Items_After_Decypted.Length == 2)
-            //{
-            //    // Route to function 3
-            //}
-
-            //Function 4: RequestPrompt
-            /* [Encypted-data] -> decypted = "RequestPrompt-Username-PromptContent"
-             * The program will route the program to bool Check if that username in the current connected socket that been verified and safe through runtime or not
-             *
-             * If true, The Server will take the prompt and sent through API AI to take the respond from AI API
-             * After take respond back from AI API,
-             * Then server will take string respond = "PromptRespond" + "Prompt_Content" hashing to generate Unique ID request
-             * Then take first 16 chars from the hashing code to generate the key to Encypted data string encypted = "PromptRespond" + '-' + "Respond_Content";
-             * server send the respond back to the socket that link to that clients in the list enrypted data string
-             *
-             *
-             *//////////////////
-
-            if (Items_After_Decypted.Length == 3 && Items_After_Decypted[0] == "Text_to_Text")
-            {
-                // Route to function 4
-
-                bool flag_Check_Authorized = false;
-                // Check if that client has been authorized or not
-                foreach (Active_Clients temp in clientSockets_active.ToList())
-                {
-                    if (temp.UserID == Items[0])
+					// Items_After_Decypted[1] = Username
+					// Items_After_Decypted[2] = Prompt input
+					switch (optionString)
                     {
-                        flag_Check_Authorized = true;
-                    }
-                }
+                        case "Text_To_Text":
+							// Take the prompt input and put into AI to take respond
+							string response_from_AI = AI_API.TextToText_openAI(Items_After_Decypted[2]);
 
-                if ( flag_Check_Authorized == true)
-                {
-                    // Items_After_Decypted[1] = Username
-                    // Items_After_Decypted[2] = Prompt input
+							string UserID = Encryption_.ComputeSha256Hash(Items_After_Decypted[1]);
 
-                    // Take the prompt input and put into AI to take respond
-                    string response_from_AI = AI_API.callOpenAIText(Items_After_Decypted[2]);
+							string raw_data_be_encrypted = Items_After_Decypted[2] + "-" + response_from_AI;
 
-                    string UserID = Encryption_.ComputeSha256Hash(Items_After_Decypted[1]);
+							// Encypted the final_string (User data) by the key
+							string send_infor_string = Encryption_.Encrypt(raw_data_be_encrypted, public_key);
 
+							DataPacket dataheader = new DataPacket(send_infor_string, public_key);
 
-                    string raw_data_be_encrypted = Items_After_Decypted[2] + "-" + response_from_AI;
+							final_response = dataheader + "-" + send_infor_string;
 
-                    // Encypted the final_string (User data) by the key
-                    string send_infor_string = Encryption_.Encrypt(raw_data_be_encrypted, public_key, secret_key);
+                            //Send the packet
+							byte[] data = Encoding.ASCII.GetBytes(final_response);
+							current.Send(data);
 
-                    respond = UserID + "-" + send_infor_string;
-                    byte[] data = Encoding.ASCII.GetBytes(respond);
-                    current.Send(data);
+							break;
+                        case "DataHeaderImageToText":
+							// Take the prompt input and put into AI to take respond
+							// The settings of the picture are pre-define in AI_API.cs:
+							//
+							// model = image-alpha-001
+							// number = 1
+							// size = 256x256 pixels
+                            //
+                            // The format of returned images is always .jpg
 
-                    current.BeginReceive(buffer, 0, BUFFER_SIZE, SocketFlags.None, ReceiveCallback, current);
+                            //Send the prompt [2] and the username [1]
+							response_from_AI = AI_API.TextToImage_openAI(Items_After_Decypted[2], Items_After_Decypted[1]);
 
-                }
-                else
-                {
-                    return;
-                }
-            }
+                            //Get userID from the username
+							UserID = Encryption_.ComputeSha256Hash(Items_After_Decypted[1]);
 
-            //byte[] data = Encoding.ASCII.GetBytes(respond);
-            //current.Send(data);
+							raw_data_be_encrypted = Items_After_Decypted[2] + "-" + response_from_AI;
+
+							// Encypted the final_string (User data) by the key
+							send_infor_string = Encryption_.Encrypt(raw_data_be_encrypted, public_key);
+
+							dataheader = new DataPacket(send_infor_string, public_key);
+
+							final_response = dataheader + "-" + send_infor_string;
+
+							//Send the packet
+							data = Encoding.ASCII.GetBytes(final_response);
+							current.Send(data);
+							break;
+                        case "Image_Caption":
+							//Send the base64 image [2] to create a prompt 
+							response_from_AI = AI_API.ImageToText_LAVIS(Items_After_Decypted[2]);
+
+							//Get userID from the username
+							UserID = Encryption_.ComputeSha256Hash(Items_After_Decypted[1]);
+
+							raw_data_be_encrypted = Items_After_Decypted[2] + "-" + response_from_AI;
+
+							// Encypted the final_string (User data) by the key
+							send_infor_string = Encryption_.Encrypt(raw_data_be_encrypted, public_key);
+
+							dataheader = new DataPacket(send_infor_string, public_key);
+
+							final_response = dataheader + "-" + send_infor_string;
+
+							//Send the packet
+							data = Encoding.ASCII.GetBytes(final_response);
+							current.Send(data);
+							break;
+                        default:
+                            Console.WriteLine("Something went wrong: incorrect prompt type\n");
+                            break;
+					}
+                    break;
+
+				//Case 3: Login
+				/* If [Encypted-data] -> decypted = "Login-Username-Password";
+				 * The program will route the program to bool login_Client_Function (string username, string password)
+				 *
+				 * If return true, program will add the socket of user to the list and append to the runtime generate list has item has 2 attribute are: Socket-UserID - Authorization( Verified/ Unverified)
+				 * When ever receive a request prompt from user server just respond to the prompt that come from verified client UserID and Correct Socket link with that userID current time
+				 * If return "LoginFailed", server will sent respond Unauthorization to Clients side for ask for Login again
+				 *
+				 * string Items_After_Decypted[0] = Login
+				 * string Items_After_Decypted[1] = Username
+				 * string Items_After_Decypted[2] = Password
+				 *
+				 *//////////////////
+				case 3:
+                    if (optionString == "Login")
+                    {
+						//Send the username (Items_After_Decypted[1]) and the password (Items_After_Decypted[2])
+						//To the Function_Excel_Login_Clients to check if the login data is correct or not
+						string respond_From_Functions = Clients_Login.Function_Excel_Login_Clients(Items_After_Decypted[1], Items_After_Decypted[2]);
+
+                        //Split the result using "-" to know the result the previous function
+                        //If logged in successfully, then the first item will be "LoginSuccessfully"
+                        //Otherwise the login failed.
+						string[] Items_in_respond_Login = respond_From_Functions.Split('-');
+
+						if (Items_in_respond_Login[0] == "LoginSuccessful")
+						{
+							// Format of the response:
+							// string Items_in_respond[0] = LoginSuccessful
+							// string Items_in_respond[1] = UserID (Clients_LoginSuccessful)
+							// string Items_in_respond[2] = username (Clients_LoginSuccessful)
+							// string Items_in_respond[3] = password (Clients_LoginSuccessful)
+							// string Items_in_respond[4] = email (Clients_LoginSuccessful)
+
+							Active_Clients active_Clients_SignUpSuccessfully = new Active_Clients();
+
+							// Assign to the class object to store the data to be transmitted 
+							active_Clients_SignUpSuccessfully.UserID = Items_in_respond_Login[1];
+							active_Clients_SignUpSuccessfully.Username = Items_in_respond_Login[2];
+							active_Clients_SignUpSuccessfully.Password = Items_in_respond_Login[3];
+							active_Clients_SignUpSuccessfully.Email = Items_in_respond_Login[4];
+
+							active_Clients_SignUpSuccessfully.Currently_Active_Client_Socket = current;
+
+							// Add information of active clients to the list
+							clientSockets_active.Add(active_Clients_SignUpSuccessfully);
+
+							// Encrypt the data to create a response to be send to the Client side
+							string resnponse = Encryption_.Quick_Encypted_Account_by_Using_Hashing_Key_By_Username(active_Clients_SignUpSuccessfully.Username,
+								active_Clients_SignUpSuccessfully.Password, active_Clients_SignUpSuccessfully.Email);
+
+							string key = active_Clients_SignUpSuccessfully.UserID;
+
+                            //Define the header
+							DataPacket dataheader = new DataPacket(resnponse, key);
+
+							// Modify the response that actually be sent
+							final_response = dataheader.DataPacketToString() + "-" + resnponse;
+
+							byte[] data = Encoding.ASCII.GetBytes(final_response);
+							current.Send(data);
+						}
+						else
+						{
+							final_response = "LoginFailed-Please check your username or password again";
+							byte[] data = Encoding.ASCII.GetBytes(final_response);
+							current.Send(data);
+						}
+					}
+                    else
+                    {
+						Console.WriteLine("Something went wrong: incorrect prompt type\n");
+					}
+					break;
+
+				//Case 4: Register
+				/* If [Encypted-data] -> decypted = "Register-Username-Password-Email";
+				 * The program will route the program to bool signup_Client_Function (string username, string password,string email)
+				 *
+				 * If return true, program will Respond Successfull Register and link the socket with that new UserID
+				 * Server will respond "SignUpSuccessfully" like signals to clients side login to the main menu clients
+				 * If return false, server will sent respond "SignUpFailed" to Clients side for ask for enter another username that valid
+				 *
+				 *//////////////////
+				case 4:
+					bool Flag = Clients_SignUp.Check_If_Duplicate_Username_Clients(Items_After_Decypted[1]);
+
+					// Route to function 2 and Assign the respond back to clients
+					string respond_From_Function = Clients_SignUp.Sign_Up_Clients(Items_After_Decypted[1], Items_After_Decypted[2], Items_After_Decypted[3]);
+
+					// Assign sockets to the list that currently active authorized
+					string[] Items_in_respond_register = respond_From_Function.Split('-');
+
+                    // String format for the response:
+                    // string Items_in_respond[0] = SignUpSuccessfully/SignUpFailed (Signal to route program)
+                    // string Items_in_respond[1] = UserID (Clients_SignUpSuccessfully)
+                    // string Items_in_respond[2] = username (Clients_SignUpSuccessfully)
+                    // string Items_in_respond[3] = password (Clients_SignUpSuccessfully)
+                    // string Items_in_respond[4] = email (Clients_SignUpSuccessfully)
+                    switch (Items_in_respond_register[0])
+                    {
+                        case "SignUpSuccessfully":
+							Active_Clients active_Clients_SignUpSuccessfully = new Active_Clients();
+
+							// Assign to the class object to store inside the functions
+							active_Clients_SignUpSuccessfully.UserID = Items_in_respond_register[1];
+							active_Clients_SignUpSuccessfully.Username = Items_in_respond_register[2];
+							active_Clients_SignUpSuccessfully.Password = Items_in_respond_register[3];
+							active_Clients_SignUpSuccessfully.Email = Items_in_respond_register[4];
+							active_Clients_SignUpSuccessfully.Currently_Active_Client_Socket = current;
+
+							// Add information of active clients to the list
+							clientSockets_active.Add(active_Clients_SignUpSuccessfully);
+
+							// Encypted the respond to the Client side
+							string final_respond = Encryption_.Quick_Encypted_Account_by_Using_Hashing_Key_By_Username(active_Clients_SignUpSuccessfully.Username,
+								active_Clients_SignUpSuccessfully.Password, active_Clients_SignUpSuccessfully.Email);
+
+							string key = active_Clients_SignUpSuccessfully.UserID;
+
+							//Define the header
+							DataPacket dataheader = new DataPacket(final_respond, key);
+
+							// Modify the response that actually be sent
+							final_response = dataheader.DataPacketToString() + "-" + final_respond;
+
+							byte[] data = Encoding.ASCII.GetBytes(final_response);
+							current.Send(data);
+                            break;
+
+						// Check if SignUpFailed because of duplicate username or not to send SignUp Failed respond to the clients
+						case "SignUpFailed":
+                            final_response = "SignUpFailed-";
+
+                            //If duplicate 
+                            if (Flag == true)
+                                final_response += "Duplicate Username";
+
+							byte[] data_test = Encoding.ASCII.GetBytes(final_response);
+							current.Send(data_test);
+							break;
+                        default:
+                            break;
+					}
+					break;
+                default:
+					Console.WriteLine("Something went wrong: incorrect option number\n");
+					break;
+			}
+
             Console.WriteLine("Respond sent");
             current.BeginReceive(buffer, 0, BUFFER_SIZE, SocketFlags.None, ReceiveCallback, current);
         }

@@ -6,8 +6,10 @@ from lavis.models import load_model_and_preprocess
 # setup device to use
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-# load sample image
-raw_image = Image.open(sys.argv[1]).convert("RGB")
+image_data = base64.b64decode(sys.argv[1])
+
+# Convert binary data to an image
+raw_image = Image.open(image_data).convert("RGB")
 
 # loads BLIP caption base model, with finetuned checkpoints on MSCOCO captioning dataset.
 # this also loads the associated image processors
