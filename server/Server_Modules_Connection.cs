@@ -1,5 +1,4 @@
-﻿using MultiServer;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -18,9 +17,10 @@ namespace server
         private const int BUFFER_SIZE = 2048;
         private const int PORT = 2700;
         private static readonly byte[] buffer = new byte[BUFFER_SIZE];
-
+        
         // Create clients socket that active with string authorized-information of clients
         public static  List<Active_Clients> clientSockets_active = new List<Active_Clients>();
+        private static string ipString;
 
         public class Active_Clients
         {
@@ -38,12 +38,17 @@ namespace server
             {
                 serverSocket.Close();
             }
-
+            returnIP();
             //Create temporary socket 
             Socket temp = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-
             //Bind -> Listen -> Accept using temp socket
-            temp.Bind(new IPEndPoint(IPAddress.Any, PORT));
+            IPEndPoint ep = new IPEndPoint(IPAddress.Parse(ipString), 27000);
+            temp.Bind(ep);
+            Console.WriteLine(@"    
+            ===================================================    
+                   Started listening requests at: {0}:{1}    
+            ===================================================",
+            ep.Address, ep.Port);
             temp.Listen(0);
             temp.BeginAccept(AcceptCallback, null);
 
@@ -108,6 +113,18 @@ namespace server
             catch(ObjectDisposedException e)
             {
                 return false;
+            }
+        }
+
+        public static void returnIP()
+        {
+            IPAddress[] localIp = Dns.GetHostAddresses(Dns.GetHostName());
+            foreach (IPAddress address in localIp)
+            {
+                if (address.AddressFamily == AddressFamily.InterNetwork)
+                {
+                    ipString = address.ToString();
+                }
             }
         }
 
@@ -183,7 +200,10 @@ namespace server
             //Decrypt the string using the public key 
 			string decrypted_data = Encryption_.Decrypt(data_encypted_received, public_key);
 
+            //Login-Minh-Nguyen
             //Print the decrypting string 
+
+            // Best Break Point 
 			Console.WriteLine("Data after decrypttion: " + decrypted_data);
 
 			// Using string split take the first items to get the type of request
@@ -357,20 +377,19 @@ namespace server
 							// Add information of active clients to the list
 							clientSockets_active.Add(active_Clients_SignUpSuccessfully);
 
-							// Encrypt the data to create a response to be send to the Client side
-							string resnponse = Encryption_.Quick_Encypted_Account_by_Using_Hashing_Key_By_Username(active_Clients_SignUpSuccessfully.Username,
-								active_Clients_SignUpSuccessfully.Password, active_Clients_SignUpSuccessfully.Email);
-
-							string key = active_Clients_SignUpSuccessfully.UserID;
-
+                            // Encrypt the data to create a response to be send to the Client side
+                            //string resnponse = Encryption_.Quick_Encypted_Account_by_Using_Hashing_Key_By_Username(active_Clients_SignUpSuccessfully.Username,
+                            //	active_Clients_SignUpSuccessfully.Password, active_Clients_SignUpSuccessfully.Email);
+                            string respond_ = "LoginSuccessful-" + Items_in_respond_Login[2] + "-" + Items_in_respond_Login[3] + "-" + Items_in_respond_Login[4];
+                            string DataAfterEncrypted = Encryption_.Encrypt(respond_, public_key);
                             //Define the header
-							DataPacket dataheader = new DataPacket(resnponse, key);
+                            DataPacket dataheader = new DataPacket(DataAfterEncrypted, public_key);
 
-							// Modify the response that actually be sent
-							final_response = dataheader.DataPacketToString() + "-" + resnponse;
+                            // Modify the response that actually be sent
+                            string send_final_response = dataheader.DataPacketToString() + "-" + DataAfterEncrypted;
 
-							byte[] data = Encoding.ASCII.GetBytes(final_response);
-							current.Send(data);
+                            byte[] data = Encoding.ASCII.GetBytes(send_final_response);
+                            current.Send(data);
 						}
 						else
 						{
@@ -425,16 +444,16 @@ namespace server
 							clientSockets_active.Add(active_Clients_SignUpSuccessfully);
 
 							// Encypted the respond to the Client side
-							string final_respond = Encryption_.Quick_Encypted_Account_by_Using_Hashing_Key_By_Username(active_Clients_SignUpSuccessfully.Username,
-								active_Clients_SignUpSuccessfully.Password, active_Clients_SignUpSuccessfully.Email);
+							//string DataAfterEncrypted = Encryption_.Quick_Encypted_Account_by_Using_Hashing_Key_By_Username(active_Clients_SignUpSuccessfully.Username,
+							//	active_Clients_SignUpSuccessfully.Password, active_Clients_SignUpSuccessfully.Email);
 
-							string key = active_Clients_SignUpSuccessfully.UserID;
-
-							//Define the header
-							DataPacket dataheader = new DataPacket(final_respond, key);
+							//string key = active_Clients_SignUpSuccessfully.UserID;
+                            string DataAfterEncrypted = Encryption_.Encrypt(respond_From_Function, public_key);
+                            //Define the header
+                            DataPacket dataheader = new DataPacket(DataAfterEncrypted, public_key);
 
 							// Modify the response that actually be sent
-							final_response = dataheader.DataPacketToString() + "-" + final_respond;
+							string send_final_response = dataheader.DataPacketToString() + "-" + DataAfterEncrypted;
 
 							byte[] data = Encoding.ASCII.GetBytes(final_response);
 							current.Send(data);
@@ -442,11 +461,10 @@ namespace server
 
 						// Check if SignUpFailed because of duplicate username or not to send SignUp Failed respond to the clients
 						case "SignUpFailed":
-                            final_response = "SignUpFailed-";
-
+                            final_response = "SignUpFailed";
                             //If duplicate 
                             if (Flag == true)
-                                final_response += "Duplicate Username";
+                                final_response += "-Duplicate Username";
 
 							byte[] data_test = Encoding.ASCII.GetBytes(final_response);
 							current.Send(data_test);

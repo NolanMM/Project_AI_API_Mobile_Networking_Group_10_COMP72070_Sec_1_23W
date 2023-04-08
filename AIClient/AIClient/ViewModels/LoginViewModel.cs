@@ -42,7 +42,8 @@ namespace AIClient.ViewModels
                     string data_encypted_received = Items[1].Substring(0, Datalength);
                     string decrypted_data = SecurityServices.Decrypt(data_encypted_received, public_key);
                     //await Application.Current.MainPage.DisplayAlert("Notification", "Decrypted data receive: " + decrypted_data, "OK.");
-                    if (decrypted_data == "LoginSuccessfully")
+                    string[] Items_in_decrypted_data = decrypted_data.Split('-');
+                    if (Items_in_decrypted_data[0] == "LoginSuccessful")
                     { checking_Status = true; } else { checking_Status = false; }
                 }
             }

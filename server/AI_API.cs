@@ -85,7 +85,7 @@ namespace server
                         size = size,
                         response_format = response_format,
                         user = username
-                    }); ;
+                    });
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
 
                     // Make the request

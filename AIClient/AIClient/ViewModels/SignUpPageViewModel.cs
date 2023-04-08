@@ -26,9 +26,12 @@ namespace AIClient.ViewModels
                 //Take Respond
                 string respond = await ConnectionServices.SendReceiveProcess(bytes_data);
                 // Format Server>UserID>DataLength-send_infor_string(data encrypted. Format: Declined(if failed) or "LoginSuccessfully")
-                if (respond == "Declined")
+                if (respond == "SignUpFailed")
                 {
                     checking_Status = false;
+                }else if(respond == "SignUpFailed-Duplicate Username")
+                {
+                    await Application.Current.MainPage.DisplayAlert("Notification", "Sign Up Failed\n" + "Duplicate Username Found", "Try Again");
                 }
                 else
                 {
@@ -40,8 +43,8 @@ namespace AIClient.ViewModels
                     //Take the exactly amount bytes for data be encypted
                     string data_encypted_received = Items[1].Substring(0, Datalength);
                     string decrypted_data = SecurityServices.Decrypt(data_encypted_received, public_key);
-                    //await Application.Current.MainPage.DisplayAlert("Notification", "Decrypted data receive: " + decrypted_data, "OK.");
-                    if (decrypted_data == "SignUpSuccessfully")
+                    string[] Items_in_decrypted_data = decrypted_data.Split('-');
+                    if (Items_in_decrypted_data[0] == "SignUpSuccessfully")
                     { checking_Status = true; }
                     else { checking_Status = false; }
                 }

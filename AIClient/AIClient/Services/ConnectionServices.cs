@@ -37,7 +37,7 @@ namespace AIClient.Services
                 try
                 {
                     attempts++;
-                    await ClientSocket.ConnectAsync(IPAddress.Parse("192.168.100.103"), PORT);
+                    await ClientSocket.ConnectAsync(IPAddress.Parse("192.168.100.105"), PORT);
                     Connection = new NetworkStream(ClientSocket);
                     flag = true;
                 }

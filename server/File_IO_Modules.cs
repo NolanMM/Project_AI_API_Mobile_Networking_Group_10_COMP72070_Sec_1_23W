@@ -81,7 +81,7 @@ namespace server
             // Take 16 chars for the key to decypted the data in the second column in the same row
             string public_key = UserID.Substring(0, 8);
             string secret_key = UserID.Substring(8, 8);
-            string decrypted_data = Encryption_.Decrypt(data_result, public_key, secret_key);
+            string decrypted_data = Encryption_.Decrypt(data_result, public_key);
 
             string[] Items = decrypted_data.Split('-');
             // string Items[0] = Username
@@ -135,7 +135,7 @@ namespace server
                     string final_string = username + "-" + password + "-" + email;
 
                     // Encypted the final_string (User data) by the key
-                    string write_to_file_encypted_data = Encryption_.Encrypt(final_string, public_key, secret_key);
+                    string write_to_file_encypted_data = Encryption_.Encrypt(final_string, public_key);
 
                     // Combine the encypted data with the key and store it into the file first for test
                     //string store_data = UserID + "-" + write_to_file_encypted_data;
@@ -207,7 +207,7 @@ namespace server
                 // Take 16 chars for the key to decypted the data in the second column in the same row
                 string public_key = UserID.Substring(0, 8);
                 string secret_key = UserID.Substring(8, 8);
-                string decrypted_data = Encryption_.Decrypt(data_result, public_key, secret_key);
+                string decrypted_data = Encryption_.Decrypt(data_result, public_key);
 
                 // string Items[0] = Username
                 // string Items[1] = Password;
@@ -280,7 +280,7 @@ namespace server
                 // Take 16 chars for the key to decypted the data in the second column in the same row
                 string public_key = UserID.Substring(0, 8);
                 string secret_key = UserID.Substring(8, 8);
-                string decrypted_data = Encryption_.Decrypt(data_result, public_key, secret_key);
+                string decrypted_data = Encryption_.Decrypt(data_result, public_key);
 
                 // string Items[0] = Username
                 // string Items[1] = Password;
@@ -297,7 +297,7 @@ namespace server
                 string final_string = Items[0] + "-" + Items[1] + "-" + Items[2];
 
                 // Encypted the final_string (User data) by the key
-                string write_to_file_encypted_data = Encryption_.Encrypt(final_string, public_key, secret_key);
+                string write_to_file_encypted_data = Encryption_.Encrypt(final_string, public_key);
 
                 // Re write to the file to specific location just find
                 // Save to the File the new data
@@ -356,8 +356,7 @@ namespace server
                 }
                 // Take 16 chars for the key to decypted the data in the second column in the same row
                 string public_key = key.Substring(0, 8);
-                string secret_key = key.Substring(8, 8);
-                string decrypted_data = Encryption_.Decrypt(data_result, public_key, secret_key);
+                string decrypted_data = Encryption_.Decrypt(data_result, public_key);
 
                 string[] Items = decrypted_data.Split('-');
                 // string Items[0] = Username
@@ -410,13 +409,12 @@ namespace server
 
                     // Take 16 chars from userID for the key for AES the data
                     string public_key = UserID.Substring(0, 8);
-                    string secret_key = UserID.Substring(8, 8);
 
                     // Combine all the data together
                     string final_string = username + "-" + password + "-" + email;
 
                     // Encypted the final_string (User data) by the key
-                    string write_to_file_encypted_data = Encryption_.Encrypt(final_string, public_key, secret_key);
+                    string write_to_file_encypted_data = Encryption_.Encrypt(final_string, public_key);
 
                     // Combine the encypted data with the key and store it into the file first for test
                     //string store_data = UserID + "-" + write_to_file_encypted_data;
