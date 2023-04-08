@@ -16,7 +16,6 @@ namespace MultiServer
         // Main Method
         static public void Main(String[] args)
         {
-
             returnIP();
             Accept();
             Receiving();

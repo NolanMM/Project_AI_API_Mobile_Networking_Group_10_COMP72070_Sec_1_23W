@@ -5,11 +5,13 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Security.Policy;
 using System.Text;
 using DocumentFormat.OpenXml.Office.Word;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using server;
+using System.Drawing;
 
 namespace server
 {
@@ -17,19 +19,21 @@ namespace server
     {
         //AI SETTINGS:
         //API KEY
-        public static string apiKey = "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"; // sets the key to be used for the api functions
-        public static int token = 1000; // max characters the ai can respond with
-        public static double creativity = 1; // the creativity of the ai's response
-        public static string engine = "text-davinci-003"; // the engine used in OpenAi api
-        public static int top_P = 1;
-        public static int frequency_penalty = 0;
-        public static int presence_penalty = 0;
+        static string apiKey = "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"; // sets the key to be used for the api functions
+        static int token = 1000; // max characters the ai can respond with
+        static double creativity = 1; // the creativity of the ai's response
+        static string engine = "text-davinci-003"; // the engine used in OpenAi api
+        static int top_P = 1;
+        static int frequency_penalty = 0;
+        static int presence_penalty = 0;
+
         //IMAGE CREATE SETTINGS
-        public static int n = 1; // number of images to be made
-        public static string size = "256x256"; // size of the image to be made
+        static int n = 1; // number of images to be made. Must be between 1 and 10
+		static string size = "256x256"; // size of the image to be made. Must be one of 256x256, 512x512, or 1024x1024
+		static string response_format = "b64_json"; //The format of the image. Must be one of url or b64_json
 
 
-        public static string callOpenAIText( string input)
+        public static string TextToText_openAI(string input)
         {
             var openAiKey = apiKey;
             var apiCall = "https://api.openai.com/v1/engines/" + engine + "/completions";
@@ -61,10 +65,8 @@ namespace server
             return null;
         }
 
-
-        public static string callOpenAIImage(string input, int number, string imagesize, string apikey)
+        public static string TextToImage_openAI(string input, string username)
         {
-            var openAiKey = apikey;
             try
             {
                 // Create an HttpClient
@@ -72,26 +74,29 @@ namespace server
                 {
 
                     // Add the API key to the request headers
-                    client.DefaultRequestHeaders.Add("Authorization", "Bearer " + openAiKey);
+                    client.DefaultRequestHeaders.Add("Authorization", "Bearer " + apiKey);
 
                     // Create the JSON payload for the request
                     var json = JsonConvert.SerializeObject(new
                     {
                         model = "image-alpha-001",
                         prompt = input,
-                        n = number,
-                        size = imagesize
-                    });
+                        n = n,
+                        size = size,
+                        response_format = response_format,
+                        user = username
+                    }); ;
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
 
                     // Make the request
                     var response = client.PostAsync("https://api.openai.com/v1/images/generations", content).Result;
+
                     //Console.WriteLine("Site Response Status: " + response.StatusCode);
                     var responseJson = response.Content.ReadAsStringAsync().Result;
                     var responseObject = JsonConvert.DeserializeObject<dynamic>(responseJson);
 
-                    // Get the image data from the response
-                    return responseObject.data[0].url;
+					// Return base64 image string
+					return responseObject;
                 }
             }
             catch (Exception ex)
@@ -103,17 +108,15 @@ namespace server
 
 
         //not working yet
-        public static string[] callOpenAIImageToText()
+        public static string ImageToText_LAVIS(string base64Image)
         {
             try
             {
-                string[] result;
+                string result;
 
-                //string imagePath = GetImagePath();
-                string imagePath = @"C:\Users\user\Downloads\movie.jpg";
                 string pythonFileName = "C:\\Users\\user\\Source\\Repos\\Project_AI_API_Mobile_Networking_Group_10_COMP72070_Sec_1_23W\\Server_LAVIS_ImageToText\\Server_LAVIS_ImageToText.py";
 
-                result = runPythonImageToText(pythonFileName, imagePath);
+                result = runPythonImageToText(pythonFileName, base64Image);
 
                 return result;
             }
@@ -125,11 +128,11 @@ namespace server
         }
 
 
-        private static string[] runPythonImageToText(string fileName, string imagePath)
+        private static string runPythonImageToText(string fileName, string base64Image)
         {
             ProcessStartInfo start = new ProcessStartInfo();
             start.FileName = "C:\\Users\\user\\anaconda3\\python.exe";
-            start.Arguments = string.Format("{0} {1}", fileName, imagePath);
+            start.Arguments = string.Format("{0} {1}", fileName, base64Image);
             start.UseShellExecute = false;
             start.RedirectStandardOutput = true;
 
@@ -137,15 +140,9 @@ namespace server
 
             process.WaitForExit();
 
-            string[] result = System.IO.File.ReadAllLines("C:\\Users\\user\\Source\\Repos\\Project_AI_API_Mobile_Networking_Group_10_COMP72070_Sec_1_23W\\ImageCaptionTemp.txt"); ;
+            string result = System.IO.File.ReadAllText("C:\\Users\\user\\Source\\Repos\\Project_AI_API_Mobile_Networking_Group_10_COMP72070_Sec_1_23W\\ImageCaptionTemp.txt"); ;
 
             return result;
-        }
-
-        public static string GetImagePath()
-        {
-            
-            return null;
         }
     }
 }
