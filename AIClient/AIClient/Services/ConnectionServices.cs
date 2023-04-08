@@ -37,7 +37,7 @@ namespace AIClient.Services
                 try
                 {
                     attempts++;
-                    await ClientSocket.ConnectAsync(IPAddress.Parse("172.29.48.1"), PORT);
+                    await ClientSocket.ConnectAsync(IPAddress.Parse("192.168.100.103"), PORT);
                     Connection = new NetworkStream(ClientSocket);
                     flag = true;
                 }
@@ -65,7 +65,6 @@ namespace AIClient.Services
         }
         public static async void SendImage(byte[] data)
         {
-            ClientSocket.SendBufferSize = 100*1024*1024;
             if (Connection.CanWrite)
             {
                 Connection.Write(data, 0, data.Length);

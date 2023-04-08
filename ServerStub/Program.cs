@@ -106,7 +106,6 @@ namespace MultiServer
                         int SizeImage;
                         bool TakeSizeImage = int.TryParse(Items_After_Derypted[1], out SizeImage);
                         byte[] imageBytes = new byte[SizeImage];
-                        ConnectedClient.Socket.SendBufferSize = 100 * bytesize;
                         ConnectedClient.Read(imageBytes, 0, imageBytes.Length);
                         // For Test
                         //using (MemoryStream ms = new MemoryStream(imageBytes))
