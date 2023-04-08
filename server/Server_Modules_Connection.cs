@@ -236,20 +236,20 @@ namespace server
 				//LAVIS documentation URI: https://opensource.salesforce.com/LAVIS/latest/intro.html
 				//GPT-3 documentation URI: https://platform.openai.com/docs/introduction
 				case 2:
-					bool flag_Check_Authorized = false;
+					//bool flag_Check_Authorized = false;
 
-					// Check if that client has been authorized or not
-					foreach (Active_Clients temp in clientSockets_active.ToList())
-					{
-						if (temp.UserID == Items[0])
-						{
-							flag_Check_Authorized = true;
-						}
-					}
+					//// Check if that client has been authorized or not
+					//foreach (Active_Clients temp in clientSockets_active.ToList())
+					//{
+					//	if (temp.UserID == Items[0])
+					//	{
+					//		flag_Check_Authorized = true;
+					//	}
+					//}
 
-                    //Return if not authorized
-                    if (!flag_Check_Authorized)
-                        return;
+     //               //Return if not authorized
+     //               if (!flag_Check_Authorized)
+     //                   return;
 
 					// Items_After_Decypted[1] = Username
 					// Items_After_Decypted[2] = Prompt input
@@ -257,18 +257,16 @@ namespace server
                     {
                         case "Text_To_Text":
 							// Take the prompt input and put into AI to take respond
-							string response_from_AI = AI_API.TextToText_openAI(Items_After_Decypted[2]);
+							string response_from_AI = AI_API.TextToText_openAI(Items_After_Decypted[1]);
 
-							string UserID = Encryption_.ComputeSha256Hash(Items_After_Decypted[1]);
-
-							string raw_data_be_encrypted = Items_After_Decypted[2] + "-" + response_from_AI;
+							string raw_data_be_encrypted = "Text_To_TextRespond" + "*_*" + response_from_AI;
 
 							// Encypted the final_string (User data) by the key
 							string send_infor_string = Encryption_.Encrypt(raw_data_be_encrypted, public_key);
 
 							DataPacket dataheader = new DataPacket(send_infor_string, public_key);
 
-							final_response = dataheader + "-" + send_infor_string;
+							final_response = dataheader.DataPacketToString() + "-" + send_infor_string;
 
                             //Send the packet
 							byte[] data = Encoding.ASCII.GetBytes(final_response);
@@ -289,7 +287,6 @@ namespace server
 							response_from_AI = AI_API.TextToImage_openAI(Items_After_Decypted[2], Items_After_Decypted[1]);
 
                             //Get userID from the username
-							UserID = Encryption_.ComputeSha256Hash(Items_After_Decypted[1]);
 
 							raw_data_be_encrypted = Items_After_Decypted[2] + "-" + response_from_AI;
 
@@ -309,8 +306,6 @@ namespace server
 							response_from_AI = AI_API.ImageToText_LAVIS(Items_After_Decypted[2]);
 
 							//Get userID from the username
-							UserID = Encryption_.ComputeSha256Hash(Items_After_Decypted[1]);
-
 							raw_data_be_encrypted = Items_After_Decypted[2] + "-" + response_from_AI;
 
 							// Encypted the final_string (User data) by the key

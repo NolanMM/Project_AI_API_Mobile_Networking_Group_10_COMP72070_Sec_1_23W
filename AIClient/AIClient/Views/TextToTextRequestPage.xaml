@@ -37,9 +37,9 @@
                 </Frame>
                 <Label Text="Respond From Server" TextColor="White" HorizontalOptions="CenterAndExpand" VerticalOptions="Center" Margin="0,5,0,0" FontSize="20" FontAttributes="Bold"/>
                 <Frame BorderColor = "White" BackgroundColor="Black" Margin="10,0,10,20" Padding="0" CornerRadius="50" HeightRequest="300">
-                    <Frame BorderColor = "White" BackgroundColor="Transparent" Margin="1" Padding="25,0,25,0" CornerRadius="50" HeightRequest="60">
-                        <ScrollView Margin="5,30,5,30">
-                        <Label Text="{Binding RespondFromServer,Mode=TwoWay}" TextColor="White" HorizontalOptions="StartAndExpand" VerticalOptions="StartAndExpand" FontSize="18" Margin="10,25,10,0" />
+                    <Frame BorderColor = "White" BackgroundColor="Transparent" Margin="1" Padding="15,0,15,0" CornerRadius="50" HeightRequest="60">
+                        <ScrollView Margin="0,0,0,0">
+                        <Label Text="{Binding RespondFromServer,Mode=TwoWay}" TextColor="White" HorizontalOptions="StartAndExpand" VerticalOptions="StartAndExpand" FontSize="18" Margin="10,0,10,45" />
                         </ScrollView>
                     </Frame>
                 </Frame>

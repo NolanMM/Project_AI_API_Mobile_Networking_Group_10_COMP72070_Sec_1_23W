@@ -19,7 +19,7 @@ namespace server
     {
         //AI SETTINGS:
         //API KEY
-        static string apiKey = "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"; // sets the key to be used for the api functions
+        static string apiKey = "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"; // sets the key to be used for the api functions
         static int token = 1000; // max characters the ai can respond with
         static double creativity = 1; // the creativity of the ai's response
         static string engine = "text-davinci-003"; // the engine used in OpenAi api

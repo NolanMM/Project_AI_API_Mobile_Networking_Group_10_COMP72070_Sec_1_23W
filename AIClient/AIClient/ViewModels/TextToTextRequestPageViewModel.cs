@@ -45,7 +45,8 @@ namespace AIClient.ViewModels
                     string data_encypted_received = Items[1].Substring(0, Datalength);
                     string decrypted_data = SecurityServices.Decrypt(data_encypted_received, public_key);
                     //await Application.Current.MainPage.DisplayAlert("Notification", "Decrypted data receive: " + decrypted_data, "OK.");
-                    string[] Items_In_Decrypted_Data = decrypted_data.Split('-');
+                    //string[] Items_In_Decrypted_Data = decrypted_data.Split(, StringSplitOptions.None);
+                    string[] Items_In_Decrypted_Data = decrypted_data.Split(new[] { "*-_-*" }, StringSplitOptions.None);
                     if (Items_In_Decrypted_Data[0] == "Text_To_TextRespond")
                     {
                         RespondFromServer = Items_In_Decrypted_Data[1];
