@@ -12,6 +12,10 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using server;
 using System.Drawing;
+using System.Web.Script.Serialization;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Json;
+using System.Collections.Generic;
 
 namespace server
 {
@@ -19,7 +23,7 @@ namespace server
     {
         //AI SETTINGS:
         //API KEY
-        static string apiKey = "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"; // sets the key to be used for the api functions
+        static string apiKey = "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"; // sets the key to be used for the api functions
         static int token = 1000; // max characters the ai can respond with
         static double creativity = 1; // the creativity of the ai's response
         static string engine = "text-davinci-003"; // the engine used in OpenAi api
@@ -92,11 +96,12 @@ namespace server
                     var response = client.PostAsync("https://api.openai.com/v1/images/generations", content).Result;
 
                     //Console.WriteLine("Site Response Status: " + response.StatusCode);
-                    var responseJson = response.Content.ReadAsStringAsync().Result;
-                    var responseObject = JsonConvert.DeserializeObject<dynamic>(responseJson);
+                    string responseJson = response.Content.ReadAsStringAsync().Result;
+                    // One error here to commit
+                    //string responseObject = (string)JsonConvert.DeserializeObject<string>(responseJson);
 
 					// Return base64 image string
-					return responseObject;
+					return responseJson;
                 }
             }
             catch (Exception ex)

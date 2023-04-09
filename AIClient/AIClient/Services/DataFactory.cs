@@ -92,13 +92,20 @@ namespace AIClient.Services
             return base64ImageRepresentation;
         }
 
-        //public static string DataPacketCreateForTextToImageRequest()
-        //{
+        public static string DataPacketCreateForTextToImageRequest(string question)
+        {
+            string request_type = "Text_To_Image";
+            string final_string = request_type + "-" + question;
+            string send_infor_string = SecurityServices.Encrypt(final_string, UserID_For_Key);
+            DataPacket dataheader = new DataPacket(send_infor_string, UserID_For_Key);
+            string final = dataheader.DataPacketToString() + "-" + send_infor_string;
+            return final;
+        }
 
-        //}
-        //public static string DataPacketCreateForSignOutProcess()
-        //{
+            //}
+            //public static string DataPacketCreateForSignOutProcess()
+            //{
 
-        //}
-    }
+            //}
+        }
 }

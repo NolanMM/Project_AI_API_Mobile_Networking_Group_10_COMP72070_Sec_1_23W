@@ -259,7 +259,7 @@ namespace server
 							// Take the prompt input and put into AI to take respond
 							string response_from_AI = AI_API.TextToText_openAI(Items_After_Decypted[1]);
 
-							string raw_data_be_encrypted = "Text_To_TextRespond" + "*_*" + response_from_AI;
+							string raw_data_be_encrypted = "Text_To_TextRespond" + "*__*" + response_from_AI;
 
 							// Encypted the final_string (User data) by the key
 							string send_infor_string = Encryption_.Encrypt(raw_data_be_encrypted, public_key);
@@ -273,7 +273,7 @@ namespace server
 							current.Send(data);
 
 							break;
-                        case "DataHeaderImageToText":
+                        case "Text_To_Image":
 							// Take the prompt input and put into AI to take respond
 							// The settings of the picture are pre-define in AI_API.cs:
 							//
@@ -284,11 +284,11 @@ namespace server
                             // The format of returned images is always .jpg
 
                             //Send the prompt [2] and the username [1]
-							response_from_AI = AI_API.TextToImage_openAI(Items_After_Decypted[2], Items_After_Decypted[1]);
+							response_from_AI = AI_API.TextToImage_openAI(Items_After_Decypted[1], public_key);
 
                             //Get userID from the username
 
-							raw_data_be_encrypted = Items_After_Decypted[2] + "-" + response_from_AI;
+							raw_data_be_encrypted = "TextToImageRespond" + "-" + response_from_AI;
 
 							// Encypted the final_string (User data) by the key
 							send_infor_string = Encryption_.Encrypt(raw_data_be_encrypted, public_key);
@@ -302,7 +302,7 @@ namespace server
 							current.Send(data);
 							break;
                         case "Image_Caption":
-							//Send the base64 image [2] to create a prompt 
+							//Send the base64 image [2] to create a prompt
 							response_from_AI = AI_API.ImageToText_LAVIS(Items_After_Decypted[2]);
 
 							//Get userID from the username
