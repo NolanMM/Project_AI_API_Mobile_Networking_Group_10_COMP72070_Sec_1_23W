@@ -43,7 +43,7 @@
                 <Frame BorderColor = "White" BackgroundColor="Black" Margin="10,0,10,5" Padding="0" CornerRadius="50" HeightRequest="350">
                     <Frame BorderColor = "White" BackgroundColor="Transparent" Margin="1" Padding="25,0,25,0" CornerRadius="50" HeightRequest="60">
                         <ScrollView Margin="5,20,5,20">
-                            <Image x:Name="ResultImage" BackgroundColor="Transparent"/>
+                                <Image Source="{Binding ResultImage}" BackgroundColor="Transparent"/>
                         </ScrollView>
                     </Frame>
                 </Frame>

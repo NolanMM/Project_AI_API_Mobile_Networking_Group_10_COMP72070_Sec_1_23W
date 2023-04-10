@@ -1,5 +1,6 @@
 import torch
 import sys
+import base64
 from PIL import Image
 from lavis.models import load_model_and_preprocess
 

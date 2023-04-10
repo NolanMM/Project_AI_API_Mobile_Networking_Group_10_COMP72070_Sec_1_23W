@@ -13,7 +13,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AIClient.iOS", "AIClient\AI
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AIClient", "AIClient\AIClient\AIClient.csproj", "{B53EDF9B-FC3C-4089-B831-E0E4AFC60CB3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerStub", "ServerStub\ServerStub.csproj", "{68919592-EEDF-4EAF-81BC-6B81D511690E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerStub", "ServerStub\ServerStub.csproj", "{68919592-EEDF-4EAF-81BC-6B81D511690E}"
+EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "HostServer", "HostServer\HostServer.pyproj", "{9110E04B-308F-4FF5-94F8-F3DA494D8FCE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -97,6 +99,12 @@ Global
 		{68919592-EEDF-4EAF-81BC-6B81D511690E}.Release|iPhone.Build.0 = Release|Any CPU
 		{68919592-EEDF-4EAF-81BC-6B81D511690E}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
 		{68919592-EEDF-4EAF-81BC-6B81D511690E}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{9110E04B-308F-4FF5-94F8-F3DA494D8FCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9110E04B-308F-4FF5-94F8-F3DA494D8FCE}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{9110E04B-308F-4FF5-94F8-F3DA494D8FCE}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{9110E04B-308F-4FF5-94F8-F3DA494D8FCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9110E04B-308F-4FF5-94F8-F3DA494D8FCE}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{9110E04B-308F-4FF5-94F8-F3DA494D8FCE}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

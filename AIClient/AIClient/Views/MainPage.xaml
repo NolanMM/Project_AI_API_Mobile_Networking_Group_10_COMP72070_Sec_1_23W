@@ -42,9 +42,11 @@
         </StackLayout>
 
         <StackLayout Grid.Row="2" Margin="25,0,0,25" Spacing="10">
+
             <Label Text="QUICK PICK" TextColor="White" Opacity="0.75" FontSize="16"/>
             <ScrollView  Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
                 <StackLayout Orientation="Horizontal" BindableLayout.ItemsSource="{Binding Picks}" Spacing="30">
+
                     <BindableLayout.ItemTemplate>
                         <DataTemplate>
                             <Grid ColumnDefinitions="Auto, Auto" ColumnSpacing="15">

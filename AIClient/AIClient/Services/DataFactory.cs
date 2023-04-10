@@ -63,10 +63,10 @@ namespace AIClient.Services
         public static string DataPacketCreateForHeaderCustomsizeFileRequest(string data)
         {
             string request_type = "DataHeaderImageToText";
-            string final_string = request_type + "-" + data.Length.ToString();
-            string send_infor_string = SecurityServices.Encrypt(final_string, UserID_For_Key);
-            DataPacket dataheader = new DataPacket(send_infor_string, UserID_For_Key);
-            string final = dataheader.DataPacketToString() + "-" + send_infor_string;
+            string final_string = request_type + "-" + data;
+            //string send_infor_string = SecurityServices.Encrypt(final_string, UserID_For_Key);
+            DataPacket dataheader = new DataPacket(final_string, UserID_For_Key);
+            string final = dataheader.DataPacketToString() + "-" + final_string;
             return final;
         }
 

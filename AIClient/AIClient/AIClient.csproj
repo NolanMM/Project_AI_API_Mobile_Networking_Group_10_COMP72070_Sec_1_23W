@@ -9,9 +9,16 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
     <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
+    <PackageReference Include="System.Text.Json" Version="7.0.2" />
     <PackageReference Include="Xamarin.CommunityToolkit" Version="2.0.5" />
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2578" />  
     <PackageReference Include="Xamarin.Essentials" Version="1.7.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Mono.Android">
+      <HintPath>..\..\..\..\..\..\..\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\IDE\ReferenceAssemblies\Microsoft\Framework\MonoAndroid\v12.0\Mono.Android.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>

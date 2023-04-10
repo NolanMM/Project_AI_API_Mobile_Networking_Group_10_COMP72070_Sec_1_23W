@@ -25,7 +25,7 @@ namespace server
 			Destination = UserId;
 			source = "Server";
 			// Assign the length of data
-			int datacount = data.Count();
+			int datacount = data.Length;
 			DataLength = datacount.ToString();  //fixed 4 bytes for int
 												// Assign the Destination of the data packet
 		}

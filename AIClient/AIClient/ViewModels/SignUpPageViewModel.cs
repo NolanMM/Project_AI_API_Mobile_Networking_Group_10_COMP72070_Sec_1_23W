@@ -49,7 +49,7 @@ namespace AIClient.ViewModels
                     else { checking_Status = false; }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 checking_Status = false;
             }

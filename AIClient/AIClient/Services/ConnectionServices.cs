@@ -76,7 +76,8 @@ namespace AIClient.Services
         }
         public static async void sendData(byte[] data)
         {
-            if(Connection.CanWrite)
+            const int bytesize = 2048 * 1024;
+            if (Connection.CanWrite)
             {
                 Connection.Write(data, 0, data.Length);
             }
@@ -91,7 +92,7 @@ namespace AIClient.Services
             {
                 try
                 {
-                    const int bytesize = 1024 * 1024;
+                    const int bytesize = 2048 * 1024;
                     byte[] buffer = new byte[bytesize];
                     string x = Connection.Read(buffer, 0, bytesize).ToString();
                     string data = ASCIIEncoding.ASCII.GetString(buffer);

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading.Tasks;
 using static server.ExcelApiTest;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
@@ -12,109 +14,56 @@ namespace server
     public static class server_connection
     {
         //Define the port number, buffer size, server and client sockets
-        private static Socket serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-        private static readonly List<Socket> clientSockets = new List<Socket>();
-        private const int BUFFER_SIZE = 2048;
-        private const int PORT = 2700;
-        private static readonly byte[] buffer = new byte[BUFFER_SIZE];
-        
+        public static TcpClient client;
+        private static TcpListener listener;
+        private static string ipString;
+        private static NetworkStream ConnectedClient;
+        private const int bytesize = 2048 * 1024;
+        private static readonly byte[] buffer = new byte[bytesize];
+
         // Create clients socket that active with string authorized-information of clients
         public static  List<Active_Clients> clientSockets_active = new List<Active_Clients>();
-        private static string ipString;
 
         public class Active_Clients
         {
-            public Socket Currently_Active_Client_Socket { get; set; }
+            public NetworkStream Currently_Active_Client_Socket { get; set; }
             public string UserID { get; set; }
             public string Username { get; set; }
             public string Password { get; set; }
             public string Email { get; set; }
         }
 
-        public static List<Active_Clients> SetupServer()
+        public static async Task<List<Active_Clients>> SetupServer()
         {
-            //Close the server socket if it is not null
-            if (serverSocket != null)
-            {
-                serverSocket.Close();
-            }
             returnIP();
-            //Create temporary socket 
-            Socket temp = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            //Bind -> Listen -> Accept using temp socket
+            AcceptAsync();
+            return clientSockets_active;
+        }
+
+        public static async void AcceptAsync()
+        {
+            AsyncCallback callBack = new AsyncCallback(ReceiveCallback);
             IPEndPoint ep = new IPEndPoint(IPAddress.Parse(ipString), 27000);
-            temp.Bind(ep);
+            listener = new TcpListener(ep);
+            listener.Start();
             Console.WriteLine(@"    
             ===================================================    
                    Started listening requests at: {0}:{1}    
             ===================================================",
             ep.Address, ep.Port);
-            temp.Listen(0);
-            temp.BeginAccept(AcceptCallback, null);
-
-            //Assign the temp socket to the server socket
-            serverSocket = temp;
-
-            return clientSockets_active;
+            client = await listener.AcceptTcpClientAsync();
+            ConnectedClient = client.GetStream();
+            ConnectedClient.BeginRead(buffer, 0, bytesize, callBack, buffer);
+            Console.WriteLine("Connected to client!" + " \n");
         }
 
         // Close all connected client (we do not need to shutdown the server socket as its connections
         // are already closed with the clients).
         public static void CloseAllSockets()
         {
-            try
-            {
-                foreach (Socket socket in clientSockets)
-                {
-                    socket.Shutdown(SocketShutdown.Both);
-                    socket.Close();
-                }
-
-                serverSocket.Close();
-            }
-            catch(ObjectDisposedException)
-            {
-                serverSocket.Close();
-            }
+            listener.Stop();
         }
 
-        private static void AcceptCallback(IAsyncResult AR)
-        {
-            Socket socket;
-            try
-            {
-                socket = serverSocket.EndAccept(AR);
-            }
-            catch (ObjectDisposedException) // I cannot seem to avoid this (on exit when properly closing sockets)
-            {
-                return;
-            }
-
-            clientSockets.Add(socket);
-            socket.BeginReceive(buffer, 0, BUFFER_SIZE, SocketFlags.None, ReceiveCallback, socket);
-
-            //Client connected, waiting for request...
-            serverSocket.BeginAccept(AcceptCallback, null);
-        }
-
-        //Checks if the socket is connected or not
-        static bool IsSocketConnected(Socket s)
-        {
-            try
-            {
-                bool part1 = s.Poll(1000, SelectMode.SelectRead);
-                bool part2 = (s.Available == 0);
-
-                if ((part1 && part2) || !s.Connected)
-                    return false;
-                else
-                    return true;
-            } 
-            catch(ObjectDisposedException e)
-            {
-                return false;
-            }
-        }
 
         public static void returnIP()
         {
@@ -130,50 +79,42 @@ namespace server
 
         //This method accepts a data packet from the client and based on the provided information and commands 
         //Performs certain actions such as login, sign up, or proceed one of three prompts. 
-        private static void ReceiveCallback(IAsyncResult AR)
+        private static void ReceiveCallback(IAsyncResult result)
         {
-            string final_response = "Empty";
-            Socket current = (Socket)AR.AsyncState;
-
+            AsyncCallback callBack = new AsyncCallback(ReceiveCallback);
+            byte[] buffer_received = (byte[])result.AsyncState;
             //Check if the server connecter or not. If no, then return 
-            if (!IsSocketConnected(current))
+            /*            if (!ConnectedClient.CanRead)
+                            return;*/
+            string final_response = "Empty";
+            if(!ConnectedClient.CanRead)
+            {
                 return;
-
-            int received;
-
+            }
             try
             {
-                received = current.EndReceive(AR);
+                ConnectedClient.EndRead(result);
             }
-            catch (SocketException)
+            catch (Exception ex)
             {
-                // Don't shutdown because the socket may be disposed and its disconnected anyway.
-                current.Close();
-                clientSockets.Remove(current);
-                return;
+                ex.ToString();
             }
 
-            byte[] recBuf = new byte[received];
-            Array.Copy(buffer, recBuf, received);
-            string text = Encoding.ASCII.GetString(recBuf);
+
+            string text = Encoding.ASCII.GetString(buffer_received);
 
             //Close the socket if disconnected 
             if (text.ToLower() == "disconnected")
             {
                 foreach (Active_Clients temp in clientSockets_active.ToList())
                 {
-                    if(temp.Currently_Active_Client_Socket == current)
+                    if(temp.Currently_Active_Client_Socket == ConnectedClient)
                     {
                         clientSockets_active.Remove(temp);
                     }
                 }
-
-                // Always Shutdown before closing
-                current.Shutdown(SocketShutdown.Both);
-                current.Close();
-                clientSockets.Remove(current);
+                CloseAllSockets();
                 Console.WriteLine("Client disconnected");
-
                 return;
             }
 
@@ -186,9 +127,9 @@ namespace server
 
 			// String Items[0] = Key
 			DataPacket Received_Datapacket = new DataPacket(Items[0]);
-
+            string decrypted_data = "Empty";
             //Assign the public key
-			string public_key = Received_Datapacket.source;
+            string public_key = Received_Datapacket.source;
 
             //Parse the lenght of the data
 			int Datalength;
@@ -198,7 +139,7 @@ namespace server
 			string data_encypted_received = Items[1].Substring(0, Datalength);
 
             //Decrypt the string using the public key 
-			string decrypted_data = Encryption_.Decrypt(data_encypted_received, public_key);
+            decrypted_data = Encryption_.Decrypt(data_encypted_received, public_key);
 
             //Login-Minh-Nguyen
             //Print the decrypting string 
@@ -270,40 +211,45 @@ namespace server
 
                             //Send the packet
 							byte[] data = Encoding.ASCII.GetBytes(final_response);
-							current.Send(data);
+                            sendRespond(data);
 
 							break;
                         case "Text_To_Image":
-							// Take the prompt input and put into AI to take respond
-							// The settings of the picture are pre-define in AI_API.cs:
-							//
-							// model = image-alpha-001
-							// number = 1
-							// size = 256x256 pixels
+                            // Take the prompt input and put into AI to take respond
+                            // The settings of the picture are pre-define in AI_API.cs:
+                            //
+                            // model = image-alpha-001
+                            // number = 1
+                            // size = 256x256 pixels
                             //
                             // The format of returned images is always .jpg
 
                             //Send the prompt [2] and the username [1]
-							response_from_AI = AI_API.TextToImage_openAI(Items_After_Decypted[1], public_key);
+                            //string test = AI_API.TextToImage_openAI(Items_After_Decypted[1],public_key);
 
+                            Task<string> GenerateImage = AI_API.TextToImage_PythonUvicornServer(Items_After_Decypted[1]);
+                            //response_from_AI = AI_API.TextToImage_openAI(Items_After_Decypted[1], public_key);
+                            string url = GenerateImage.Result;
+                            //byte[] bytes_images = AI_API.getImageFromUrl(url);
+                            //string dataImagestringBase64 = Convert.ToBase64String(bytes_images);
                             //Get userID from the username
 
-							raw_data_be_encrypted = "TextToImageRespond" + "-" + response_from_AI;
+                            raw_data_be_encrypted = "TextToImageRespond" + "*__*" + url;
 
 							// Encypted the final_string (User data) by the key
 							send_infor_string = Encryption_.Encrypt(raw_data_be_encrypted, public_key);
 
 							dataheader = new DataPacket(send_infor_string, public_key);
 
-							final_response = dataheader + "-" + send_infor_string;
+							final_response = dataheader.DataPacketToString() + "-" + send_infor_string;
 
 							//Send the packet
 							data = Encoding.ASCII.GetBytes(final_response);
-							current.Send(data);
+							sendRespond(data);
 							break;
-                        case "Image_Caption":
+                        case "DataHeaderImageToText":
 							//Send the base64 image [2] to create a prompt
-							response_from_AI = AI_API.ImageToText_LAVIS(Items_After_Decypted[2]);
+							response_from_AI = AI_API.ImageToText_LAVIS(Items_After_Decypted[1]);
 
 							//Get userID from the username
 							raw_data_be_encrypted = Items_After_Decypted[2] + "-" + response_from_AI;
@@ -317,7 +263,7 @@ namespace server
 
 							//Send the packet
 							data = Encoding.ASCII.GetBytes(final_response);
-							current.Send(data);
+							sendRespond(data);
 							break;
                         default:
                             Console.WriteLine("Something went wrong: incorrect prompt type\n");
@@ -367,8 +313,6 @@ namespace server
 							active_Clients_SignUpSuccessfully.Password = Items_in_respond_Login[3];
 							active_Clients_SignUpSuccessfully.Email = Items_in_respond_Login[4];
 
-							active_Clients_SignUpSuccessfully.Currently_Active_Client_Socket = current;
-
 							// Add information of active clients to the list
 							clientSockets_active.Add(active_Clients_SignUpSuccessfully);
 
@@ -384,13 +328,13 @@ namespace server
                             string send_final_response = dataheader.DataPacketToString() + "-" + DataAfterEncrypted;
 
                             byte[] data = Encoding.ASCII.GetBytes(send_final_response);
-                            current.Send(data);
+                            sendRespond(data);
 						}
 						else
 						{
 							final_response = "LoginFailed-Please check your username or password again";
 							byte[] data = Encoding.ASCII.GetBytes(final_response);
-							current.Send(data);
+							sendRespond(data);
 						}
 					}
                     else
@@ -433,7 +377,6 @@ namespace server
 							active_Clients_SignUpSuccessfully.Username = Items_in_respond_register[2];
 							active_Clients_SignUpSuccessfully.Password = Items_in_respond_register[3];
 							active_Clients_SignUpSuccessfully.Email = Items_in_respond_register[4];
-							active_Clients_SignUpSuccessfully.Currently_Active_Client_Socket = current;
 
 							// Add information of active clients to the list
 							clientSockets_active.Add(active_Clients_SignUpSuccessfully);
@@ -450,8 +393,8 @@ namespace server
 							// Modify the response that actually be sent
 							string send_final_response = dataheader.DataPacketToString() + "-" + DataAfterEncrypted;
 
-							byte[] data = Encoding.ASCII.GetBytes(final_response);
-							current.Send(data);
+							byte[] data = Encoding.ASCII.GetBytes(send_final_response);
+							sendRespond(data);
                             break;
 
 						// Check if SignUpFailed because of duplicate username or not to send SignUp Failed respond to the clients
@@ -462,32 +405,51 @@ namespace server
                                 final_response += "-Duplicate Username";
 
 							byte[] data_test = Encoding.ASCII.GetBytes(final_response);
-							current.Send(data_test);
+							sendRespond(data_test);
 							break;
                         default:
                             break;
 					}
 					break;
                 default:
-					Console.WriteLine("Something went wrong: incorrect option number\n");
+                    if(optionString == "DataHeaderImageToText") { 
+                        //Send the base64 image [2] to create a prompt
+                    string response_from_AI = AI_API.ImageToText_LAVIS(Items_After_Decypted[1]);
+
+                    //Get userID from the username
+                    string raw_data_be_encrypted = Items_After_Decypted[2] + "-" + response_from_AI;
+
+                    //// Encypted the final_string (User data) by the key
+                    ////send_infor_string = Encryption_.Encrypt(raw_data_be_encrypted, public_key);
+
+                    //dataheader = new DataPacket(send_infor_string, public_key);
+
+                    //final_response = dataheader + "-" + send_infor_string;
+
+                    ////Send the packet
+                    //data = Encoding.ASCII.GetBytes(final_response);
+                    //sendRespond(data);
+                    break;
+                    }
+                    else
+                    {
+                    Console.WriteLine("Something went wrong: incorrect option number\n");
 					break;
-			}
+                    }
+            }
 
             Console.WriteLine("Respond sent");
-            current.BeginReceive(buffer, 0, BUFFER_SIZE, SocketFlags.None, ReceiveCallback, current);
+            ConnectedClient.BeginRead(buffer, 0, bytesize, callBack, buffer);
         }
-
-        private static void CloseSpecificSockets(Socket socket)
+        public static void sendRespond(byte[] data)
         {
-            foreach (Socket items_In_List in clientSockets)
+            if (ConnectedClient.CanWrite)
             {
-                if (items_In_List == socket)
-                {
-                    items_In_List.Shutdown(SocketShutdown.Both);
-                    items_In_List.Close();
-                    // Remove from list Connection
-                    clientSockets.Remove((Socket)items_In_List);
-                }
+                ConnectedClient.Write(data, 0, data.Length);
+            }
+            else
+            {
+                Console.WriteLine("Sorry.  You cannot write to this NetworkStream.");
             }
         }
     }

@@ -16,6 +16,7 @@ using System.Web.Script.Serialization;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace server
 {
@@ -23,7 +24,7 @@ namespace server
     {
         //AI SETTINGS:
         //API KEY
-        static string apiKey = "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"; // sets the key to be used for the api functions
+        static string apiKey = "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"; // sets the key to be used for the api functions
         static int token = 1000; // max characters the ai can respond with
         static double creativity = 1; // the creativity of the ai's response
         static string engine = "text-davinci-003"; // the engine used in OpenAi api
@@ -68,7 +69,45 @@ namespace server
             }
             return null;
         }
+        static readonly HttpClient client = new HttpClient();
 
+        public static async Task<string> TextToImage_PythonUvicornServer(string input)
+        {
+            // Call asynchronous network methods in a try/catch block to handle exceptions.
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync("http://127.0.0.1:28000/?Prompt=" + "\"" + input + "\"");
+                response.EnsureSuccessStatusCode();
+                string responseBody = await response.Content.ReadAsStringAsync();
+                Console.WriteLine(responseBody);
+                string respond_url_image = responseBody.Substring(2,responseBody.Length - 4);
+                return respond_url_image;
+            }
+            catch (HttpRequestException e)
+            {
+                Console.WriteLine("\nException Caught!");
+                Console.WriteLine("Message :{0} ", e.Message);
+                return "\nException Caught!";
+
+            }
+        }
+        public static byte[] getImageFromUrl(string url)
+        {
+            //System.Net.HttpWebRequest request = null;
+            //System.Net.HttpWebResponse response = null;
+            byte[] imageBytes = null;
+            Uri uri = new Uri(url);
+            //request = (System.Net.HttpWebRequest)System.Net.WebRequest.Create(uri);
+            //request.UseDefaultCredentials = true;
+            //response = (System.Net.HttpWebResponse)request.GetResponse();
+
+            using (var webClient = new WebClient())
+            {
+                imageBytes = webClient.DownloadData(uri);
+            }
+
+            return imageBytes;
+        }
         public static string TextToImage_openAI(string input, string username)
         {
             try
@@ -98,7 +137,7 @@ namespace server
                     //Console.WriteLine("Site Response Status: " + response.StatusCode);
                     string responseJson = response.Content.ReadAsStringAsync().Result;
                     // One error here to commit
-                    //string responseObject = (string)JsonConvert.DeserializeObject<string>(responseJson);
+                    //string responseObject = JsonConvert.DeserializeObject<dynamic>(responseJson);
 
 					// Return base64 image string
 					return responseJson;

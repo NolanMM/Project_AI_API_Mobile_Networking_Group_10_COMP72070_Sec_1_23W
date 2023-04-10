@@ -29,9 +29,9 @@ namespace AIClient.Models
             // Assign the Destination of the data packet
         }
         // When receive to extract data
-        public DataPacket(string overload)
+        public DataPacket(string data)
         {
-            string[] Items = overload.Split('>');
+            string[] Items = data.Split('>');
             //Swap source with destination set destination to server
             Destination = Items[0];
             source = Items[1];

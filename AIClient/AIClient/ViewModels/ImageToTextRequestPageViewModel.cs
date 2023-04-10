@@ -9,7 +9,10 @@ using System.IO;
 using System.Text;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using System.Drawing;
 using Command = MvvmHelpers.Commands.Command;
+using Newtonsoft.Json;
+using System.Net.WebSockets;
 
 namespace AIClient.ViewModels
 {
@@ -37,15 +40,15 @@ namespace AIClient.ViewModels
         async void SendRequestToSerVerImageToTextAsync()
         {
             string imageToString = DataFactory.ImageToBase64(File_result_Path);
+            // Create a JSON object with the base64-encoded image string
 
+            // Serialize the JSON object to a string
+            //string jsonString = JsonSerializer.Serialize(WebSocketState,jsonObject);
             string SendCreateHeaderPacket = DataFactory.DataPacketCreateForHeaderCustomsizeFileRequest(imageToString);
-            string send = DataFactory.DataPacketCreateForImageToTextRequest(imageToString);
+            //string send = DataFactory.DataPacketCreateForImageToTextRequest(imageToString);
 
             byte[] bytes_data = Encoding.ASCII.GetBytes(SendCreateHeaderPacket);
-            ConnectionServices.sendData(bytes_data);
-
-            byte[] bytes_data_Image = Encoding.ASCII.GetBytes(imageToString);
-            string respond = await ConnectionServices.SendReceiveImageProcess(bytes_data_Image);
+            string respond = await ConnectionServices.SendReceiveProcess(bytes_data);
 
             // Format Server>UserID>DataLength-send_infor_string(data encrypted. Format: Declined(if failed) or "Text")
             if (respond == "Declined")
